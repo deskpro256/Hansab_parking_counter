@@ -51,26 +51,26 @@
 
 */
 
-unsigned char buff [sizeBuff];        // RECEIVING BUFFER
-unsigned char msg [sizeBuff];         // SENDING MESSAGE
-unsigned char recMsg [sizeBuff];      // RECEIVED MESSAGE
+char buff [sizeBuff];        // RECEIVING BUFFER
+char msg [sizeBuff];         // SENDING MESSAGE
+char recMsg [sizeBuff];      // RECEIVED MESSAGE
 
 bool newData = false;           //flag var to see if there is new data on the UART
 
-unsigned char STX = 0x02;       //start bit of the message
-unsigned char ETX = 0x03;       //end bit of the message
+char STX = 0x02;       //start bit of the message
+char ETX = 0x03;       //end bit of the message
 
-unsigned char myID = 0x00;    // my address
-unsigned char floorID = 0x00; // my floor address
-unsigned char recID = 0x00;   // MASTER address
+char myID = 0x00;    // my address
+char floorID = 0x00; // my floor address
+char recID = 0x0F;   // MASTER address
 
 /*  since this project is only for small lots, max count = 512 spots
     data is divided in 2 parts dataHigh and dataLow(1 byte each = 256)
     with the 2 bytes together we can get 512
     If the lot has 300 spots(data2INT), dataL = 256 and dataH = 44
 */
-unsigned char DATAH = 0x00;
-unsigned char DATAL = 0x00;
+char DATAH = 0x00;
+char DATAL = 0x00;
 unsigned int dataH = 0;
 unsigned int dataL = 0;
 unsigned int data2INT = 0;
@@ -85,10 +85,10 @@ volatile int type = 0;
 */
 
 //arrays to store values for detecting the direction of a vehicle
-unsigned char AB1[2]; // L1[A] & L2[B]
-unsigned char AB2[2]; // L3[A] & L4[B]
+char AB1[2]; // L1[A] & L2[B]
+char AB2[2]; // L3[A] & L4[B]
 
-unsigned char CMD = 0x00;  //by default on startup,there hasn't been any messages, so the command byte is just null
+char CMD = 0x00;  //by default on startup,there hasn't been any messages, so the command byte is just null
 /*what each command stands for
    set -> cmd to set the count number
    ask -> enquiry of the current state
@@ -98,14 +98,28 @@ unsigned char CMD = 0x00;  //by default on startup,there hasn't been any message
    err -> cmd to set error flag on
       ASCII CHAR| DC1  ENQ   DC2    DC3   DC4   !
              CMD| set  ask   fts    cfg   dis  err */
-byte CMDLUT[] = {0x11, 0x05, 0x12, 0x13, 0x14, 0x21}; // a look up table for every command
+char CMDLUT[] = {0x11, 0x05, 0x12, 0x13, 0x14, 0x21}; // a look up table for every command
+
 int ADRLUT[] = {ADR1, ADR2, ADR3, ADR4};              // a look up table for adress selecting pins
 
 int i = 0;    //just a counter number for 'for loops'
+
 int oldCount = 0;
 int maxCount = 123;
+volatile int count = 123;
 
-volatile int count = 10;
+// Flags for redundancy detecting vehicles
+boolean L1_flag = false;
+boolean L2_flag = false;
+
+boolean L3_flag = false;
+boolean L4_flag = false;
+
+boolean L5_flag = false;
+boolean L6_flag = false;
+
+boolean L7_flag = false;
+boolean L8_flag = false;
 
 //============================[RS485_SEND]========================
 
@@ -137,27 +151,50 @@ void NOPdelay(unsigned int z) {
   }
 }
 
+//============================[ISR]================================================================================,,,,,,,,
+//isr for pins L4-L8
+ISR(PCINT0_vect) {
+
+}
+
+//isr for pins L1-L3
+ISR(PCINT1_vect) {
+
+}
+/* read PCINT0 (PB0 - pin 14):
+  if(PINB & (1 << PB0)) {
+    serial_write_str("rising edge\n");
+  }
+  else{
+    serial_write_str("falling edge\n");
+  }
+*/
+
 //============================[SETUP]========================
 
 void setup() {
-  Serial.begin(250000);   //starting UART with 250000 BAUD
-  /*
-    //PORT B
-    DDRB |= 0B00000000;;
+  //------[PIN COFING]-----
+  //1 = OUTPUT // 0 = INPUT
+  DDRB |=0x00;
+  DDRC |=0B00111000;
+  DDRD |=0B00000100;
 
-    //PORT C
-    DDRC |= 0B00111000;;
+  PORTB |=0B00111110;
+  PORTC |=0B00000111;
+  PORTD |=0B00000000;
 
-    //PORT D
-    DDRD |= 0B00000000;
+  //------[ISR SETUP]------
 
-    PORTD |= 0B00010110;
+  PCMSK0 = 0B000111110;
+  PCMSK1 = 0B000000111;
 
-    PORTC &= ~(1 << PC3);
-    /////////
+  PCICR |= (1 << PCIE0) | (1 << PCIE1);
+  sei();
 
-  */
+  //------[REST]-----
 
+  Serial.begin(115200);   //starting UART with 115200 BAUD
+/*
   //LEDS
   pinMode(2, OUTPUT);      // RE-DE
   pinMode(A3, OUTPUT);     // ERROR LED
@@ -184,13 +221,11 @@ void setup() {
   pinMode(10, INPUT_PULLUP);     // ADR IN 2
   pinMode(11, INPUT_PULLUP);     // ADR IN 3
   pinMode(12, INPUT_PULLUP);     // ADR IN 4
-
-  digitalWrite(2, LOW);          //turning off the RS485 TX
+*/
+  PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
 
   getMyAddress();                // reads its own address on power-up
-
 }
-
 
 //============================[GET_MY_ADDRESS]========================
 // reads the DIP switches and translates that to an address for RS485 communication protocol
@@ -244,28 +279,28 @@ void getData() {
 // gets the command byte from the message and
 void getCMD() {
   //set  ask   fts    cfg   dis  err
-  if (CMD == CMDLUT[0]) { // set num on display
-
+  if (CMD == CMDLUT[0]) {
+    // set count
   }
 
   if (CMD == CMDLUT[1]) { //ask
-
+    //reply return count
   }
 
   if (CMD == CMDLUT[2]) { //fts
-
+    //gets type data
   }
 
   if (CMD == CMDLUT[3]) { //cfg
-
+    //any changes after  fts
   }
 
   if (CMD == CMDLUT[4]) { //dis
-
+    //set num on display
   }
 
   if (CMD == CMDLUT[5]) { //err
-
+    //error state enable
   }
 
 }
@@ -302,28 +337,63 @@ void readSerial() {
 //AB2[2]; // L3[A] & L4[B]
 //============================[CHECK_LOOPS]========================<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 //from ISR to this in order to correctly know the vehicles direction
+/*  type 1:  [↓↑]   single bidirectional entrance
+    type 2: [↑][↓]  separate directional entrance and exit
+    type 3:  [↑]    single entrance
+    type 4:  [↓]    single exit
+    type 5:  eco    eco(sigle loop action)
+*/
+
+void carIn() {
+  digitalWrite(A4, HIGH);
+  count = count - 1;
+  RS485Send(CMDLUT[0], 0x00, 0xFF);
+  digitalWrite(A4, LOW);
+}
+
+void carOut() {
+  digitalWrite(A4, HIGH);
+  count = count + 1;
+  RS485Send(CMDLUT[0], 0x00, 0xFF);
+  digitalWrite(A4, LOW);
+}
+
+
 void checkLoops() {
 
-  if (type == 1) {
-    // L1, L2, L3, L4
-
+  if (digitalRead(L5) == LOW) {
+    carOut();
+  }
+  if (digitalRead(L6) == LOW) {
+    carOut();
+  }
+  if (digitalRead(L7) == LOW) {
+    carIn();
+  }
+  if (digitalRead(L8) == LOW) {
+    carIn();
   }
 
-  if (type == 2) {
-    //L5-L8
 
-  }
+  /* if (type == 1) {
+     // L1, L2, L3, L4
 
-  if (type == 3) {
-    //L7, L8, L11, L12
+    }
 
-  }
+    if (type == 2) {
+     //L5,L6
 
-  if (type == 4) {
-    //L5, L6, L9 L10
+    }
 
-  }
+    if (type == 3) {
+     //L7, L8
 
+    }
+
+    if (type == 4) {
+
+    }
+  */
 }
 
 //==============================[LOOP]========================
