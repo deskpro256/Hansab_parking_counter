@@ -56,13 +56,20 @@ char msg [sizeBuff];         // SENDING MESSAGE
 char recMsg [sizeBuff];      // RECEIVED MESSAGE
 
 bool newData = false;           //flag var to see if there is new data on the UART
+/*
+  char STX = 0x02;       //start bit of the message
+  char ETX = 0x03;       //end bit of the message
 
-char STX = 0x02;       //start bit of the message
-char ETX = 0x03;       //end bit of the message
+  char myID = 0x00;    // my address
+  char floorID = 0x00; // my floor address
+  char recID = 0x0F;   // MASTER address
+*/
+char STX = '[';       //start bit of the message
+char ETX = ']';       //end bit of the message
 
-char myID = 0x00;    // my address
-char floorID = 0x00; // my floor address
-char recID = 0x0F;   // MASTER address
+char myID = 'A';    // my address
+char floorID = 'F'; // my floor address
+char recID = 'B';   // MASTER address
 
 /*  since this project is only for small lots, max count = 512 spots
     data is divided in 2 parts dataHigh and dataLow(1 byte each = 256)
@@ -85,10 +92,13 @@ volatile int type = 0;
 */
 
 //arrays to store values for detecting the direction of a vehicle
-char AB1[2]; // L1[A] & L2[B]
-char AB2[2]; // L3[A] & L4[B]
+//['A','B'] >> carIn
+//['B','A'] >> carOut
+char AB1[2] = {'0', '0'}; // L1[A] & L2[B]
+char AB2[2] = {'0', '0'}; // L3[A] & L4[B]
 
-char CMD = 0x00;  //by default on startup,there hasn't been any messages, so the command byte is just null
+//char CMD = 0x00;  //by default on startup,there hasn't been any messages, so the command byte is just null
+char CMD = '0';  //by default on startup,there hasn't been any messages, so the command byte is just null
 /*what each command stands for
    set -> cmd to set the count number
    ask -> enquiry of the current state
@@ -98,15 +108,20 @@ char CMD = 0x00;  //by default on startup,there hasn't been any messages, so the
    err -> cmd to set error flag on
       ASCII CHAR| DC1  ENQ   DC2    DC3   DC4   !
              CMD| set  ask   fts    cfg   dis  err */
-char CMDLUT[] = {0x11, 0x05, 0x12, 0x13, 0x14, 0x21}; // a look up table for every command
+//char CMDLUT[] = {0x11, 0x05, 0x12, 0x13, 0x14, 0x21}; // a look up table for every command
+char CMDLUT[] = {'Q', 'W', 'E', 'R', 'T', 'Y'}; // a look up table for every command
 
 int ADRLUT[] = {ADR1, ADR2, ADR3, ADR4};              // a look up table for adress selecting pins
 
 int i = 0;    //just a counter number for 'for loops'
 
 int oldCount = 0;
-int maxCount = 123;
-volatile int count = 123;
+int maxCount = 0;
+volatile int count = 0;
+
+//vars for storing PORTB and PORTC states
+unsigned char PinsB_old = '0';
+unsigned char PinsC_old = '0';
 
 // Flags for redundancy detecting vehicles
 boolean L1_flag = false;
@@ -153,14 +168,41 @@ void NOPdelay(unsigned int z) {
 
 //============================[ISR]================================================================================,,,,,,,,
 //isr for pins L4-L8
+//PB1
+//PB2
+//PB3
+//PB4
+//PB5
 ISR(PCINT0_vect) {
 
 }
-
+//['A','B'] >> carIn
+//['B','A'] >> carOut
 //isr for pins L1-L3
+//PC0
+//PC1
+//PC2
 ISR(PCINT1_vect) {
+  //L1
+  if (!(PINC & (1 << PC2))) {
+    L1_flag = true;
+    checkLoops();
+  }
+
+  //L2
+  if (!(PINC & (1 << PC1))) {
+    L2_flag = true;
+    checkLoops();
+  }
+
+  //L3
+  if (!(PINC & (1 << PC0))) {
+    L3_flag = true;
+    checkLoops();
+  }
 
 }
+
 /* read PCINT0 (PB0 - pin 14):
   if(PINB & (1 << PB0)) {
     serial_write_str("rising edge\n");
@@ -168,6 +210,9 @@ ISR(PCINT1_vect) {
   else{
     serial_write_str("falling edge\n");
   }
+
+
+  PINB |=(1<PINB5);
 */
 
 //============================[SETUP]========================
@@ -175,61 +220,35 @@ ISR(PCINT1_vect) {
 void setup() {
   //------[PIN COFING]-----
   //1 = OUTPUT // 0 = INPUT
-  DDRB |=0x00;
-  DDRC |=0B00111000;
-  DDRD |=0B00000100;
+  DDRB |= 0x00;
+  DDRC |= 0B00111000;
+  DDRD |= 0B00000100;
 
-  PORTB |=0B00111110;
-  PORTC |=0B00000111;
-  PORTD |=0B00000000;
+  PORTB |= 0B00111110;
+  PORTC |= 0B00000111;
+  PORTD |= 0B00000000;
 
   //------[ISR SETUP]------
 
   PCMSK0 = 0B000111110;
   PCMSK1 = 0B000000111;
 
-  PCICR |= (1 << PCIE0) | (1 << PCIE1);
+  PCICR |= (1 << PCIE0);
+  PCICR |= (1 << PCIE1);
   sei();
 
   //------[REST]-----
 
-  Serial.begin(115200);   //starting UART with 115200 BAUD
-/*
-  //LEDS
-  pinMode(2, OUTPUT);      // RE-DE
-  pinMode(A3, OUTPUT);     // ERROR LED
-  pinMode(A4, OUTPUT);     // LOOP ACTIVITY LED
-  pinMode(A5, OUTPUT);     // COMM LED
+  Serial.begin(9600);   //starting UART with 115200 BAUD
 
-  //TYPE 1
-  pinMode(A0, INPUT_PULLUP);     // SENS IN&OUT
-  pinMode(A1, INPUT_PULLUP);     // SENS IN&OUT
-  pinMode(A2, INPUT_PULLUP);     // SENS IN&OUT
-  pinMode(13, INPUT_PULLUP);     // SENS IN&OUT
-
-  //TYPE 2
-  //TYPE 4
-  pinMode(5, INPUT_PULLUP);      // SENS OUT
-  pinMode(6, INPUT_PULLUP);      // SENS OUT
-
-  //TYPE 3
-  pinMode(7, INPUT_PULLUP);      // SENS IN
-  pinMode(8, INPUT_PULLUP);      // SENS IN
-
-  //ADDRESS BITS
-  pinMode(9, INPUT_PULLUP);      // ADR IN 1
-  pinMode(10, INPUT_PULLUP);     // ADR IN 2
-  pinMode(11, INPUT_PULLUP);     // ADR IN 3
-  pinMode(12, INPUT_PULLUP);     // ADR IN 4
-*/
   PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
 
-  getMyAddress();                // reads its own address on power-up
+  getMyID();                // reads its own address on power-up
 }
 
 //============================[GET_MY_ADDRESS]========================
 // reads the DIP switches and translates that to an address for RS485 communication protocol
-void getMyAddress() {
+void getMyID() {
   int adrINT;     //varialble to store slave's address as an int
   int DIP[4];     //array to store the SW1 DIP switch states
   //reading the states of SW1
@@ -261,30 +280,16 @@ void cfgCMD(int val) {
 }
 
 
-//============================[GET_DATA_VAL]========================
-// translates the received byte data to an integer to later use for displaying the number on a screen
-void getData() {
-
-  DATAH = recMsg[4];
-  DATAL = recMsg[5];
-
-  dataH = DATAH;
-  dataL = DATAL;
-
-  data2INT = dataH + dataL;
-  getCMD();
-}
-
 //============================[GET_CMD_NAME]========================
 // gets the command byte from the message and
 void getCMD() {
-  //set  ask   fts    cfg   dis  err
+
   if (CMD == CMDLUT[0]) {
     // set count
   }
 
   if (CMD == CMDLUT[1]) { //ask
-    //reply return count
+    //reply with count
   }
 
   if (CMD == CMDLUT[2]) { //fts
@@ -314,6 +319,15 @@ void isMyAddress() {
       recMsg[i] = buff[i];
       buff[i] = 0x00;
     }
+    CMD = recMsg[3];
+    DATAH = recMsg[4];
+    DATAL = recMsg[5];
+
+    dataH = DATAH;
+    dataL = DATAL;
+
+    data2INT = dataH + dataL;
+    getCMD();
   }
 }
 
@@ -324,11 +338,9 @@ void readSerial() {
   //checks the buffer for the msg stx and etx bytes, if the buffer is still clear, there is no new data, return, if there is new data, continue on reading the message
   if (buff[0] == STX && buff[sizeBuff - 1] == ETX) {
     newData = true;
-    return;
   }
   else {
     newData = false;
-    return;
   }
 }
 
@@ -343,57 +355,91 @@ void readSerial() {
     type 4:  [↓]    single exit
     type 5:  eco    eco(sigle loop action)
 */
-
-void carIn() {
-  digitalWrite(A4, HIGH);
-  count = count - 1;
-  RS485Send(CMDLUT[0], 0x00, 0xFF);
-  digitalWrite(A4, LOW);
-}
-
-void carOut() {
-  digitalWrite(A4, HIGH);
-  count = count + 1;
-  RS485Send(CMDLUT[0], 0x00, 0xFF);
-  digitalWrite(A4, LOW);
-}
-
-
 void checkLoops() {
 
-  if (digitalRead(L5) == LOW) {
-    carOut();
-  }
-  if (digitalRead(L6) == LOW) {
-    carOut();
-  }
-  if (digitalRead(L7) == LOW) {
-    carIn();
-  }
-  if (digitalRead(L8) == LOW) {
-    carIn();
-  }
-
-
-  /* if (type == 1) {
-     // L1, L2, L3, L4
-
+  if (type == 1) {
+    // L1, L2
+    if (AB1 == "AB") {
+      //carIN
+      count = count - 1;
+      L1_flag = false;
+      L2_flag = false;
+    }
+    else if (AB1 == "BA") {
+      //carOUT
+      count = count + 1;
+      L1_flag = false;
+      L2_flag = false;
+    }
+    if (AB1[0] != 'B') {
+      AB1[0] = 'A';
+    }
+    else {
+      AB1[1] = 'A';
     }
 
-    if (type == 2) {
-     //L5,L6
+    // L3, L4
+    if (AB2 == "AB") {
+      //carIN
+      count = count - 1;
+      L3_flag = false;
+      L4_flag = false;
+    }
+    else if (AB2 == "BA") {
+      //carOUT
+      count = count + 1;
+      L3_flag = false;
+      L4_flag = false;
+    }
+    if (AB2[0] != 'B') {
+      AB2[0] = 'A';
+    }
+    else {
+      AB2[1] = 'A';
+    }
+  }
 
+  if (type == 2) {
+    //L5, L6
+    if (L5_flag && L6_flag) {
+      //carOUT
+      count = count + 1;
+      L5_flag = false;
+      L6_flag = false;
     }
 
-    if (type == 3) {
-     //L7, L8
-
+    //L7, L8
+    if (L7_flag && L8_flag) {
+      //carIN
+      count = count - 1;
+      L7_flag = false;
+      L8_flag = false;
     }
+  }
 
-    if (type == 4) {
-
+  if (type == 3) {
+    //L7, L8
+    if (L7_flag && L8_flag) {
+      //carIN
+      count = count - 1;
+      L7_flag = false;
+      L8_flag = false;
     }
-  */
+  }
+
+  if (type == 4) {
+    //L5, L6
+    if (L5_flag && L6_flag) {
+      //carOUT
+      count = count + 1;
+      L5_flag = false;
+      L6_flag = false;
+    }
+  }
+
+  if (type == 5) {
+    //eco mode ?????
+  }
 }
 
 //==============================[LOOP]========================
@@ -404,12 +450,12 @@ void loop() {
 
   // if there is a message coming in, turn on the comm LED, read the message in buffer,then turn off the LED
   if (Serial.available()) {
-    PORTC |= (1 << PC5);
+    PORTC ^= (1 << PC5);
     readSerial();
-    PORTC &= ~(1 << PC5);
   }
   // if there is new data in the message buffer, check it for the slaves address, if true, then continues with the message translation, else continue on
   if (newData) {
+    PORTC ^= (1 << PC5);
     isMyAddress();
   }
   checkLoops();
