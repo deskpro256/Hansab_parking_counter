@@ -101,8 +101,4 @@ void checkLoops() {
     }
   }
 
-  if (type == 5) {
-    //eco mode ?????
-  }
 }
-
