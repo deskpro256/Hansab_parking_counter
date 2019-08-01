@@ -1,9 +1,8 @@
-/*
-
-   SLAVE DEVICE
-   PROGRAM BY KARLIS REINIS ULMANIS
-
+/* Slave device program for Hansab
+   Written by Karlis Reinis Ulmanis
+                2019
 */
+
 #include <EEPROM.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -32,13 +31,11 @@
 #define ADR4 5 //PD5
 
 //number of bytes in buffer and message buff[sizeBuff] & msg[sizeBuff]
-#define sizeBuff 7
-
-int i = 0;    //just a counter number for 'for loops'
+#define sizeBuff 8
 
 int oldCount = 0;
 int maxCount = 100;
-volatile int count = 98;
+volatile int count = 0;
 
 // Flags for redundancy detecting vehicles
 boolean L1_flag = false;
@@ -55,24 +52,16 @@ boolean L8_flag = false;
 
 //////////////////////////////////
 char buff [sizeBuff];        // RECEIVING BUFFER
-char msg [sizeBuff];         // SENDING MESSAGE
 char recMsg [sizeBuff];      // RECEIVED MESSAGE
 
 bool newData = false;           //flag var to see if there is new data on the UART
-/*
-  char STX = 0x02;       //start bit of the message
-  char ETX = 0x03;       //end bit of the message
 
-  char myID = 0x00;    // my address
-  char floorID = 0x00; // my floor address
-  char recID = 0x0F;   // MASTER address
-*/
 char STX = '[';       //start bit of the message
 char ETX = ']';       //end bit of the message
 
-char myID = 'A';    // my address
-char floorID = 'F'; // my floor address
-char recID = 'B';   // MASTER address
+char myID = 0;    // my address
+char floorID = '0'; // my floor address
+char RXID = 0;   // MASTER address
 
 /*  since this project is only for small lots, max count = 512 spots
     data is divided in 2 parts dataHigh and dataLow(1 byte each = 256)
@@ -85,6 +74,9 @@ unsigned int dataH = 0;
 unsigned int dataL = 0;
 unsigned int data2INT = 0;
 
+bool errorState = false;
+int errorCount = 0;
+char errorCodes[4] = {'0', '1', '2', '3'}; // E0 E1 E2 E3
 
 volatile int type = 2;
 /*  type 1:  [↓↑]   single bidirectional entrance
@@ -108,7 +100,6 @@ int ADRLUT[] = {ADR1, ADR2, ADR3, ADR4};              // a look up table for adr
 //char CMDLUT[] = {0x11, 0x05, 0x12, 0x13, 0x14, 0x21}; // a look up table for every command
 char CMDLUT[] = {'Q', 'W', 'E', 'R', 'T', 'Y'}; // a look up table for every command
 
-
 //============================[NOP_DELAY]========================
 //no-operation delay with a set value
 void NOPdelay(unsigned int z) {
@@ -116,8 +107,6 @@ void NOPdelay(unsigned int z) {
     NOP;
   }
 }
-
-
 //============================[SETUP]========================
 
 void setup() {
@@ -138,23 +127,17 @@ void setup() {
 
   PCICR |= (1 << PCIE0);
   PCICR |= (1 << PCIE1);
-  sei();
-
+  sei(); //enable interrupts
   Serial.begin(9600);   //starting UART with xxxx BAUD
-
-  PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
-
-  getMyID();                // reads its own address on power-up
+  getMyID();  // reads its own address on power-up
+  isFirstCfgTime(); // check to see if this is the first time setting up cfg
 }
-
-
 
 //==============================[LOOP]========================
 
 void loop() {
 
   oldCount = count;
-
   // if there is a message coming in, turn on the comm LED, read the message in buffer,then turn off the LED
   if (Serial.available()) {
     PORTC ^= (1 << PC5);
@@ -166,12 +149,12 @@ void loop() {
     isMyAddress();
   }
   // error state check. If the count is not within the margins set by min/max turn on the error LED, master ticks the error in a log file
-  if (count < 1 || count > maxCount) {
+  if (count < 0 || count > maxCount) {
     PORTC |= (1 << PC3);
-    //+send error report func
+    errorState = true;
+    errorCount = count;
   }
   else {
     PORTC &= ~(1 << PC3);
   }
 }
-

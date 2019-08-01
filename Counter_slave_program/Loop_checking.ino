@@ -10,17 +10,7 @@
     type 5:  eco    eco(sigle loop action)
 */
 void checkLoops() {
-
-  NOPdelay(1000);           // give the master a moment to prepare to receive
-  PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
-  Serial.print("hello");
-  NOPdelay(1000);
-  PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
-
-  RS485Send(0x0F, 0x00, 65);
-
-  PORTC ^= (1 << PC4);
-
+    PORTC ^= (1 << PC4);  
   if (type == 1) {
     // L1, L2
     if (AB1 == "AB") {
@@ -100,5 +90,29 @@ void checkLoops() {
       L6_flag = false;
     }
   }
-
+  if (type == 5) {
+    //L5, L6, L7, L8
+    if (L5_flag == true) {
+      //carOUT
+      count ++;
+      L5_flag = false;
+    }
+    if (L6_flag == true) {
+      //carOUT
+      count ++;
+      L6_flag = false;
+    }
+    if (L7_flag == true) {
+      //carOUT
+      count --;
+      L7_flag = false;
+    }
+    if (L8_flag == true) {
+      //carOUT
+      count --;
+      L8_flag = false;
+    }
+  }
+    PORTC &= ~(1 << PC4);
+  sei(); //enable interrupts
 }

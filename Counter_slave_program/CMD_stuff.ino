@@ -8,7 +8,7 @@
       ASCII CHAR| DC1  ENQ   DC2    DC3   DC4   !
              CMD| set  ask   fts    cfg   dis  err */
 //char CMDLUT[] = {0x11, 0x05, 0x12, 0x13, 0x14, 0x21}; // a look up table for every command
-
+//char CMDLUT[] = {'Q', 'W', 'E', 'R', 'T', 'Y'}; // a look up table for every command
 
 
 //==================================[SET]========================
@@ -19,7 +19,7 @@ void setCount(int val) {
 //============================[CONFIG]========================
 void cfgCMD(int val) {
   type = val;
-  EEPROM[0] = type;
+  EEPROM[1] = type;
 }
 
 
@@ -54,4 +54,3 @@ void getCMD() {
   }
 
 }
-

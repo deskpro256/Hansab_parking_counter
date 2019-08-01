@@ -11,31 +11,26 @@ ISR(PCINT0_vect) {
   //L4
   if (!(PINB & (1 << PB1))) {
     L4_flag = true;
-    sei();
     checkLoops();
   }
   //L5
   if (!(PINB & (1 << PB2))) {
     L5_flag = true;
-    sei();
     checkLoops();
   }
   //L6
   if (!(PINB & (1 << PB3))) {
     L6_flag = true;
-    sei();
     checkLoops();
   }
   //L7
   if (!(PINB & (1 << PB4))) {
     L7_flag = true;
-    sei();
     checkLoops();
   }
   //L8
   if (!(PINB & (1 << PB5))) {
     L8_flag = true;
-    sei();
     checkLoops();
   }
 }
@@ -50,22 +45,18 @@ ISR(PCINT1_vect) {
   //L1
   if (!(PINC & (1 << PC2))) {
     L1_flag = true;
-    sei();
     checkLoops();
   }
 
   //L2
   if (!(PINC & (1 << PC1))) {
     L2_flag = true;
-    sei();
     checkLoops();
   }
 
   //L3
   if (!(PINC & (1 << PC0))) {
     L3_flag = true;
-    sei();
     checkLoops();
   }
 }
-
