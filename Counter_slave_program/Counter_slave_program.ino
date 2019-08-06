@@ -34,10 +34,11 @@
 #define sizeBuff 8
 
 int oldCount = 0;
-int maxCount = 100;
-volatile int count = 0;
+volatile int maxCount = 100;
+int count = 0;
+bool changedCount = false;
 
-// Flags for redundancy detecting vehicles
+// Flags for redundancy to detect vehicles
 boolean L1_flag = false;
 boolean L2_flag = false;
 
@@ -56,29 +57,31 @@ char recMsg [sizeBuff];      // RECEIVED MESSAGE
 
 bool newData = false;           //flag var to see if there is new data on the UART
 
+char messageType[] = {0x05, 0x06, 0x21}; //ENQ ACK NAK
+char mesType = 0x00; // received message type /ENQ ACK NAK
 char STX = '[';       //start bit of the message
 char ETX = ']';       //end bit of the message
 
-char myID = 0;    // my address
-char floorID = '0'; // my floor address
-char RXID = 0;   // MASTER address
+char myID = 0x69;    // my address
+char floorID = 0x69; // my floor address
+char RXID = 0x00;   // MASTER address
 
 /*  since this project is only for small lots, max count = 512 spots
     data is divided in 2 parts dataHigh and dataLow(1 byte each = 256)
     with the 2 bytes together we can get 512
-    If the lot has 300 spots(data2INT), dataL = 256 and dataH = 44
+    If the lot has 300 spots(data2INT), dataL = 255 and dataH = 45
 */
 char DATAH = 0x00;
 char DATAL = 0x00;
-unsigned int dataH = 0;
-unsigned int dataL = 0;
 unsigned int data2INT = 0;
 
 bool errorState = false;
 int errorCount = 0;
 char errorCodes[4] = {'0', '1', '2', '3'}; // E0 E1 E2 E3
+char eH = 0x00;
+char eL = 0x00;
 
-volatile int type = 2;
+volatile int type = 0;
 /*  type 1:  [↓↑]   single bidirectional entrance
     type 2: [↑][↓]  separate directional entrance and exit
     type 3:  [↑]    single entrance
@@ -92,13 +95,13 @@ volatile int type = 2;
 char AB1[2] = {'0', '0'}; // L1[A] & L2[B]
 char AB2[2] = {'0', '0'}; // L3[A] & L4[B]
 
-//char CMD = 0x00;  //by default on startup,there hasn't been any messages, so the command byte is just null
-char CMD = '0';  //by default on startup,there hasn't been any messages, so the command byte is just null
+char CMD = 0x00;  //by default on startup,there hasn't been any messages, so the command byte is just null
+char plusMinus[] = {0x2B, 0x2D}; // + / -
+char inOut = 0x00;
 
-int ADRLUT[] = {ADR1, ADR2, ADR3, ADR4};              // a look up table for adress selecting pins
+int ADRLUT[] = {ADR1, ADR2, ADR3, ADR4};// a look up table for adress selecting pins
 
-//char CMDLUT[] = {0x11, 0x05, 0x12, 0x13, 0x14, 0x21}; // a look up table for every command
-char CMDLUT[] = {'Q', 'W', 'E', 'R', 'T', 'Y'}; // a look up table for every command
+char CMDLUT[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09}; // a look up table for every command
 
 //============================[NOP_DELAY]========================
 //no-operation delay with a set value
@@ -116,9 +119,9 @@ void setup() {
   DDRC |= 0B00111000;
   DDRD |= 0B00000100;
 
-  PORTB |= 0B00111110;
+  PORTB |= 0B00111111;
   PORTC |= 0B00000111;
-  PORTD |= 0B00000000;
+  PORTD |= 0B11100000;
 
   //------[ISR SETUP]------
 
@@ -130,31 +133,22 @@ void setup() {
   sei(); //enable interrupts
   Serial.begin(9600);   //starting UART with xxxx BAUD
   getMyID();  // reads its own address on power-up
-  isFirstCfgTime(); // check to see if this is the first time setting up cfg
+  //isFirstCfgTime(); // check to see if this is the first time setting up cfg
 }
 
 //==============================[LOOP]========================
 
 void loop() {
-
-  oldCount = count;
   // if there is a message coming in, turn on the comm LED, read the message in buffer,then turn off the LED
   if (Serial.available()) {
     PORTC ^= (1 << PC5);
-    readSerial();
+    RS485Receive();
   }
   // if there is new data in the message buffer, check it for the slaves address, if true, then continues with the message translation, else continue on
   if (newData) {
     PORTC ^= (1 << PC5);
     isMyAddress();
   }
-  // error state check. If the count is not within the margins set by min/max turn on the error LED, master ticks the error in a log file
-  if (count < 0 || count > maxCount) {
-    PORTC |= (1 << PC3);
-    errorState = true;
-    errorCount = count;
-  }
-  else {
-    PORTC &= ~(1 << PC3);
-  }
+  errorCheck();
+  countCheck();
 }

@@ -33,17 +33,18 @@ void configurationMode() {
       PORTC ^= (1 << PD5);
       if (recMsg[1] == myID) {
         //moves all the buff[] to a stored message value while also clearing the buffer
-        for (int i = 0; i <= sizeBuff; i++) {
+        for (int i = 0; i <= sizeBuff - 1; i++) {
           recMsg[i] = buff[i];
           buff[i] = 0x00;
         }
-        CMD = recMsg[3];
-        DATAH = recMsg[4];
-        DATAL = recMsg[5];
-        dataH = DATAH;
-        dataL = DATAL;
-        data2INT = dataH + dataL;
-        getCMD();
+        CMD = recMsg[2];
+        type = recMsg[3];
+        floorID = recMsg[4];
+        DATAH = recMsg[5];
+        DATAL = recMsg[6];
+        data2INT = DATAH + DATAL;
+        
+        getCMD(CMD, mesType, data2INT);
       }
     }
   }

@@ -4,6 +4,6 @@
 //RS232 DISPLAY DRIVER
 // needs the "meandr" protocol
 
-void drawDisplay(int PLACEHOLDER) {
+void drawDisplay(int placeholder) {
   //stuff here
 }

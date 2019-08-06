@@ -4,7 +4,6 @@
 //===============================[CONFIGURATION MODE]================================
 
 void configurationMode() {
-  greeting();
   if (Serial.available()) {  //wait for config from PC software
     PORTC ^= (1 << PD5);
     Serial.readBytes(buff, sizeBuff); //reads the serial data,stores data in a 8 byte buffer
@@ -16,22 +15,40 @@ void configurationMode() {
       newData = false;
       configurationMode();
     }
+    // if there is new data, start parsing it
     if (newData == true) {
       PORTC ^= (1 << PD5);
+      // if received own address
       if (recMsg[1] == myID) {
         //moves all the buff[] to a stored message value while also clearing the buffer
-        for (int i = 0; i <= sizeBuff; i++) {
+        for (int i = 0; i <= sizeBuff - 1; i++) {
           recMsg[i] = buff[i];
           buff[i] = 0x00;
         }
-        CMD = recMsg[3];
-        DATAH = recMsg[4];
-        DATAL = recMsg[5];
-        dataH = DATAH;
-        dataL = DATAL;
-        data2INT = dataH + dataL;
-        getCMD();
+        firstTimeSetup();
+      }
+      // else if received slaves address. Store their data somewhere
+      else {
+        //moves all the buff[] to a stored message value while also clearing the buffer
+        for (int i = 0; i <= sizeBuff - 1; i++) {
+          recMsg[i] = buff[i];
+          buff[i] = 0x00;
+        }
+        storeSlaveData();
       }
     }
+  }
+}
+
+//============================[IS THIS THE FIRST TIME CONFIGURING?]===================================
+
+void isFirstCfgTime() {
+  if (EEPROM[0] = 1) {
+    loop();
+  }
+  else {
+    EEPROM[0] = 1;
+    loop();
+    //configurationMode();
   }
 }

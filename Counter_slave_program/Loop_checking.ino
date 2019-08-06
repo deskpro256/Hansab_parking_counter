@@ -7,10 +7,11 @@
     type 2: [↑][↓]  separate directional entrance and exit
     type 3:  [↑]    single entrance
     type 4:  [↓]    single exit
-    type 5:  eco    eco(sigle loop action)
+    type 5:  eco    eco(sigle loop action) only in/ only out
 */
 void checkLoops() {
-    PORTC ^= (1 << PC4);  
+  oldCount = count;
+  PORTC ^= (1 << PC4);
   if (type == 1) {
     // L1, L2
     if (AB1 == "AB") {
@@ -70,7 +71,7 @@ void checkLoops() {
       L8_flag = false;
     }
   }
-
+  // in
   if (type == 3) {
     //L7, L8
     if (L7_flag == true && L8_flag == true) {
@@ -80,7 +81,7 @@ void checkLoops() {
       L8_flag = false;
     }
   }
-
+  // out
   if (type == 4) {
     //L5, L6
     if (L5_flag == true && L6_flag == true) {
@@ -90,6 +91,7 @@ void checkLoops() {
       L6_flag = false;
     }
   }
+  //eco / single loop action
   if (type == 5) {
     //L5, L6, L7, L8
     if (L5_flag == true) {
@@ -113,6 +115,6 @@ void checkLoops() {
       L8_flag = false;
     }
   }
-    PORTC &= ~(1 << PC4);
+  PORTC &= ~(1 << PC4);
   sei(); //enable interrupts
 }
