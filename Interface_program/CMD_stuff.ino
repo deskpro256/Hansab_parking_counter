@@ -5,10 +5,9 @@
 // 0x03 - sendDisplayCount
 // 0x04 - clearErrors
 // 0x05 - firstTimeSetup
-// 0x06 -
+// 0x06 - ping/pong
 // 0x07 -
 // 0x08 -
-// 0x09 -
 // };     a look up table for every command
 
 //char messageType[] = {
@@ -32,21 +31,21 @@ void getCMD(char cmd, char msgType, int data) {
     //-----------------------here            
     }
   }
-  if (cmd == CMDLUT[2]) {
+  if (cmd == CMDLUT[2]) { // 0x03 - sendDisplayCount
 
   }
-  if (cmd == CMDLUT[3]) {
+  if (cmd == CMDLUT[3]) { // 0x04 - clearErrors
 
   }
-  if (cmd == CMDLUT[4]) {
+  if (cmd == CMDLUT[4]) { // 0x05 - firstTimeSetup
 
   }
-  if (cmd == CMDLUT[5]) {
-
+  if (cmd == CMDLUT[5]) { // 0x06 - ping/pong
+      RS485Send(0x99, messageType[1], CMDLUT[5], 0x00, 0x00, 0x00);
   }
-  if (cmd == CMDLUT[6]) {
-
+  if (cmd == CMDLUT[6]) { // 0x07 - sendDisplayCountToUSB
   }
+  
   if (cmd == CMDLUT[7]) {
 
   }

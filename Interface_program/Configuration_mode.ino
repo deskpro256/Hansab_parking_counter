@@ -27,6 +27,11 @@ void configurationMode() {
         }
         firstTimeSetup();
       }
+      // else if received PING - reply with PONG
+      else if(recMsg[4] == CMDLUT[5]){        
+      RS485Send(0x99, messageType[1], CMDLUT[5], 0x00, 0x00, 0x00);
+        }       
+         
       // else if received slaves address. Store their data somewhere
       else {
         //moves all the buff[] to a stored message value while also clearing the buffer

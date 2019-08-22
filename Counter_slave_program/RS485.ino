@@ -1,23 +1,22 @@
 //============================[RS485_SEND]========================
 
-void RS485Send(byte receiverID, byte msgType, byte command, byte datahigh, byte datalow) {
+void RS485Send(char receiverID, char msgType, char command, char data1, char data2, char data3) {
 
-  char msg [] = {
-    STX,                // start of text
-    receiverID,         // receiver address
-    myID,               // transmitter address
-    msgType,            // ENQ - ACK - NAK
-    command,            // command
-    datahigh,           // dataH
-    datalow,            // dataL
-    ETX,                // end of text
-  };
+  msg[0] = STX;
+  msg[1] = receiverID;
+  msg[2] = myID;
+  msg[3] = msgType;
+  msg[4] = command;
+  msg[5] = data1;
+  msg[6] = data2;
+  msg[7] = data3;
+  msg[8] = ETX;
 
-  delay(100);
+  delay(10);
   PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
   PORTC |= (1 << PC5);      // Enable COM Led
-  Serial.print(msg);
-  delay(100);
+  Serial.println(msg);
+  delay(10);
   PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
   PORTC &= ~(1 << PC5);     // Disable COM Led
 }
@@ -46,10 +45,13 @@ void isMyAddress() {
     }
     mesType = recMsg[3];
     CMD = recMsg[4];
-    DATAH = recMsg[5];
-    DATAL = recMsg[6];
-    data2INT = DATAH + DATAL;
-    
+    huns = recMsg[5];
+    tens = recMsg[6];
+    ones = recMsg[7];
+    data2INT = (huns * 100) + (tens * 10) + ones;
+
     getCMD(CMD, mesType, data2INT);
+    PORTC ^= (1 << PC3);
+    
   }
 }

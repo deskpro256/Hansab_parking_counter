@@ -57,29 +57,24 @@ char recMsg [sizeBuff];      // RECEIVED MESSAGE
 
 bool newData = false;           //flag var to see if there is new data on the UART
 
+char msg [9];
 char messageType[] = {0x05, 0x06, 0x21}; //ENQ ACK NAK
 char mesType = 0x00; // received message type /ENQ ACK NAK
-char STX = '[';       //start bit of the message
-char ETX = ']';       //end bit of the message
+char STX = 0x02;       //start bit of the message
+char ETX = 0x03;       //end bit of the message
 
 char myID = 0x69;    // my address
 char floorID = 0x69; // my floor address
 char RXID = 0x00;   // MASTER address
 
-/*  since this project is only for small lots, max count = 512 spots
-    data is divided in 2 parts dataHigh and dataLow(1 byte each = 256)
-    with the 2 bytes together we can get 512
-    If the lot has 300 spots(data2INT), dataL = 255 and dataH = 45
-*/
-char DATAH = 0x00;
-char DATAL = 0x00;
 unsigned int data2INT = 0;
+char ones = 0x00;
+char tens = 0x00;
+char huns = 0x00;
 
 bool errorState = false;
 int errorCount = 0;
 char errorCodes[4] = {'0', '1', '2', '3'}; // E0 E1 E2 E3
-char eH = 0x00;
-char eL = 0x00;
 
 volatile int type = 0;
 /*  type 1:  [↓↑]   single bidirectional entrance
@@ -101,7 +96,7 @@ char inOut = 0x00;
 
 int ADRLUT[] = {ADR1, ADR2, ADR3, ADR4};// a look up table for adress selecting pins
 
-char CMDLUT[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09}; // a look up table for every command
+char CMDLUT[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08}; // a look up table for every command
 
 //============================[NOP_DELAY]========================
 //no-operation delay with a set value
@@ -131,7 +126,7 @@ void setup() {
   PCICR |= (1 << PCIE0);
   PCICR |= (1 << PCIE1);
   sei(); //enable interrupts
-  Serial.begin(9600);   //starting UART with xxxx BAUD
+  Serial.begin(115200);   //starting UART with 115200 BAUD
   getMyID();  // reads its own address on power-up
   //isFirstCfgTime(); // check to see if this is the first time setting up cfg
 }

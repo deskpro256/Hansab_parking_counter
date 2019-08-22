@@ -40,10 +40,11 @@ void configurationMode() {
         CMD = recMsg[2];
         type = recMsg[3];
         floorID = recMsg[4];
-        DATAH = recMsg[5];
-        DATAL = recMsg[6];
-        data2INT = DATAH + DATAL;
-        
+        huns = recMsg[5];
+        tens = recMsg[6];
+        ones = recMsg[7];
+        data2INT = (huns * 100) + (tens * 10) + ones;
+
         getCMD(CMD, mesType, data2INT);
       }
     }

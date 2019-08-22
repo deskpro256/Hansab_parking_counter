@@ -13,18 +13,14 @@
 void sendErrorReport(int errcount) {      //sends the error report to master
   if (errorState == true) {
     if (errcount <= 255) {
-      eH = 0x00;
-      eL = errcount;
     }
     else if (errcount > 255) {
-      eH = errcount - 255;
-      eL = 255;
     }
-    RS485Send(RXID, messageType[1], CMDLUT[0], eH , eL);
+    RS485Send(RXID, messageType[1], CMDLUT[0], 0x00 , 0x00, 0x00);
   }
   //send error with errcount
   else {
-    RS485Send(RXID, messageType[2], CMDLUT[0], 0x00, 0x00);
+    RS485Send(RXID, messageType[2], CMDLUT[0], 0x00, 0x00, 0x00);
     //reply with no error
   }
 }
