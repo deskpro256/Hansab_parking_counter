@@ -4,9 +4,9 @@
 //===============================[CONFIGURATION MODE]================================
 
 void configurationMode() {
-  if (Serial.available()) {  //wait for config from PC software
+  if (Serial.available() > 8) { //wait for config from PC software
     PORTC ^= (1 << PD5);
-    Serial.readBytes(buff, sizeBuff); //reads the serial data,stores data in a 8 byte buffer
+    Serial.readBytes(buff, sizeBuff); //reads the serial data,stores data in a 9 byte buffer
     //checks the buffer for the msg stx and etx bytes, if the buffer is still clear, there is no new data, return, if there is new data, continue on reading the message
     if (buff[0] == STX && buff[sizeBuff - 1] == ETX) {
       newData = true;
@@ -28,10 +28,10 @@ void configurationMode() {
         firstTimeSetup();
       }
       // else if received PING - reply with PONG
-      else if(recMsg[4] == CMDLUT[5]){        
-      RS485Send(0x99, messageType[1], CMDLUT[5], 0x00, 0x00, 0x00);
-        }       
-         
+      else if (recMsg[4] == CMDLUT[5]) {
+        RS485Send(0x99, messageType[1], CMDLUT[5], 'P', 'N', 'G');
+      }
+
       // else if received slaves address. Store their data somewhere
       else {
         //moves all the buff[] to a stored message value while also clearing the buffer

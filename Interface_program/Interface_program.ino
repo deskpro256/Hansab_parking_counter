@@ -1,5 +1,6 @@
 /* Interface device program for Hansab
     Written by Karlis Reinis Ulmanis
+    
                 2019
     type 1:  [↓↑]   single bidirectional entrance
     type 2: [↑][↓]  separate directional entrance and exit
@@ -13,6 +14,28 @@
 #include <avr/interrupt.h>
 
 #define NOP __asm__ __volatile__ ("nop\n\t")  //NO OPERATION
+
+//============================[FUNCTION_PREDEFINES]========================
+void getCMD(char cmd, char msgType, int data);
+void configurationMode();
+void isFirstCfgTime();
+void countNumbers();
+void getChanges(int receiverID);
+void compareFloor();
+void sendDisplayCount();
+void sendDisplayCountToUSB();
+void getErrors(char receiverID);
+void sendErrorReport();
+void firstTimeSetup();
+ISR(INT1_vect);
+void powerSource();
+void RS485Send(char receiverID, char msgType, char command, char data1, char data2, char data3);
+void RS485Receive();
+void isMyAddress();
+void greeting();
+void testSend(char what);
+void storeSlaveData();
+//============================[FUNCTION_PREDEFINES]========================
 
 //============================[NOP_DELAY]========================
 //no-operation delay with a set value
@@ -33,43 +56,47 @@ char versionNum[] = "Version Number: v1.00";
 ////Slave data array/////
 char slaveData[16][4] {};
 /////////////////////////
-int floorCount[3] = {123, 456, 789};
+int floorCount[4] = {123, 456, 789, 696};
 int totalCount = 0;
 int maxCount = 512;
 char errorDevices[32] = {}; //devices with errors. ID, ERROR, ID, ERROR ...
 char errorCodes[4] = {'0', '1', '2', '3'}; // E0 E1 E2 E3
-char addresses[15] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
-char floorDevices[15] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; //floor num according to address
+byte addresses[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
+byte floorDevices[16] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; //floor num according to address
 int slaveCount = 15;
+volatile bool ConfigEnabled = false;
 bool batteryUsed = false;
 bool externalPower = false;
 int timeout = 1000; // 1 sec
 int tries = 0;  // counts retries
-char currentAddress = 0;
+byte currentAddress = 0;
 
-char buff [sizeBuff];        // RECEIVING BUFFER
-char recMsg [sizeBuff];      // RECEIVED MESSAGE
+byte buff [sizeBuff];        // RECEIVING BUFFER
+byte recMsg [sizeBuff];      // RECEIVED MESSAGE
 
-bool newData = false;           //flag var to see if there is new data on the UART
-char msg [9];
-char messageType[] = {0x05, 0x06, 0x21}; //ENQ ACK NAK
-char mesType = 0x00; // received message type / ACK NAK
-char STX = 0x02;       // start bit of the message  0x5B
-char ETX = 0x03;       // end bit of the message    0x5D
+bool newData = false;           // flag var to see if there is new data on the UART
+bool replied = false;           // flag to see if slave has replied
 
-char CMD = '0';  // by default on startup,there hasn't been any messages, so the command byte is just null
-char CMDLUT[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08}; // a look up table for every command
+byte msg [9] = {'0', '0', '0', '0', '0', '0', '0', '0', '0'};
+byte messageType[] = {0x05, 0x06, 0x15}; //ENQ ACK NAK
+byte mesType = 0x00; // received message type / ACK NAK
+byte STX = 0x02;       // start bit of the message  0x5B
+byte ETX = 0x03;       // end bit of the message    0x5D
 
-char myID = 0x00;    // my address
-char floorID = '0'; // floor address
-char RXID = '0';   // receivers address
+byte CMD = '0';  // by default on startup,there hasn't been any messages, so the command byte is just null
+byte CMDLUT[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B}; // a look up table for every command
 
-char ones = 0x00;
-char tens = 0x00;
-char huns = 0x00;
+byte myID = 0x1D;    // my address
+byte floorID = '0'; // floor address
+byte RXID = '1';   // receivers address
+
+byte ones = 0x00;
+byte tens = 0x00;
+byte huns = 0x00;
 unsigned int data2INT = 0;
-
 int foo = 0;
+
+
 //============================[SETUP]========================
 
 void setup() {
@@ -87,36 +114,39 @@ void setup() {
   EICRA = 0B00000100;
   EIMSK = 0B00000010;
   sei();
-  Serial.begin(115200);   //starting UART with 115200 BAUD
-  greeting();
-  //countNumbers();
+  Serial.begin(9600);   //starting UART with 115200 BAUD
+  //Serial.begin(9600, SERIAL_8N2);   //starting UART with 9600 BAUD
+  //greeting();
   //isFirstCfgTime(); // check to see if this is the first time setting up cfg
 }
 
 //==============================[LOOP]========================
 
 void loop() {
-  foo = 1;
-  delay(10);
-  while (foo <= slaveCount) {
-    currentAddress = addresses[foo];
-    testSend(currentAddress);
-    delay(10);
-    RS485Send(currentAddress, messageType[0], CMDLUT[1], '1', '2', '3');
-    /*
-      getErrors(currentAddress);
-      delay(10);
-      getChanges(currentAddress);
-    */
-    foo++;
+  if (ConfigEnabled) {
+    CheckPowerSource();
+    if (Serial.available() > 8) {
+      PORTC ^= (1 << PC5);
+      RS485Receive();
+    }
   }
-  delay(10);
-  compareFloor();
-  delay(10);
-  sendDisplayCount();
-  delay(10);
-  sendDisplayCountToUSB();
-  delay(10);
-  powerSource();
-  delay(1000);
+  else {
+      foo = 0;
+      slaveCount = 15;
+      while (foo <= slaveCount) {
+      currentAddress = addresses[foo];
+      delay(100);
+      getErrors(currentAddress);
+      delay(100);
+      getChanges(currentAddress);
+      delay(100);
+      foo++;
+      }
+      compareFloor();
+      sendDisplayCount();
+      //CheckPowerSource();
+      delay(1000);
+    //sendToDisplay();
+  }
+
 }

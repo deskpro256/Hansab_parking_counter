@@ -16,4 +16,28 @@ void getMyID() {
   adrINT = (DIP[0] * 8) + (DIP[1] * 4) + (DIP[2] * 2) + (DIP[3] * 1);
   //adrINT to ascii
   myID = adrINT;
+
+  // optional ID for greeting()
+  if (myID <= 0x09) {
+    id [1] = myID + '0';
+  } else if (myID == 0x0A) {
+    id [0] = '1';
+    id [1] = '0';
+  } else if (myID == 0x0B) {
+    id [0] = '1';
+    id [1] = '1';
+  } else if (myID == 0x0C) {
+    id [0] = '1';
+    id [1] = '2';
+  } else if (myID == 0x0D) {
+    id [0] = '1';
+    id [1] = '3';
+  } else if (myID == 0x0E) {
+    id [0] = '1';
+    id [1] = '4';
+  } else if (myID == 0x0F) {
+    id [0] = '1';
+    id [1] = '5';
+  }
+
 }

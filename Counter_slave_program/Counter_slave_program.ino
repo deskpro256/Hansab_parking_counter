@@ -31,25 +31,46 @@
 #define ADR4 5 //PD5
 
 //number of bytes in buffer and message buff[sizeBuff] & msg[sizeBuff]
-#define sizeBuff 8
+#define sizeBuff 9
+
+//============================[FUNCTION_PREDEFINES]========================
+void getMyID();
+void getCMD(char cmd, char msgType, int data);
+void countCheck();
+void drawDisplay(int placeholder);
+void sendErrorReport(int errcount);
+void errorCheck();
+void clearErrors();
+void isFirstCfgTime();
+void configurationMode();
+ISR(PCINT0_vect);
+ISR(PCINT1_vect);
+void checkLoops();
+void RS485Send(char receiverID, char msgType, char command, char data1, char data2, char data3);
+void RS485Receive();
+void isMyAddress();
+void greeting();
+void carIN();
+void carOUT();
+//============================[FUNCTION_PREDEFINES]========================
 
 int oldCount = 0;
-volatile int maxCount = 100;
-int count = 0;
+volatile int maxCount = 999;
+int count = 666;
 bool changedCount = false;
 
 // Flags for redundancy to detect vehicles
-boolean L1_flag = false;
-boolean L2_flag = false;
+volatile boolean L1_flag = false;
+volatile boolean L2_flag = false;
 
-boolean L3_flag = false;
-boolean L4_flag = false;
+volatile boolean L3_flag = false;
+volatile boolean L4_flag = false;
 
-boolean L5_flag = false;
-boolean L6_flag = false;
+volatile boolean L5_flag = false;
+volatile boolean L6_flag = false;
 
-boolean L7_flag = false;
-boolean L8_flag = false;
+volatile boolean L7_flag = false;
+volatile boolean L8_flag = false;
 
 //////////////////////////////////
 char buff [sizeBuff];        // RECEIVING BUFFER
@@ -63,9 +84,10 @@ char mesType = 0x00; // received message type /ENQ ACK NAK
 char STX = 0x02;       //start bit of the message
 char ETX = 0x03;       //end bit of the message
 
-char myID = 0x69;    // my address
-char floorID = 0x69; // my floor address
-char RXID = 0x00;   // MASTER address
+char myID = 0x00;    // my address
+char floorID = 0x01; // my floor address
+char RXID = 0x1D;   // MASTER address
+char id[] = {'0', '0'}; // for greeting show id
 
 unsigned int data2INT = 0;
 char ones = 0x00;
@@ -76,7 +98,7 @@ bool errorState = false;
 int errorCount = 0;
 char errorCodes[4] = {'0', '1', '2', '3'}; // E0 E1 E2 E3
 
-volatile int type = 0;
+volatile int type = 5;
 /*  type 1:  [↓↑]   single bidirectional entrance
     type 2: [↑][↓]  separate directional entrance and exit
     type 3:  [↑]    single entrance
@@ -84,19 +106,21 @@ volatile int type = 0;
     type 5:  eco    eco(sigle loop action)
 */
 
-//arrays to store values for detecting the direction of a vehicle
-//['A','B'] >> carIn
-//['B','A'] >> carOut
-char AB1[2] = {'0', '0'}; // L1[A] & L2[B]
-char AB2[2] = {'0', '0'}; // L3[A] & L4[B]
-
 char CMD = 0x00;  //by default on startup,there hasn't been any messages, so the command byte is just null
-char plusMinus[] = {0x2B, 0x2D}; // + / -
+char plusMinus[] = {0x2B, 0x2D, 0x3D}; // + / - / =
 char inOut = 0x00;
 
 int ADRLUT[] = {ADR1, ADR2, ADR3, ADR4};// a look up table for adress selecting pins
 
-char CMDLUT[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08}; // a look up table for every command
+char CMDLUT[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B}; // a look up table for every command
+
+char dispNum[] = {0x1B, 0x01, 0x00, 0x06, 0xA1, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00};
+char packetSum = 0x00;
+char checkSum = 0x00;
+
+unsigned int currentMillis = 0;
+unsigned int previousMillis = 0;
+unsigned int interval = 100;
 
 //============================[NOP_DELAY]========================
 //no-operation delay with a set value
@@ -126,24 +150,28 @@ void setup() {
   PCICR |= (1 << PCIE0);
   PCICR |= (1 << PCIE1);
   sei(); //enable interrupts
-  Serial.begin(115200);   //starting UART with 115200 BAUD
+  Serial.begin(9600);   //starting UART with 115200 BAUD
   getMyID();  // reads its own address on power-up
+  //greeting();
   //isFirstCfgTime(); // check to see if this is the first time setting up cfg
+  drawDisplay(count);
 }
 
 //==============================[LOOP]========================
 
 void loop() {
   // if there is a message coming in, turn on the comm LED, read the message in buffer,then turn off the LED
-  if (Serial.available()) {
+  if (Serial.available() > 8) {
     PORTC ^= (1 << PC5);
     RS485Receive();
   }
-  // if there is new data in the message buffer, check it for the slaves address, if true, then continues with the message translation, else continue on
   if (newData) {
-    PORTC ^= (1 << PC5);
     isMyAddress();
   }
   errorCheck();
   countCheck();
+  /*
+    if (currentMillis - previousMillis > interval) {
+      checkPins();
+    }*/
 }

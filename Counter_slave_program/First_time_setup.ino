@@ -18,9 +18,9 @@ void isFirstCfgTime() {
 /*  STX RXID TXID CMD TYPE FLOORID MAX MIN ETX */
 
 void configurationMode() {
-  if (Serial.available()) {  //wait for config from PC software
+  if (Serial.available() > 8) { //wait for config from PC software
     PORTC ^= (1 << PD5);
-    Serial.readBytes(buff, sizeBuff); //reads the serial data,stores data in a 8 byte buffer
+    Serial.readBytes(buff, sizeBuff); //reads the serial data,stores data in a 9 byte buffer
     //checks the buffer for the msg stx and etx bytes, if the buffer is still clear, there is no new data, return, if there is new data, continue on reading the message
     if (buff[0] == STX && buff[sizeBuff - 1] == ETX) {
       newData = true;

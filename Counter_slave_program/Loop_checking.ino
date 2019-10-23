@@ -1,6 +1,4 @@
 
-//AB1[2]; // L1[A] & L2[B]
-//AB2[2]; // L3[A] & L4[B]
 //============================[CHECK_LOOPS]========================<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 //from ISR to this in order to correctly know the vehicles direction
 /*  type 1:  [↓↑]   single bidirectional entrance
@@ -10,55 +8,40 @@
     type 5:  eco    eco(sigle loop action) only in/ only out
 */
 void checkLoops() {
-  oldCount = count;
+  //oldCount = count;
   PORTC ^= (1 << PC4);
   if (type == 1) {
     // L1, L2
-    if (AB1 == "AB") {
+    if (L1_flag == true) {
       //carIN
-      count --;
+      count--;
       L1_flag = false;
-      L2_flag = false;
     }
-    else if (AB1 == "BA") {
+    else if (L2_flag == true) {
       //carOUT
-      count ++;
-      L1_flag = false;
+      count++;
       L2_flag = false;
-    }
-    if (AB1[0] != 'B') {
-      AB1[0] = 'A';
-    }
-    else {
-      AB1[1] = 'A';
     }
 
     // L3, L4
-    if (AB2 == "AB") {
+    if (L3_flag == true) {
       //carIN
-      count --;
+      count--;
       L3_flag = false;
-      L4_flag = false;
     }
-    else if (AB2 == "BA") {
+    else if (L4_flag == true) {
       //carOUT
-      count ++;
-      L3_flag = false;
+      count++;
       L4_flag = false;
-    }
-    if (AB2[0] != 'B') {
-      AB2[0] = 'A';
-    }
-    else {
-      AB2[1] = 'A';
     }
   }
 
-  if (type == 2) {
+
+  else if (type == 2) {
     //L5, L6
     if (L5_flag == true && L6_flag == true) {
       //carOUT
-      count ++;
+      count++;
       L5_flag = false;
       L6_flag = false;
     }
@@ -66,55 +49,53 @@ void checkLoops() {
     //L7, L8
     if (L7_flag == true && L8_flag == true) {
       //carIN
-      count --;
+      count--;
       L7_flag = false;
       L8_flag = false;
     }
   }
   // in
-  if (type == 3) {
+  else if (type == 3) {
     //L7, L8
     if (L7_flag == true && L8_flag == true) {
       //carIN
-      count --;
+      count--;
       L7_flag = false;
       L8_flag = false;
     }
   }
   // out
-  if (type == 4) {
+  else if (type == 4) {
     //L5, L6
     if (L5_flag == true && L6_flag == true) {
       //carOUT
-      count ++;
+      count++;
       L5_flag = false;
       L6_flag = false;
     }
   }
   //eco / single loop action
-  if (type == 5) {
+  else if (type == 5) {
     //L5, L6, L7, L8
     if (L5_flag == true) {
       //carOUT
-      count ++;
+      count++;
       L5_flag = false;
     }
     if (L6_flag == true) {
       //carOUT
-      count ++;
+      count++;
       L6_flag = false;
     }
     if (L7_flag == true) {
-      //carOUT
-      count --;
+      //carIN
+      count--;
       L7_flag = false;
     }
     if (L8_flag == true) {
-      //carOUT
-      count --;
+      //carIN
+      count--;
       L8_flag = false;
     }
   }
-  PORTC &= ~(1 << PC4);
-  sei(); //enable interrupts
 }

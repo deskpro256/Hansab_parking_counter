@@ -12,39 +12,40 @@
 //===================================[GET_ERRORS]=======================================
 
 void getErrors(char receiverID) {
-  while (newData == false && tries < 2) {
-    RS485Send(receiverID, messageType[0], CMDLUT[0], 0x00, 0x00, 0x00);
-    //timerStart();
+    RS485Send(receiverID, messageType[0], CMDLUT[0], 'E', 'R', 'R');
+    delay(100);
     tries++;
-    RS485Receive();
-  }
+    if (Serial.available() > 8) {
+      RS485Receive();
+    }
+  //replied = false;
   if (tries > 2) {
-    //add to error list
     PORTD |= (1 << PD6);      // Enable ERR Led
+    //add to error list
     addToErrorList(receiverID, errorCodes[1]);
+    tries = 0;
   }
   else {
     tries = 0;
-    isMyAddress();
   }
   PORTD &= ~(1 << PD6);     // Disable ERR Led
-  tries = 0;
 }
 
 //===================================[SEND_ERROR_REPORT]=======================================
 
 void sendErrorReport() {    //sends the errorDevices[] array to configurator program
-  delay(100);
+
+  delay(10);
   PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
   PORTD |= (1 << PD5);      // Enable COM Led
-  Serial.write(errorDevices);
-  delay(100);
+  Serial.println(errorDevices);
+  delay(10);
   PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
   PORTD &= ~(1 << PD5);     // Disable COM Led
 }
 
 void addToErrorList(char id, char errCode) {
   //add to error list
-  errorDevices[id - 1] = id;
-  errorDevices[id] = errCode;
+  errorDevices[id] = id;
+  errorDevices[id + 1] = errCode;
 }

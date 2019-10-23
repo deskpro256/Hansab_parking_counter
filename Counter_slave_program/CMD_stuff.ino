@@ -6,9 +6,10 @@
 // 0x04 - clearErrors
 // 0x05 - firstTimeSetup
 // 0x06 - ping/pong
-// 0x07 -
-// 0x08 -
-// 0x09 -
+// 0x07 - sendDisplayCountToUSB
+// 0x08 - sendErrorReport
+// 0x09 - request power data
+// 0x0A -
 // };     a look up table for every command
 
 //char messageType[] = {
@@ -22,7 +23,11 @@
 void getCMD(char cmd, char msgType, int data) {
 
   if (cmd == CMDLUT[0]) {  // 0x01 - getErrors
-    sendErrorReport(errorCount);
+    if (errorState) {
+      sendErrorReport(errorCount);
+    } else {
+      RS485Send(0x1D, messageType[1], CMDLUT[0], 'N', 'E', 'r');
+    }
   }
   if (cmd == CMDLUT[1]) {  // 0x02 - getChanges
     if (changedCount = true) {
@@ -34,7 +39,7 @@ void getCMD(char cmd, char msgType, int data) {
     }
   }
   if (cmd == CMDLUT[2]) { // 0x03 - sendDisplayCount
-
+      drawDisplay(data);
   }
   if (cmd == CMDLUT[3]) { // 0x04 - clearErrors
 
@@ -43,15 +48,18 @@ void getCMD(char cmd, char msgType, int data) {
 
   }
   if (cmd == CMDLUT[5]) { // 0x06 - ping/pong
-      RS485Send(0x99, messageType[1], CMDLUT[5], 0x00, 0x00, 0x00);
+    RS485Send(0x1C, messageType[1], 'P', 'O', 'N', 'G');
   }
-  if (cmd == CMDLUT[6]) {
-
+  if (cmd == CMDLUT[6]) { // 0x07 - request count from pc
+    //do nothing
   }
-  if (cmd == CMDLUT[7]) {
-
+  if (cmd == CMDLUT[7]) { // 0x08 - sendErrorReport
+    //do nothing
   }
-  if (cmd == CMDLUT[8]) {
+  if (cmd == CMDLUT[8]) { // 0x09 - request power data
+    //do nothing
+  }
+  if (cmd == CMDLUT[9]) { // 0x0A -
 
   }
 }

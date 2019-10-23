@@ -1,20 +1,22 @@
 
-//============================[ISR]================================================================================,,,,,,,,
+//============================[ISR]================================================================================
 //isr for pins L4-L8
 //PB1   L4
 //PB2   L5
 //PB3   L6
 //PB4   L7
 //PB5   L8
+
+
 ISR(PCINT0_vect) {
-  cli();
+  //cli();
   //L4
-  if (!(PINB & (1 << PB1))) {
+  if (!(PINB & (1 << PB5))) {
     L4_flag = true;
     checkLoops();
   }
   //L5
-  if (!(PINB & (1 << PB2))) {
+  if (!(PINB & (1 << PB4))) {
     L5_flag = true;
     checkLoops();
   }
@@ -24,12 +26,12 @@ ISR(PCINT0_vect) {
     checkLoops();
   }
   //L7
-  if (!(PINB & (1 << PB4))) {
+  if (!(PINB & (1 << PB2))) {
     L7_flag = true;
     checkLoops();
   }
   //L8
-  if (!(PINB & (1 << PB5))) {
+  if (!(PINB & (1 << PB1))) {
     L8_flag = true;
     checkLoops();
   }
@@ -41,7 +43,7 @@ ISR(PCINT0_vect) {
 //PC1
 //PC2
 ISR(PCINT1_vect) {
-  cli();
+  //cli();
   //L1
   if (!(PINC & (1 << PC2))) {
     L1_flag = true;
