@@ -114,13 +114,17 @@ int ADRLUT[] = {ADR1, ADR2, ADR3, ADR4};// a look up table for adress selecting 
 
 char CMDLUT[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B}; // a look up table for every command
 
-char dispNum[] = {0x1B, 0x01, 0x00, 0x06, 0xA1, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00};
+char dispNum[] = {0x1B, 0x01, 0x00, 0x06, 0xA1, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00}; // no eeprom & no reply
+//char dispNum[] = {0x1B, 0x01, 0x00, 0x06, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00}; //eeprom & reply
 char packetSum = 0x00;
 char checkSum = 0x00;
 
-unsigned int currentMillis = 0;
-unsigned int previousMillis = 0;
-unsigned int interval = 100;
+const unsigned long debounceTime = 50;
+volatile bool contactPressed = false;
+volatile unsigned long current_millis = 0;
+volatile unsigned long last_millis = 0;
+
+
 
 //============================[NOP_DELAY]========================
 //no-operation delay with a set value
@@ -128,6 +132,15 @@ void NOPdelay(unsigned int z) {
   for (unsigned int x = 0; x <= z; x++) {
     NOP;
   }
+}
+
+//============================[DEBOUNCE]========================
+void debounceISR() {
+  current_millis = millis();
+  if (current_millis - last_millis >= debounceTime) {
+    contactPressed = true;
+  }
+  last_millis = current_millis;
 }
 //============================[SETUP]========================
 
@@ -143,14 +156,20 @@ void setup() {
   PORTD |= 0B11100000;
 
   //------[ISR SETUP]------
-
+  /*
+    TCNT2 = 0;
+    TCCR2B |= (1 << CS22)| (1 << CS21) | (1 << CS20); // PRESCALER 1024
+    TIMSK2 |= (1 << TOIE2);           // enable timer overflow INT
+  */
+  //------[OLD ISR]---------
   PCMSK0 = 0B000111110;
   PCMSK1 = 0B000000111;
 
   PCICR |= (1 << PCIE0);
   PCICR |= (1 << PCIE1);
+  //------------------------
   sei(); //enable interrupts
-  Serial.begin(9600);   //starting UART with 115200 BAUD
+  Serial.begin(9600);   //starting UART with 9600 BAUD
   getMyID();  // reads its own address on power-up
   //greeting();
   //isFirstCfgTime(); // check to see if this is the first time setting up cfg
@@ -170,8 +189,5 @@ void loop() {
   }
   errorCheck();
   countCheck();
-  /*
-    if (currentMillis - previousMillis > interval) {
-      checkPins();
-    }*/
+
 }

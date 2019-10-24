@@ -6,7 +6,6 @@
 
 //============================[DRAW_DISPLAY]========================
 void drawDisplay(int countNum) {
-
   //|                                                sum = C4  |
   //char adispNum[] = {0x1B, 0x01, 0x00, 0x06, 0xA1, 0x01, 0x00, 0x35, 0x35, 0x41, 0x90}; //ASS
 
