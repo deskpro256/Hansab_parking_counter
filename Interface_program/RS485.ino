@@ -25,7 +25,7 @@ void RS485Send(char receiverID, char msgType, char command, char data1, char dat
 
 void RS485Receive() {
   //reads the serial data,stores data in a byte buffer
-  Serial.readBytes(buff, 9);
+  Serial.readBytesUntil(ETX, buff, sizeBuff);
   //checks the buffer for the msg stx and etx bytes, if the buffer is still clear, there is no new data, return, if there is new data, continue on reading the message
   if (buff[0] == STX && buff[sizeBuff - 1] == ETX) {
     newData = true;
@@ -42,9 +42,6 @@ void RS485Receive() {
 
 void isMyAddress() {
   if (recMsg[1] == myID) {
-
-    testSend('y');
-
     newData = false;
     replied = true;
     //moves all the buff[] to a stored message value while also clearing the buffer
@@ -61,28 +58,4 @@ void isMyAddress() {
 
     getCMD(CMD, mesType, data2INT);
   }
-}
-
-//===================================[GREETING]=======================================
-
-void greeting() {
-  PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
-  PORTD |= (1 << PD5);      // Enable COM Led
-  delay(10);
-  Serial.println(connectedString);
-  Serial.println(versionNum);
-  delay(10);
-  PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
-  PORTD &= ~(1 << PD5);     // Disable COM Led
-}
-
-//===================================[TEST]=======================================
-void testSend(char what) {
-  PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
-  PORTD |= (1 << PD5);      // Enable COM Led
-  delay(10);
-  Serial.write(what);
-  delay(10);
-  PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
-  PORTD &= ~(1 << PD5);     // Disable COM Led
 }

@@ -6,8 +6,6 @@
 
 //============================[DRAW_DISPLAY]========================
 void drawDisplay(int countNum) {
-  //|                                                sum = C4  |
-  //char adispNum[] = {0x1B, 0x01, 0x00, 0x06, 0xA1, 0x01, 0x00, 0x35, 0x35, 0x41, 0x90}; //ASS
 
   checkSum = 0x00;
   packetSum = 0x00;
@@ -19,8 +17,8 @@ void drawDisplay(int countNum) {
   dispNum[7] = nums[2];
   dispNum[8] = nums[1];
   dispNum[9] = nums[0];
+  
   //summing the bytes
-
   for (int i = 0; i <= 9; i++) {
     packetSum += dispNum[i];
   }
@@ -32,7 +30,7 @@ void drawDisplay(int countNum) {
   PORTC |= (1 << PC5);      // Enable COM Led
   delay(10);
   Serial.write(dispNum, 11);
-  delay(100);
+  delay(50);
   PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
   PORTC &= ~(1 << PC5);     // Disable COM Led
 }

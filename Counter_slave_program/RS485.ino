@@ -25,16 +25,18 @@ void RS485Send(char receiverID, char msgType, char command, char data1, char dat
 
 void RS485Receive() {
   //reads the serial data,stores data in a 9 byte buffer
-  Serial.readBytes(buff, sizeBuff);
-
+  Serial.readBytesUntil(ETX, buff, sizeBuff);
+  Serial.write(buff, sizeBuff);
   //checks the buffer for the msg stx and etx bytes, if the buffer is still clear, there is no new data, return, if there is new data, continue on reading the message
-  if (buff[0] == STX && buff[sizeBuff - 1] == ETX) {
+  if (buff[0] == STX) {
     newData = true;
+    PORTC ^= (1 << PC3);      // Enable COM Led
   }
   else {
     newData = false;
   }
 }
+
 //============================[RECEIVED_MY_ADDRESS]========================
 //checks if the address byte has own or floor address
 void isMyAddress() {
@@ -54,18 +56,4 @@ void isMyAddress() {
 
     getCMD(CMD, mesType, data2INT);
   }
-}
-
-
-///greeting
-void greeting() {
-  PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
-  PORTC |= (1 << PC5);      // Enable COM Led
-  delay(10);
-  Serial.print("Slave connected with ID:");
-  Serial.write(id, 2);
-  Serial.println();
-  delay(10);
-  PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
-  PORTC &= ~(1 << PC5);     // Disable COM Led
 }

@@ -39,7 +39,7 @@ void getCMD(char cmd, char msgType, int data) {
     }
   }
   if (cmd == CMDLUT[2]) { // 0x03 - sendDisplayCount
-      drawDisplay(data);
+    drawDisplay(data);
   }
   if (cmd == CMDLUT[3]) { // 0x04 - clearErrors
 

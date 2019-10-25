@@ -33,26 +33,6 @@
 //number of bytes in buffer and message buff[sizeBuff] & msg[sizeBuff]
 #define sizeBuff 9
 
-//============================[FUNCTION_PREDEFINES]========================
-void getMyID();
-void getCMD(char cmd, char msgType, int data);
-void countCheck();
-void drawDisplay(int placeholder);
-void sendErrorReport(int errcount);
-void errorCheck();
-void clearErrors();
-void isFirstCfgTime();
-void configurationMode();
-ISR(PCINT0_vect);
-ISR(PCINT1_vect);
-void checkLoops();
-void RS485Send(char receiverID, char msgType, char command, char data1, char data2, char data3);
-void RS485Receive();
-void isMyAddress();
-void greeting();
-void carIN();
-void carOUT();
-//============================[FUNCTION_PREDEFINES]========================
 
 int oldCount = 0;
 volatile int maxCount = 999;
@@ -81,11 +61,11 @@ bool newData = false;           //flag var to see if there is new data on the UA
 char msg [9];
 char messageType[] = {0x05, 0x06, 0x21}; //ENQ ACK NAK
 char mesType = 0x00; // received message type /ENQ ACK NAK
-char STX = 0x02;       //start bit of the message
-char ETX = 0x03;       //end bit of the message
+byte STX = 0x5B;       // start bit of the message  0x5B
+byte ETX = 0x5D;       // end bit of the message    0x5D
 
 char myID = 0x00;    // my address
-char floorID = 0x01; // my floor address
+char floorID = 0xF1; // my floor address
 char RXID = 0x1D;   // MASTER address
 char id[] = {'0', '0'}; // for greeting show id
 
@@ -114,12 +94,13 @@ int ADRLUT[] = {ADR1, ADR2, ADR3, ADR4};// a look up table for adress selecting 
 
 char CMDLUT[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B}; // a look up table for every command
 
-char dispNum[] = {0x1B, 0x01, 0x00, 0x06, 0xA1, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00}; // no eeprom & no reply
-//char dispNum[] = {0x1B, 0x01, 0x00, 0x06, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00}; //eeprom & reply
+char dispNum[] = {0x1B, 0x01, 0x00, 0x06, 0xA1, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00};    // no write to eeprom & no reply
+//char dispNum[] = {0x1B, 0x01, 0x00, 0x06, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00};  //    write to eeprom & reply
 char packetSum = 0x00;
 char checkSum = 0x00;
 
-const unsigned long debounceTime = 50;
+const unsigned long debounceTimeMin = 1;
+const unsigned long debounceTimeMax = 2000;
 volatile bool contactPressed = false;
 volatile unsigned long current_millis = 0;
 volatile unsigned long last_millis = 0;
@@ -137,7 +118,7 @@ void NOPdelay(unsigned int z) {
 //============================[DEBOUNCE]========================
 void debounceISR() {
   current_millis = millis();
-  if (current_millis - last_millis >= debounceTime) {
+  if (current_millis - last_millis >= debounceTimeMin || current_millis - last_millis >= debounceTimeMax) {
     contactPressed = true;
   }
   last_millis = current_millis;
@@ -169,7 +150,7 @@ void setup() {
   PCICR |= (1 << PCIE1);
   //------------------------
   sei(); //enable interrupts
-  Serial.begin(9600);   //starting UART with 9600 BAUD
+  Serial.begin(9600, SERIAL_8N2);   //starting UART with 9600 BAUD
   getMyID();  // reads its own address on power-up
   //greeting();
   //isFirstCfgTime(); // check to see if this is the first time setting up cfg
@@ -189,5 +170,4 @@ void loop() {
   }
   errorCheck();
   countCheck();
-
 }

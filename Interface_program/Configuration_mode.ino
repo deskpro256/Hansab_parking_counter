@@ -49,11 +49,9 @@ void configurationMode() {
 
 void isFirstCfgTime() {
   if (EEPROM[0] = 1) {
-    loop();
   }
   else {
     EEPROM[0] = 1;
-    loop();
     //configurationMode();
   }
 }
