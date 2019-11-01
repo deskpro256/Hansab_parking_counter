@@ -10,12 +10,11 @@ void RS485Send(char receiverID, char msgType, char command, char data1, char dat
   msg[5] = data1;
   msg[6] = data2;
   msg[7] = data3;
-  msg[8] = ETX;
 
   PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
   PORTC |= (1 << PC5);      // Enable COM Led
   delay(10);
-  Serial.write(msg, 9);
+  Serial.write(msg, sizeBuff);
   delay(10);
   PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
   PORTC &= ~(1 << PC5);     // Disable COM Led
@@ -24,13 +23,16 @@ void RS485Send(char receiverID, char msgType, char command, char data1, char dat
 //===================================[RS485_RECEIVE]=======================================
 
 void RS485Receive() {
-  //reads the serial data,stores data in a 9 byte buffer
-  Serial.readBytesUntil(ETX, buff, sizeBuff);
-  Serial.write(buff, sizeBuff);
-  //checks the buffer for the msg stx and etx bytes, if the buffer is still clear, there is no new data, return, if there is new data, continue on reading the message
-  if (buff[0] == STX) {
+  //reads the serial data,stores data in an 8 byte buffer
+  char lookForSTX;
+  while (lookForSTX != STX) {
+    lookForSTX = Serial.read();
+  }
+  if (lookForSTX == STX) {
+    Serial.readBytes(buff, sizeBuff);
+
     newData = true;
-    PORTC ^= (1 << PC3);      // Enable COM Led
+    isMyAddress();
   }
   else {
     newData = false;
@@ -40,7 +42,7 @@ void RS485Receive() {
 //============================[RECEIVED_MY_ADDRESS]========================
 //checks if the address byte has own or floor address
 void isMyAddress() {
-  if (recMsg[1] == myID || recMsg[1] == floorID) {
+  if (buff[1] == myID || buff[1] == floorID) {
     newData = false;
     //moves all the buff[] to a stored message value while also clearing the buffer
     for (int i = 0; i <= sizeBuff; i++) {
@@ -52,8 +54,6 @@ void isMyAddress() {
     huns = recMsg[5];
     tens = recMsg[6];
     ones = recMsg[7];
-    data2INT = (huns * 100) + (tens * 10) + ones;
-
-    getCMD(CMD, mesType, data2INT);
+    getCMD(CMD, mesType, ones, tens, huns);
   }
 }

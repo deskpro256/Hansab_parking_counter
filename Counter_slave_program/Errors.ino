@@ -11,7 +11,7 @@
 //============================[SEND_ERROR_REPORT]========================
 
 void sendErrorReport(int errcount) {      //sends the error report to master
-  if (errorState == true) {
+  if (errorState) {
     RS485Send(RXID, messageType[1], CMDLUT[0], 0x00 , 0x00, 0x00);
   }
   //send error with errcount
@@ -25,12 +25,12 @@ void sendErrorReport(int errcount) {      //sends the error report to master
 void errorCheck() {
   // error state check. If the count is not within the margins set by min/max turn on the error LED, master ticks the error in a log file
   if (count < 0 || count > maxCount) {
-    PORTC |= (1 << PC3);
+    PORTC |= (1 << PC3); //error led on
     errorState = true;
     errorCount = count;
   }
   else {
-    PORTC &= ~(1 << PC3);
+    PORTC &= ~(1 << PC3);//error led off
   }
 }
 

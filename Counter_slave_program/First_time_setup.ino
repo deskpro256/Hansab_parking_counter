@@ -4,11 +4,11 @@
 //===============================[IS THIS THE FIRST TIME CONFIGURING?]================================
 void isFirstCfgTime() {
   if (EEPROM[0] = 1) {
-    loop();
+    //continue to main loop
   }
   else {
     EEPROM[0] = 1;
-    loop();
+    // wait for PC to send my settings
     //configurationMode();
   }
 }
@@ -18,9 +18,9 @@ void isFirstCfgTime() {
 /*  STX RXID TXID CMD TYPE FLOORID MAX MIN ETX */
 
 void configurationMode() {
-  if (Serial.available() > 8) { //wait for config from PC software
+  if (Serial.available() >= 8) { //wait for config from PC software
     PORTC ^= (1 << PD5);
-    Serial.readBytes(buff, sizeBuff); //reads the serial data,stores data in a 9 byte buffer
+    Serial.readBytes(buff, sizeBuff); //reads the serial data,stores data in a buffer
     //checks the buffer for the msg stx and etx bytes, if the buffer is still clear, there is no new data, return, if there is new data, continue on reading the message
     if (buff[0] == STX && buff[sizeBuff - 1] == ETX) {
       newData = true;
@@ -43,9 +43,8 @@ void configurationMode() {
         huns = recMsg[5];
         tens = recMsg[6];
         ones = recMsg[7];
-        data2INT = (huns * 100) + (tens * 10) + ones;
 
-        getCMD(CMD, mesType, data2INT);
+        getCMD(CMD, mesType, ones, tens, huns);
       }
     }
   }

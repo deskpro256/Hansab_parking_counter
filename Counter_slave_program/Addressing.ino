@@ -16,7 +16,7 @@ void getMyID() {
   adrINT = (DIP[0] * 8) + (DIP[1] * 4) + (DIP[2] * 2) + (DIP[3] * 1);
   //adrINT to ascii
   myID = adrINT;
-
+/*
   // optional ID for greeting()
   if (myID <= 0x09) {
     id [1] = myID + '0';
@@ -39,5 +39,5 @@ void getMyID() {
     id [0] = '1';
     id [1] = '5';
   }
-
+*/
 }

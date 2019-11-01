@@ -1,6 +1,6 @@
 /* Interface device program for Hansab
     Written by Karlis Reinis Ulmanis
-    
+
                 2019
     type 1:  [↓↑]   single bidirectional entrance
     type 2: [↑][↓]  separate directional entrance and exit
@@ -27,12 +27,19 @@ void NOPdelay(unsigned int z) {
 //============================[VARIABLES]========================
 
 //number of bytes in buffer and message buff[sizeBuff] & msg[sizeBuff]
-#define sizeBuff 9
+#define sizeBuff 8
 
 ////Slave data array/////
-char slaveData[16][4] {};
+//char slaveData[16][4] {}; //GOES IN EEPROM
 /////////////////////////
 int floorCount[4] = {123, 456, 789, 696};
+int activeFloors = 1;
+char floorNaddresses[4] = {0xF1, 0xF2, 0xF3, 0xF4};
+int tempF1Count = 0;
+int tempF2Count = 0;
+int tempF3Count = 0;
+int tempF4Count = 0;
+bool countChanged = false;
 int totalCount = 0;
 int maxCount = 512;
 char errorDevices[32] = {}; //devices with errors. ID, ERROR, ID, ERROR ...
@@ -53,7 +60,7 @@ byte recMsg [sizeBuff];      // RECEIVED MESSAGE
 bool newData = false;           // flag var to see if there is new data on the UART
 bool replied = false;           // flag to see if slave has replied
 
-byte msg [9] = {'0', '0', '0', '0', '0', '0', '0', '0', '0'};
+byte msg [sizeBuff];
 byte messageType[] = {0x05, 0x06, 0x15}; //ENQ ACK NAK
 byte mesType = 0x00; // received message type / ACK NAK
 byte STX = 0x5B;       // start bit of the message  0x5B
@@ -63,13 +70,12 @@ byte CMD = '0';  // by default on startup,there hasn't been any messages, so the
 byte CMDLUT[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B}; // a look up table for every command
 
 byte myID = 0x1D;    // my address
-byte floorID = '0'; // floor address
-byte RXID = '1';   // receivers address
+byte floorID = 0x00; // floor address
+byte RXID = 0x00;   // receivers address
 
 byte ones = 0x00;
 byte tens = 0x00;
 byte huns = 0x00;
-unsigned int data2INT = 0;
 int foo = 0;//just a general slave counter iterator var
 
 
@@ -93,6 +99,10 @@ void setup() {
   //Serial.begin(9600);   //starting UART with 115200 BAUD
   Serial.begin(9600, SERIAL_8N2);   //starting UART with 9600 BAUD
   //isFirstCfgTime(); // check to see if this is the first time setting up cfg
+  tempF1Count = floorCount[0];
+  tempF2Count = floorCount[1];
+  tempF3Count = floorCount[2];
+  tempF4Count = floorCount[3];
 }
 
 //==============================[LOOP]========================
@@ -100,26 +110,32 @@ void setup() {
 void loop() {
   if (ConfigEnabled) {
     //CheckPowerSource();
-    if (Serial.available() > 8) {
+    if (Serial.available() >= 8) {
       PORTC ^= (1 << PC5);
       RS485Receive();
     }
   }
   else {
-      foo = 0;
-      slaveCount = 1;
-      while (foo <= slaveCount) {
+    foo = 0;
+    slaveCount = 0;
+    while (foo <= slaveCount) {
       currentAddress = addresses[foo];
       delay(100);
-      getErrors(currentAddress);
+      enquireSlave(currentAddress, 'E'); // get errors
+      //getErrors(currentAddress);
       delay(100);
-      getChanges(currentAddress);
+      //getChanges(currentAddress);
+      enquireSlave(currentAddress, 'C');  // get changes
       delay(100);
       foo++;
-      }
-      compareFloor();
+    }
+    //sendDisplayCount();
+    countNumbers();
+    if (countChanged) {
       sendDisplayCount();
-      //CheckPowerSource();
-      delay(1000);
+      countChanged = false;
+    }
+    //CheckPowerSource();
+    delay(1000);
   }
 }

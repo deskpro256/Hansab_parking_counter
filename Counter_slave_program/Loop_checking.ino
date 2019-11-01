@@ -9,6 +9,7 @@
 */
 void checkLoops() {
   //oldCount = count;
+  contactPressed = false;
   PORTC ^= (1 << PC4);
   if (type == 1) {
     // L1, L2

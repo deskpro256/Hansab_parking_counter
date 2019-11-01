@@ -9,16 +9,48 @@
   E3 : Reserved
 */
 
+//===================================[ENQUIRE]=======================================
+void enquireSlave(char receiverID, char cmd) {
+  //while (tries <= 2) {
+  while (replied == false) {
+
+    if (cmd == 'E') {
+      RS485Send(receiverID, messageType[0], CMDLUT[0], 'E', 'R', 'R');
+    }
+    else if (cmd == 'C') {
+      RS485Send(receiverID, messageType[0], CMDLUT[1], 'C', 'N', 'G');
+    }
+    delay(100);
+    tries++;
+    if (Serial.available() >= 8) {
+      RS485Receive();
+    }
+  }
+  replied = false;
+  if (tries > 2) {
+    PORTD |= (1 << PD6);      // Enable ERR Led
+    //add to error list
+    addToErrorList(receiverID, errorCodes[1]);
+    tries = 0;
+  }
+  else {
+    tries = 0;
+  }
+  PORTD &= ~(1 << PD6);     // Disable ERR Led
+}
+
 //===================================[GET_ERRORS]=======================================
 
 void getErrors(char receiverID) {
+  while (replied == false || tries <= 2) {
     RS485Send(receiverID, messageType[0], CMDLUT[0], 'E', 'R', 'R');
     delay(100);
     tries++;
-    if (Serial.available() > 8) {
+    if (Serial.available() >= 8) {
       RS485Receive();
     }
-  //replied = false;
+  }
+  replied = false;
   if (tries > 2) {
     PORTD |= (1 << PD6);      // Enable ERR Led
     //add to error list

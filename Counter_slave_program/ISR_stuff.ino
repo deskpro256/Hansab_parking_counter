@@ -25,7 +25,6 @@ ISR(PCINT1_vect) {
     if (!(PINC & (1 << PC0))) {
       L3_flag = true;
     }
-    contactPressed = false;
     checkLoops();
   }
 }
@@ -33,7 +32,6 @@ ISR(PCINT1_vect) {
 ISR(PCINT0_vect) {
   debounceISR();
   if (contactPressed) {
-
     //L4
     if (!(PINB & (1 << PB5))) {
       L4_flag = true;
@@ -54,7 +52,20 @@ ISR(PCINT0_vect) {
     if (!(PINB & (1 << PB1))) {
       L8_flag = true;
     }
-    contactPressed = false;
     checkLoops();
   }
 }
+
+// If the address is changed after
+//-----------
+/*
+  #define ADR1 8 //PB0
+  #define ADR2 7 //PD7
+  #define ADR3 6 //PD6
+  #define ADR4 5 //PD5
+
+ISR(){
+  getMyID();
+  }
+
+*/

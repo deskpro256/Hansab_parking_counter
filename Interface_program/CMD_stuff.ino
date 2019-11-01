@@ -20,43 +20,53 @@
 
 //============================[GET_CMD_NAME]========================
 // gets the command byte from the message and executes the corresponding func
-void getCMD(char cmd, char msgType, int data) {
+void getCMD(char cmd, char msgType, char _ones, char _tens, char _hundreds) {
+  //--------------------------------------
   if (cmd == CMDLUT[0]) {  // getError
     if (msgType == messageType[1]) { //if error
       addToErrorList(currentAddress, errorCodes[2]);
     }
   }
+  //--------------------------------------
   if (cmd == CMDLUT[1]) {   //getChanges
+    // floor sign count
+    // ones  
+    //hundreds = + or -, tens = count diff,ones = floorNum
     if (msgType == messageType[1]) { //if changes
-      //-----------------------here
-    }
-    else {
-      //something
+      compareFloor(_ones, _hundreds, _tens);
     }
   }
+  //--------------------------------------
   if (cmd == CMDLUT[2]) { // 0x03 - sendDisplayCount
-    
+    //nothing, slave only command
   }
+  //--------------------------------------
   if (cmd == CMDLUT[3]) { // 0x04 - clearErrors
 
   }
+  //--------------------------------------
   if (cmd == CMDLUT[4]) { // 0x05 - firstTimeSetup
 
   }
+  //--------------------------------------
   if (cmd == CMDLUT[5]) { // 0x06 - ping/pong
-    RS485Send(0x99, messageType[1], CMDLUT[5], 'P', 'N', 'G');
+    RS485Send(0x1C, messageType[1], 'P', 'O', 'N', 'G');
   }
+  //--------------------------------------
   if (cmd == CMDLUT[6]) { // 0x07 - sendDisplayCountToUSB
     sendDisplayCountToUSB();
   }
-
+  //--------------------------------------
   if (cmd == CMDLUT[7]) { // 0x08 - sendErrorReport
     sendErrorReport();
   }
+  //--------------------------------------
   if (cmd == CMDLUT[8]) { // 0x09 - request power data
 
   }
+  //--------------------------------------
   if (cmd == CMDLUT[9]) { // 0x0A -
 
   }
+  //--------------------------------------
 }

@@ -1,3 +1,4 @@
+
 /* Slave device program for Hansab
    Written by Karlis Reinis Ulmanis
                 2019
@@ -6,6 +7,9 @@
 #include <EEPROM.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <SendOnlySoftwareSerial.h>
+
+
 
 #define NOP __asm__ __volatile__ ("nop\n\t")  //NO OPERATION
 
@@ -31,13 +35,16 @@
 #define ADR4 5 //PD5
 
 //number of bytes in buffer and message buff[sizeBuff] & msg[sizeBuff]
-#define sizeBuff 9
+#define sizeBuff 8
 
+//PD3 = SWTX
+//PD4 = DDE
+SendOnlySoftwareSerial Display(PD3); //PD3
 
 int oldCount = 0;
 volatile int maxCount = 999;
 int count = 666;
-bool changedCount = false;
+bool countChanged = false;
 
 // Flags for redundancy to detect vehicles
 volatile boolean L1_flag = false;
@@ -58,21 +65,22 @@ char recMsg [sizeBuff];      // RECEIVED MESSAGE
 
 bool newData = false;           //flag var to see if there is new data on the UART
 
-char msg [9];
-char messageType[] = {0x05, 0x06, 0x21}; //ENQ ACK NAK
+char msg [sizeBuff];
+char messageType[] = {0x05, 0x06, 0x15}; //ENQ ACK NAK
 char mesType = 0x00; // received message type /ENQ ACK NAK
 byte STX = 0x5B;       // start bit of the message  0x5B
 byte ETX = 0x5D;       // end bit of the message    0x5D
 
-char myID = 0x00;    // my address
+char myID = 0xFF;    // my address
 char floorID = 0xF1; // my floor address
 char RXID = 0x1D;   // MASTER address
 char id[] = {'0', '0'}; // for greeting show id
 
-unsigned int data2INT = 0;
 char ones = 0x00;
 char tens = 0x00;
 char huns = 0x00;
+
+unsigned int changedCount = 0;
 
 bool errorState = false;
 int errorCount = 0;
@@ -99,7 +107,7 @@ char dispNum[] = {0x1B, 0x01, 0x00, 0x06, 0xA1, 0x01, 0x00, 0x00, 0x00, 0x00, 0x
 char packetSum = 0x00;
 char checkSum = 0x00;
 
-const unsigned long debounceTimeMin = 1;
+const unsigned long debounceTimeMin = 10;
 const unsigned long debounceTimeMax = 2000;
 volatile bool contactPressed = false;
 volatile unsigned long current_millis = 0;
@@ -137,12 +145,6 @@ void setup() {
   PORTD |= 0B11100000;
 
   //------[ISR SETUP]------
-  /*
-    TCNT2 = 0;
-    TCCR2B |= (1 << CS22)| (1 << CS21) | (1 << CS20); // PRESCALER 1024
-    TIMSK2 |= (1 << TOIE2);           // enable timer overflow INT
-  */
-  //------[OLD ISR]---------
   PCMSK0 = 0B000111110;
   PCMSK1 = 0B000000111;
 
@@ -151,22 +153,20 @@ void setup() {
   //------------------------
   sei(); //enable interrupts
   Serial.begin(9600, SERIAL_8N2);   //starting UART with 9600 BAUD
+  Display.begin(9600);
   getMyID();  // reads its own address on power-up
-  //greeting();
   //isFirstCfgTime(); // check to see if this is the first time setting up cfg
-  drawDisplay(count);
+  //drawDisplay(0x00,0x00,0x00);
+  oldCount = count;
 }
 
 //==============================[LOOP]========================
 
 void loop() {
   // if there is a message coming in, turn on the comm LED, read the message in buffer,then turn off the LED
-  if (Serial.available() > 8) {
+  if (Serial.available() >= 8) {
     PORTC ^= (1 << PC5);
     RS485Receive();
-  }
-  if (newData) {
-    isMyAddress();
   }
   errorCheck();
   countCheck();
