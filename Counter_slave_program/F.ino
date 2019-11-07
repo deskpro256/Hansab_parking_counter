@@ -12,15 +12,6 @@ void ReceiveConfig() {
   }
   if (lookForSTX == STX) {
     Serial.readBytes(buff, sizeBuff);
-    //------
-    PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
-    PORTD |= (1 << PD5);      // Enable COM Led
-    delay(10);
-    Serial.write(buff, sizeBuff);
-    delay(10);
-    PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
-    PORTD &= ~(1 << PD5);     // Disable COM Led
-    //------
     newData = true;
     isMyAddress();
   }

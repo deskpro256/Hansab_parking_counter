@@ -107,7 +107,7 @@ char dispNum[] = {0x1B, 0x01, 0x00, 0x06, 0xA1, 0x01, 0x00, 0x00, 0x00, 0x00, 0x
 char packetSum = 0x00;
 char checkSum = 0x00;
 
-const unsigned long debounceTimeMin = 10;
+const unsigned long debounceTimeMin = 100;
 const unsigned long debounceTimeMax = 2000;
 volatile bool contactPressed = false;
 volatile unsigned long current_millis = 0;
