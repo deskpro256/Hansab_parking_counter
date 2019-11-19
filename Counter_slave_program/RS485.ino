@@ -42,18 +42,18 @@ void RS485Receive() {
 //============================[RECEIVED_MY_ADDRESS]========================
 //checks if the address byte has own or floor address
 void isMyAddress() {
-  if (buff[1] == myID || buff[1] == floorID) {
+  if (buff[0] == myID || buff[0] == floorID) {
     newData = false;
     //moves all the buff[] to a stored message value while also clearing the buffer
-    for (int i = 0; i <= sizeBuff; i++) {
+    for (int i = 0; i <= sizeBuff - 1; i++) {
       recMsg[i] = buff[i];
       buff[i] = 0x00;
     }
-    mesType = recMsg[3];
-    CMD = recMsg[4];
-    huns = recMsg[5];
-    tens = recMsg[6];
-    ones = recMsg[7];
+    mesType = recMsg[2];
+    CMD = recMsg[3];
+    huns = recMsg[4];
+    tens = recMsg[5];
+    ones = recMsg[6];
     getCMD(CMD, mesType, ones, tens, huns);
   }
 }

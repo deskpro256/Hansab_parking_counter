@@ -109,7 +109,6 @@ void setup() {
 
 void loop() {
   if (ConfigEnabled) {
-    //CheckPowerSource();
     if (Serial.available() >= 8) {
       PORTC ^= (1 << PC5);
       RS485Receive();
@@ -121,11 +120,11 @@ void loop() {
     while (foo <= slaveCount) {
       currentAddress = addresses[foo];
       delay(100);
-      enquireSlave(currentAddress, 'E'); // get errors
-      //getErrors(currentAddress);
+      //enquireSlave(currentAddress, 'E'); // get errors
+      getErrors(currentAddress);
       delay(100);
-      //getChanges(currentAddress);
-      enquireSlave(currentAddress, 'C');  // get changes
+      getChanges(currentAddress);
+      //enquireSlave(currentAddress, 'C');  // get changes
       delay(100);
       foo++;
     }

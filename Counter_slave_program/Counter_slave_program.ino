@@ -107,7 +107,7 @@ char dispNum[] = {0x1B, 0x01, 0x00, 0x06, 0xA1, 0x01, 0x00, 0x00, 0x00, 0x00, 0x
 char packetSum = 0x00;
 char checkSum = 0x00;
 
-const unsigned long debounceTimeMin = 100;
+const unsigned long debounceTimeMin = 50;
 const unsigned long debounceTimeMax = 2000;
 volatile bool contactPressed = false;
 volatile unsigned long current_millis = 0;
@@ -147,7 +147,7 @@ void setup() {
   //------[ISR SETUP]------
   PCMSK0 = 0B000111110;
   PCMSK1 = 0B000000111;
-
+  
   PCICR |= (1 << PCIE0);
   PCICR |= (1 << PCIE1);
   //------------------------
