@@ -1,0 +1,17 @@
+Musu rekomendacija - kadus komandus tev jaizmantot autostavvietas sistema:
+ 
+0x00 - nav operacijas - displeja aptauja;
+ 
+datu ievadišanas komandas:
+ 
+0x21 - ASCII datu ievadišana bez ierakstišas EEPROM ar atbildi;
+0xa1 - ASCII datu ievadišana bez ierakstišas EEPROM bez atbildes;
+ 
+Servisa komandas:
+0x4a   -  displeja adreses attelojums ;
+0x4b   -  displeja serijas numura attelojums ;
+0x3d   -  displeja ar noteiktu serijas numuru adreses lasišana;
+0x3e   -  displeja ar noteiktu serijas numuru jaunas adreses ierakstišana;
+0x4c   -  jaunas adreses ierakstišana displeja pec noteikto adresi;
+0x4e   -  jauno displeja darbibas parametru (SETTINGS) ierakstišana;
+0x4f    -  raašanas displeja darbibas parametru (SETTINGS) atjaunošana.
