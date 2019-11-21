@@ -97,7 +97,7 @@ void setup() {
   EIMSK = 0B00000010;
   sei();
   //Serial.begin(9600);   //starting UART with 115200 BAUD
-  Serial.begin(9600, SERIAL_8N2);   //starting UART with 9600 BAUD
+  Serial.begin(9600);   //starting UART with 9600 BAUD
   //isFirstCfgTime(); // check to see if this is the first time setting up cfg
   tempF1Count = floorCount[0];
   tempF2Count = floorCount[1];
@@ -116,7 +116,7 @@ void loop() {
   }
   else {
     foo = 0;
-    slaveCount = 0;
+    slaveCount = 1;
     while (foo <= slaveCount) {
       currentAddress = addresses[foo];
       delay(100);

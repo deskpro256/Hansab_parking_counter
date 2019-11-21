@@ -10,7 +10,6 @@
 #include <SendOnlySoftwareSerial.h>
 
 
-
 #define NOP __asm__ __volatile__ ("nop\n\t")  //NO OPERATION
 
 //IN&OUT
@@ -152,7 +151,7 @@ void setup() {
   PCICR |= (1 << PCIE1);
   //------------------------
   sei(); //enable interrupts
-  Serial.begin(9600, SERIAL_8N2);   //starting UART with 9600 BAUD
+  Serial.begin(9600);   //starting UART with 9600 BAUD
   Display.begin(9600);
   getMyID();  // reads its own address on power-up
   //isFirstCfgTime(); // check to see if this is the first time setting up cfg
