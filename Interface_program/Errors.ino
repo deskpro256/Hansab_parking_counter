@@ -22,8 +22,12 @@ void enquireSlave(char receiverID, char cmd) {
     }
     delay(100);
     tries++;
-    if (Serial.available() >= 8) {
-      RS485Receive();
+    if (Serial.available() > 0) {
+      lookForSTX = Serial.read();
+      if (lookForSTX == STX) {
+        PORTD ^= (1 << PD3);
+        RS485Receive();
+      }
     }
   }
   replied = false;
@@ -46,8 +50,12 @@ void getErrors(char receiverID) {
     RS485Send(receiverID, messageType[0], CMDLUT[0], 'E', 'R', 'R');
     delay(100);
     tries++;
-    if (Serial.available() >= 8) {
-      RS485Receive();
+    if (Serial.available() > 0) {
+      lookForSTX = Serial.read();
+      if (lookForSTX == STX) {
+        PORTD ^= (1 << PD3);
+        RS485Receive();
+      }
     }
   }
   replied = false;

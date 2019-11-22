@@ -44,7 +44,8 @@ void getCMD(char cmd, char msgType, char onesN, char tensN, char hundredsN) {
   //--------------------------------------
   if (cmd == CMDLUT[2]) { // 0x03 - sendDisplayCount
     
-    //count = ((onesN - '0') * 100) + ((tensN - '0') * 10) + (hundredsN - '0');
+    count = ((hundredsN - '0') * 100) + ((tensN - '0') * 10) + (onesN - '0');
+    
     drawDisplay(onesN, tensN, hundredsN);
   }
   //--------------------------------------

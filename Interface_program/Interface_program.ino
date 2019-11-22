@@ -65,6 +65,7 @@ byte messageType[] = {0x05, 0x06, 0x15}; //ENQ ACK NAK
 byte mesType = 0x00; // received message type / ACK NAK
 byte STX = 0x5B;       // start bit of the message  0x5B
 byte ETX = 0x5D;       // end bit of the message    0x5D
+char lookForSTX;
 
 byte CMD = '0';  // by default on startup,there hasn't been any messages, so the command byte is just null
 byte CMDLUT[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B}; // a look up table for every command
@@ -109,9 +110,12 @@ void setup() {
 
 void loop() {
   if (ConfigEnabled) {
-    if (Serial.available() >= 8) {
-      PORTC ^= (1 << PC5);
-      RS485Receive();
+    if (Serial.available() > 0) {
+      lookForSTX = Serial.read();
+      if (lookForSTX == STX) {
+        PORTD ^= (1 << PD3);
+        RS485Receive();
+      }
     }
   }
   else {
@@ -134,6 +138,7 @@ void loop() {
       sendDisplayCount();
       countChanged = false;
     }
+    
     //CheckPowerSource();
     delay(1000);
   }

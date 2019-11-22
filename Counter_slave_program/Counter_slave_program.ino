@@ -69,6 +69,7 @@ char messageType[] = {0x05, 0x06, 0x15}; //ENQ ACK NAK
 char mesType = 0x00; // received message type /ENQ ACK NAK
 byte STX = 0x5B;       // start bit of the message  0x5B
 byte ETX = 0x5D;       // end bit of the message    0x5D
+char lookForSTX;
 
 char myID = 0xFF;    // my address
 char floorID = 0xF1; // my floor address
@@ -146,7 +147,7 @@ void setup() {
   //------[ISR SETUP]------
   PCMSK0 = 0B000111110;
   PCMSK1 = 0B000000111;
-  
+
   PCICR |= (1 << PCIE0);
   PCICR |= (1 << PCIE1);
   //------------------------
@@ -163,9 +164,12 @@ void setup() {
 
 void loop() {
   // if there is a message coming in, turn on the comm LED, read the message in buffer,then turn off the LED
-  if (Serial.available() >= 8) {
-    PORTC ^= (1 << PC5);
-    RS485Receive();
+  if (Serial.available() > 0) {
+    lookForSTX = Serial.read();
+    if (lookForSTX == STX) {
+      PORTD ^= (1 << PD3);
+      RS485Receive();
+    }
   }
   errorCheck();
   countCheck();

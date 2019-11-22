@@ -24,14 +24,9 @@ void RS485Send(char receiverID, char msgType, char command, char data1, char dat
 
 void RS485Receive() {
   //reads the serial data,stores data in an 8 byte buffer
-  char lookForSTX;
-  while (lookForSTX != STX) {
-    lookForSTX = Serial.read();
-  }
   if (lookForSTX == STX) {
+    lookForSTX = 0x00;
     Serial.readBytes(buff, sizeBuff - 1);
-
-    //reply();
     newData = true;
     isMyAddress();
   }

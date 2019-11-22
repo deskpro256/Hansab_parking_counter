@@ -13,9 +13,13 @@ void countNumbers() {
 void getChanges(int receiverID) {
   RS485Send(receiverID, messageType[0], CMDLUT[1], 'C', 'N', 'G');
   tries++;
-  if (Serial.available() >= 8) {
-    RS485Receive();
-  }
+    if (Serial.available() > 0) {
+      lookForSTX = Serial.read();
+      if (lookForSTX == STX) {
+        PORTD ^= (1 << PD3);
+        RS485Receive();
+      }
+    }
   replied = false;
   if (tries > 2) {
     PORTD |= (1 << PD6);      // Enable ERR Led
