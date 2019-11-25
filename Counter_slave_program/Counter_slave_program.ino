@@ -42,7 +42,8 @@ SendOnlySoftwareSerial Display(PD3); //PD3
 
 int oldCount = 0;
 volatile int maxCount = 999;
-int count = 666;
+volatile int count = 666;
+int displayCount = 0;
 bool countChanged = false;
 
 // Flags for redundancy to detect vehicles

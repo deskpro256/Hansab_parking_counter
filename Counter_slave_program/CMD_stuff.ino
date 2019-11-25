@@ -27,7 +27,7 @@ void getCMD(char cmd, char msgType, char onesN, char tensN, char hundredsN) {
     if (errorState) {
       sendErrorReport(errorCount);
     } else {
-      RS485Send(0x1D, messageType[1], CMDLUT[0], 'N', 'E', 'r');
+      RS485Send(0x1D, messageType[2], CMDLUT[0], 'N', 'E', 'r');
     }
   }
   //--------------------------------------
@@ -44,7 +44,7 @@ void getCMD(char cmd, char msgType, char onesN, char tensN, char hundredsN) {
   //--------------------------------------
   if (cmd == CMDLUT[2]) { // 0x03 - sendDisplayCount
     
-    count = ((hundredsN - '0') * 100) + ((tensN - '0') * 10) + (onesN - '0');
+    displayCount = ((hundredsN - '0') * 100) + ((tensN - '0') * 10) + (onesN - '0');
     
     drawDisplay(onesN, tensN, hundredsN);
   }

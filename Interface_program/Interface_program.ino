@@ -48,9 +48,6 @@ byte addresses[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09
 byte floorDevices[16] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; //floor num according to address
 int slaveCount = 15;
 volatile bool ConfigEnabled = false;
-bool batteryUsed = false;
-bool externalPower = false;
-int timeout = 1000; // 1 sec
 int tries = 0;  // counts retries
 byte currentAddress = 0;
 
@@ -71,6 +68,7 @@ byte CMD = '0';  // by default on startup,there hasn't been any messages, so the
 byte CMDLUT[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B}; // a look up table for every command
 
 byte myID = 0x1D;    // my address
+byte PCID = 0x1C;    // my address
 byte floorID = 0x00; // floor address
 byte RXID = 0x00;   // receivers address
 
@@ -124,21 +122,18 @@ void loop() {
     while (foo <= slaveCount) {
       currentAddress = addresses[foo];
       delay(100);
-      //enquireSlave(currentAddress, 'E'); // get errors
       getErrors(currentAddress);
       delay(100);
       getChanges(currentAddress);
-      //enquireSlave(currentAddress, 'C');  // get changes
       delay(100);
       foo++;
     }
-    //sendDisplayCount();
     countNumbers();
     if (countChanged) {
       sendDisplayCount();
       countChanged = false;
     }
-    
+
     //CheckPowerSource();
     delay(1000);
   }

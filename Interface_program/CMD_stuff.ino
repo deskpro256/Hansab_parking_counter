@@ -54,7 +54,7 @@ void getCMD(char cmd, char msgType, char _ones, char _tens, char _hundreds) {
   }
   //--------------------------------------
   if (cmd == CMDLUT[6]) { // 0x07 - sendDisplayCountToUSB
-    sendDisplayCountToUSB();
+    sendDisplayCountToUSB(msgType);
   }
   //--------------------------------------
   if (cmd == CMDLUT[7]) { // 0x08 - sendErrorReport
