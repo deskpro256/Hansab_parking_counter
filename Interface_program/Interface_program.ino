@@ -11,6 +11,7 @@
 
 #include <EEPROM.h>
 #include <avr/io.h>
+#include <avr/wdt.h>
 #include <avr/interrupt.h>
 
 #define NOP __asm__ __volatile__ ("nop\n\t")  //NO OPERATION
@@ -28,12 +29,13 @@ void NOPdelay(unsigned int z) {
 
 //number of bytes in buffer and message buff[sizeBuff] & msg[sizeBuff]
 #define sizeBuff 8
+#define sizeConfigBuff 8
 
 ////Slave data array/////
 //char slaveData[16][4] {}; //GOES IN EEPROM
 /////////////////////////
 int floorCount[4] = {123, 456, 789, 696};
-int activeFloors = 1;
+int activeFloors = 4;
 char floorNaddresses[4] = {0xF1, 0xF2, 0xF3, 0xF4};
 int tempF1Count = 0;
 int tempF2Count = 0;
@@ -42,7 +44,8 @@ int tempF4Count = 0;
 bool countChanged = false;
 int totalCount = 0;
 int maxCount = 512;
-char errorDevices[32] = {}; //devices with errors. ID, ERROR, ID, ERROR ...
+//char errorDevices[32] = {}; //devices with errors. ID, ERROR, ID, ERROR ...
+char errorDevices[32] = "sajdakdsadsafdsfsafa"; //devices with errors. ID, ERROR, ID, ERROR ...
 char errorCodes[4] = {'0', '1', '2', '3'}; // E0 E1 E2 E3
 byte addresses[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
 byte floorDevices[16] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; //floor num according to address
@@ -53,6 +56,7 @@ byte currentAddress = 0;
 
 byte buff [sizeBuff];        // RECEIVING BUFFER
 byte recMsg [sizeBuff];      // RECEIVED MESSAGE
+byte recConfig [sizeConfigBuff];      // RECEIVED CONFIG MESSAGE
 
 bool newData = false;           // flag var to see if there is new data on the UART
 bool replied = false;           // flag to see if slave has replied
@@ -77,6 +81,18 @@ byte tens = 0x00;
 byte huns = 0x00;
 int foo = 0;//just a general slave counter iterator var
 
+//watchdog stuff
+
+//============================[SOFTWARE_RESET]========================
+void SW_Reset() {
+  PORTD &= ~(1 << PD3) | ~(1 << PD5) | ~(1 << PD6) | ~(1 << PD7); //disable ALL LED'S
+  Serial.end();
+  //wdt_enable(WDTO_1S);
+  PORTD |= (1 << PD3) | (1 << PD5) | (1 << PD6) | (1 << PD7);  //ENABLE ALL LED'S
+  delay(1000);
+  PORTD &= ~(1 << PD3) | ~(1 << PD5) | ~(1 << PD6) | ~(1 << PD7); //disable ALL LED'S
+  setup();
+}
 
 //============================[SETUP]========================
 
@@ -94,14 +110,15 @@ void setup() {
   //------[ISR SETUP]------
   EICRA = 0B00000100;
   EIMSK = 0B00000010;
+  //-----------[WDT]--------
   sei();
-  //Serial.begin(9600);   //starting UART with 115200 BAUD
   Serial.begin(9600);   //starting UART with 9600 BAUD
   //isFirstCfgTime(); // check to see if this is the first time setting up cfg
   tempF1Count = floorCount[0];
   tempF2Count = floorCount[1];
   tempF3Count = floorCount[2];
   tempF4Count = floorCount[3];
+  sendDisplayCount();
 }
 
 //==============================[LOOP]========================

@@ -30,7 +30,7 @@ void getCMD(char cmd, char msgType, char _ones, char _tens, char _hundreds) {
   //--------------------------------------
   if (cmd == CMDLUT[1]) {   //getChanges
     // floor sign count
-    // ones  
+    // ones
     //hundreds = + or -, tens = count diff,ones = floorNum
     if (msgType == messageType[1]) { //if changes
       compareFloor(_ones, _hundreds, _tens);
@@ -38,7 +38,21 @@ void getCMD(char cmd, char msgType, char _ones, char _tens, char _hundreds) {
   }
   //--------------------------------------
   if (cmd == CMDLUT[2]) { // 0x03 - sendDisplayCount
-    //nothing, slave only command
+    //msgType == floorNaddresses[]
+    if (msgType == floorNaddresses[0]) {
+      tempF1Count =  ((_hundreds - '0') * 100) + ((_tens - '0') * 10) + (_ones - '0');
+    }
+    else if (msgType == floorNaddresses[1]) {
+      tempF2Count =  ((_hundreds - '0') * 100) + ((_tens - '0') * 10) + (_ones - '0');
+    }
+    else if (msgType == floorNaddresses[2]) {
+      tempF3Count =  ((_hundreds - '0') * 100) + ((_tens - '0') * 10) + (_ones - '0');
+    }
+    else if (msgType == floorNaddresses[3]) {
+      tempF4Count =  ((_hundreds - '0') * 100) + ((_tens - '0') * 10) + (_ones - '0');
+    }
+    countChanged = true;
+    countNumbers();
   }
   //--------------------------------------
   if (cmd == CMDLUT[3]) { // 0x04 - clearErrors
@@ -61,7 +75,8 @@ void getCMD(char cmd, char msgType, char _ones, char _tens, char _hundreds) {
     sendErrorReport();
   }
   //--------------------------------------
-  if (cmd == CMDLUT[8]) { // 0x09 - request power data
+  if (cmd == CMDLUT[8]) { // 0x09 -  restart
+    SW_Reset();
 
   }
   //--------------------------------------

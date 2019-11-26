@@ -3,9 +3,10 @@
    Written by Karlis Reinis Ulmanis
                 2019
 */
-
+#define F_CPU 8000000L
 #include <EEPROM.h>
 #include <avr/io.h>
+#include <avr/wdt.h>
 #include <avr/interrupt.h>
 #include <SendOnlySoftwareSerial.h>
 
@@ -35,6 +36,7 @@
 
 //number of bytes in buffer and message buff[sizeBuff] & msg[sizeBuff]
 #define sizeBuff 8
+#define sizeConfigBuff 8
 
 //PD3 = SWTX
 //PD4 = DDE
@@ -62,6 +64,7 @@ volatile boolean L8_flag = false;
 //////////////////////////////////
 char buff [sizeBuff];        // RECEIVING BUFFER
 char recMsg [sizeBuff];      // RECEIVED MESSAGE
+byte recConfig [sizeConfigBuff];      // RECEIVED CONFIG MESSAGE
 
 bool newData = false;           //flag var to see if there is new data on the UART
 
@@ -75,6 +78,7 @@ char lookForSTX;
 char myID = 0xFF;    // my address
 char floorID = 0xF1; // my floor address
 char RXID = 0x1D;   // MASTER address
+char PCID = 0x1C;   // MASTER address
 char id[] = {'0', '0'}; // for greeting show id
 
 char ones = 0x00;
@@ -108,7 +112,7 @@ char dispNum[] = {0x1B, 0x01, 0x00, 0x06, 0xA1, 0x01, 0x00, 0x00, 0x00, 0x00, 0x
 char packetSum = 0x00;
 char checkSum = 0x00;
 
-const unsigned long debounceTimeMin = 50;
+const unsigned long debounceTimeMin = 100;
 const unsigned long debounceTimeMax = 2000;
 volatile bool contactPressed = false;
 volatile unsigned long current_millis = 0;
@@ -132,6 +136,20 @@ void debounceISR() {
   }
   last_millis = current_millis;
 }
+
+
+//============================[SOFTWARE_RESET]========================
+void SW_Reset() {
+  PORTC &= ~(1 << PC5) | ~(1 << PC4) | ~(1 << PC3);  //disable ALL LED'S
+  Serial.end();
+  Display.end();
+  //wdt_enable(WDTO_1S);
+  PORTC |= (1 << PC5) | (1 << PC4) | (1 << PC3);  //ENABLE ALL LED'S
+  delay(1000);
+  PORTC &= ~(1 << PC5) | ~(1 << PC4) | ~(1 << PC3);  //disable ALL LED'S
+  setup();
+}
+
 //============================[SETUP]========================
 
 void setup() {
@@ -151,6 +169,8 @@ void setup() {
 
   PCICR |= (1 << PCIE0);
   PCICR |= (1 << PCIE1);
+  //-----------[WDT]--------
+  //WDTCSR |= 0B00001110;   //watchdog on system reset mode, 1 second timer
   //------------------------
   sei(); //enable interrupts
   Serial.begin(9600);   //starting UART with 9600 BAUD

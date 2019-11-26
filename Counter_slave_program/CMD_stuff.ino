@@ -43,9 +43,9 @@ void getCMD(char cmd, char msgType, char onesN, char tensN, char hundredsN) {
   }
   //--------------------------------------
   if (cmd == CMDLUT[2]) { // 0x03 - sendDisplayCount
-    
+
     displayCount = ((hundredsN - '0') * 100) + ((tensN - '0') * 10) + (onesN - '0');
-    
+
     drawDisplay(onesN, tensN, hundredsN);
   }
   //--------------------------------------
@@ -69,8 +69,10 @@ void getCMD(char cmd, char msgType, char onesN, char tensN, char hundredsN) {
     //do nothing
   }
   //--------------------------------------
-  if (cmd == CMDLUT[8]) { // 0x09 - request power data
-    //do nothing
+  if (cmd == CMDLUT[8]) { // 0x09 - restart
+
+    RS485Send(PCID, messageType[1], CMDLUT[8], 'R', 's', 't');
+    SW_Reset();
   }
   //--------------------------------------
   if (cmd == CMDLUT[9]) { // 0x0A - getConfig?

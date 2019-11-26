@@ -38,13 +38,13 @@ void getErrors(char receiverID) {
 //===================================[SEND_ERROR_REPORT]=======================================
 
 void sendErrorReport() {    //sends the errorDevices[] array to configurator program
-
+  char ErrorDeviceText[] = "Error devices:";
   delay(10);
   PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
   PORTD |= (1 << PD5);      // Enable COM Led
-  Serial.println("Error devices:");
+  Serial.write(ErrorDeviceText, sizeof(ErrorDeviceText));
   Serial.write(errorDevices, sizeof(errorDevices));
-  delay(10);
+  delay(100);
   PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
   PORTD &= ~(1 << PD5);     // Disable COM Led
 }

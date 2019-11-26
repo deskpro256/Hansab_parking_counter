@@ -40,7 +40,8 @@ void RS485Receive() {
 //checks if the address byte has its address
 
 void isMyAddress() {
-  if (buff[0] == myID) {
+
+  if (buff[0] == myID || buff[0] == 0xF1 || buff[0] == 0xF2 || buff[0] == 0xF3 || buff[0] == 0xF4) {
     newData = false;
     replied = true;
     //moves all the buff[] to a stored message value while also clearing the buffer
@@ -48,36 +49,16 @@ void isMyAddress() {
       recMsg[i] = buff[i];
       buff[i] = 0x00;
     }
-    mesType = recMsg[2];
+    if (recMsg[0] != myID) {
+      mesType = recMsg[0];
+    }
+    else {
+      mesType = recMsg[2];
+    }
     CMD = recMsg[3];
     huns = recMsg[4];
     tens = recMsg[5];
     ones = recMsg[6];
     getCMD(CMD, mesType, ones, tens, huns);
   }
-}
-
-void reply() {
-  PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
-  PORTD |= (1 << PD5);      // Enable COM Led
-  delay(10);
-  Serial.write(buff, sizeBuff);
-  Serial.println("");
-  delay(10);
-  PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
-  PORTD &= ~(1 << PD5);     // Disable COM Led
-}
-
-void sendStuff(char stuff1, char stuff2, char stuff3) {
-  PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
-  PORTD |= (1 << PD5);      // Enable COM Led
-  delay(10);
-  Serial.println();
-  Serial.write(stuff1);
-  Serial.write(stuff2);
-  Serial.write(stuff3);
-  Serial.println();
-  delay(10);
-  PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
-  PORTD &= ~(1 << PD5);     // Disable COM Led
 }

@@ -36,6 +36,8 @@ void getChanges(int receiverID) {
 //===================================[COMPARE_FLOOR_COUNT]================================
 void compareFloor(char _floorID, char sign, char _count) {
 
+  PORTD ^= (1 << PD6);
+
   tempF1Count = floorCount[0];
   tempF2Count = floorCount[1];
   tempF3Count = floorCount[2];
@@ -87,21 +89,34 @@ void compareFloor(char _floorID, char sign, char _count) {
 
 //===================================[SEND_DISPLAY_COUNT]================================
 void sendDisplayCount() {
-  activeFloors = 4;
+
   for (int i = 0; i <= activeFloors - 1; i++) {
     huns = (floorCount[i] / 100);
     tens = (floorCount[i] % 100) / 10;
     ones = (floorCount[i] % 10);
     char FloorNumbers[] = {huns + '0', tens + '0', ones + '0'};
-    char floorAddress = floorNaddresses[i];
+    RS485Send(floorNaddresses[i], messageType[0], CMDLUT[2], FloorNumbers[0], FloorNumbers[1], FloorNumbers[2]);
     delay(50);
-    RS485Send(floorAddress, messageType[0], CMDLUT[2], FloorNumbers[0], FloorNumbers[1], FloorNumbers[2]);
   }
 }
 
-//===================================[SEND_DISPLAY_COUNT_TO_USB]================================
+
+//===================================[SEND_DISPLAY_COUNT]================================
 void sendDisplayCountToUSB(char _floorNum) {
-  int i = _floorNum;
+  int i = 0;
+  if (_floorNum == 0xF1) {
+    i = 0;
+  }
+  else if (_floorNum == 0xF2) {
+    i = 1;
+  }
+  else if (_floorNum == 0xF3) {
+    i = 2;
+  }
+  else if (_floorNum == 0xF4) {
+    i = 3;
+  }
+
   huns = (floorCount[i] / 100);
   tens = (floorCount[i] % 100) / 10;
   ones = (floorCount[i] % 10);
