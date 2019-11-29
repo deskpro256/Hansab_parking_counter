@@ -3,7 +3,6 @@
    Written by Karlis Reinis Ulmanis
                 2019
 */
-#define F_CPU 8000000L
 #include <EEPROM.h>
 #include <avr/io.h>
 #include <avr/wdt.h>
@@ -35,16 +34,16 @@
 #define ADR4 5 //PD5
 
 //number of bytes in buffer and message buff[sizeBuff] & msg[sizeBuff]
-#define sizeBuff 8
-#define sizeConfigBuff 8
+#define sizeBuff 9
+#define sizeConfigBuff 10
 
 //PD3 = SWTX
 //PD4 = DDE
 SendOnlySoftwareSerial Display(PD3); //PD3
 
-int oldCount = 0;
 volatile int maxCount = 999;
-volatile int count = 666;
+volatile int count = 0;
+int oldCount = 0;
 int displayCount = 0;
 bool countChanged = false;
 
@@ -64,13 +63,14 @@ volatile boolean L8_flag = false;
 //////////////////////////////////
 char buff [sizeBuff];        // RECEIVING BUFFER
 char recMsg [sizeBuff];      // RECEIVED MESSAGE
-byte recConfig [sizeConfigBuff];      // RECEIVED CONFIG MESSAGE
+byte configBuff [sizeConfigBuff];   // RECEIVED MESSAGE
+byte recConfig [sizeConfigBuff];    // RECEIVED CONFIG MESSAGE
 
 bool newData = false;           //flag var to see if there is new data on the UART
 
 char msg [sizeBuff];
 char messageType[] = {0x05, 0x06, 0x15}; //ENQ ACK NAK
-char mesType = 0x00; // received message type /ENQ ACK NAK
+byte mesType = 0x00; // received message type /ENQ ACK NAK
 byte STX = 0x5B;       // start bit of the message  0x5B
 byte ETX = 0x5D;       // end bit of the message    0x5D
 char lookForSTX;
@@ -159,6 +159,7 @@ void setup() {
   DDRC |= 0B00111000;
   DDRD |= 0B00000100;
 
+  //1 = HIGH // 0 = LOW
   PORTB |= 0B00111111;
   PORTC |= 0B00000111;
   PORTD |= 0B11100000;
@@ -169,16 +170,18 @@ void setup() {
 
   PCICR |= (1 << PCIE0);
   PCICR |= (1 << PCIE1);
+
   //-----------[WDT]--------
   //WDTCSR |= 0B00001110;   //watchdog on system reset mode, 1 second timer
   //------------------------
-  sei(); //enable interrupts
+
+  getMyID();  // reads its own address on power-up
+  fakeEEPROM();
+  readEEPROMSettings();
   Serial.begin(9600);   //starting UART with 9600 BAUD
   Display.begin(9600);
-  getMyID();  // reads its own address on power-up
-  //isFirstCfgTime(); // check to see if this is the first time setting up cfg
-  //drawDisplay(0x00,0x00,0x00);
   oldCount = count;
+  sei(); //enable interrupts
 }
 
 //==============================[LOOP]========================

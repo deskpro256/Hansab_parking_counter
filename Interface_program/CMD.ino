@@ -8,7 +8,7 @@
 // 0x06 - ping/pong
 // 0x07 - sendDisplayCountToUSB
 // 0x08 - sendErrorReport
-// 0x09 - request power data
+// 0x09 - restart
 // 0x0A -
 // };     a look up table for every command
 
@@ -60,7 +60,7 @@ void getCMD(char cmd, char msgType, char _ones, char _tens, char _hundreds) {
   }
   //--------------------------------------
   if (cmd == CMDLUT[4]) { // 0x05 - firstTimeSetup
-
+    ReceiveConfig();
   }
   //--------------------------------------
   if (cmd == CMDLUT[5]) { // 0x06 - ping/pong
@@ -77,11 +77,10 @@ void getCMD(char cmd, char msgType, char _ones, char _tens, char _hundreds) {
   //--------------------------------------
   if (cmd == CMDLUT[8]) { // 0x09 -  restart
     SW_Reset();
-
   }
   //--------------------------------------
   if (cmd == CMDLUT[9]) { // 0x0A -
-
+    //reserved
   }
   //--------------------------------------
 }

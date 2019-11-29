@@ -10,6 +10,7 @@ void RS485Send(char receiverID, char msgType, char command, char data1, char dat
   msg[5] = data1;
   msg[6] = data2;
   msg[7] = data3;
+  msg[8] = ETX;
 
   PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
   PORTD |= (1 << PD5);      // Enable COM Led
@@ -23,7 +24,7 @@ void RS485Send(char receiverID, char msgType, char command, char data1, char dat
 //===================================[RS485_RECEIVE]=======================================
 
 void RS485Receive() {
-  //reads the serial data,stores data in an 8 byte buffer
+  //reads the serial data,stores data in an 9 byte buffer
   if (lookForSTX == STX) {
     lookForSTX = 0x00;
     Serial.readBytes(buff, sizeBuff - 1);
@@ -41,11 +42,11 @@ void RS485Receive() {
 
 void isMyAddress() {
 
-  if (buff[0] == myID || buff[0] == 0xF1 || buff[0] == 0xF2 || buff[0] == 0xF3 || buff[0] == 0xF4) {
+  if ((buff[0] == myID || buff[0] == 0xF1 || buff[0] == 0xF2 || buff[0] == 0xF3 || buff[0] == 0xF4) && buff[7] == ETX) {
     newData = false;
     replied = true;
     //moves all the buff[] to a stored message value while also clearing the buffer
-    for (int i = 0; i <= sizeBuff - 1; i++) {
+    for (int i = 0; i <= sizeBuff; i++) {
       recMsg[i] = buff[i];
       buff[i] = 0x00;
     }

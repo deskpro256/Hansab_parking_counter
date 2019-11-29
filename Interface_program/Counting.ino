@@ -6,7 +6,6 @@ void countNumbers() {
   floorCount[2] = tempF3Count;
   floorCount[3] = tempF4Count;
 
-  totalCount = floorCount[0] + floorCount[1] + floorCount[2] + floorCount[3];
 }
 
 //===================================[GET_CHANGES]=======================================
@@ -102,32 +101,45 @@ void sendDisplayCount() {
 
 
 //===================================[SEND_DISPLAY_COUNT]================================
-void sendDisplayCountToUSB(char _floorNum) {
-  int i = 0;
+void sendDisplayCountToUSB(byte _floorNum) {
+  /*
+    tempF1Count = floorCount[0];
+    tempF2Count = floorCount[1];
+    tempF3Count = floorCount[2];
+    tempF4Count = floorCount[3];
+  */
+
+  ///////why this shit doesnt worlkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
+  tempF1Count = 123;
+  tempF2Count = 456;
+  tempF3Count = 789;
+  tempF4Count = 145;
+
   if (_floorNum == 0xF1) {
-    i = 0;
+    huns = (tempF1Count / 100);
+    tens = (tempF1Count % 100) / 10;
+    ones = (tempF1Count % 10);
   }
   else if (_floorNum == 0xF2) {
-    i = 1;
+    huns = (tempF2Count / 100);
+    tens = (tempF2Count % 100) / 10;
+    ones = (tempF2Count % 10);
   }
   else if (_floorNum == 0xF3) {
-    i = 2;
+    huns = (tempF3Count / 100);
+    tens = (tempF3Count % 100) / 10;
+    ones = (tempF3Count % 10);
   }
   else if (_floorNum == 0xF4) {
-    i = 3;
+    huns = (tempF4Count / 100);
+    tens = (tempF4Count % 100) / 10;
+    ones = (tempF4Count % 10);
   }
-
-  huns = (floorCount[i] / 100);
-  tens = (floorCount[i] % 100) / 10;
-  ones = (floorCount[i] % 10);
-  char FloorNumbersInt[] = {STX, PCID, myID , _floorNum, CMDLUT[6], huns + '0', tens + '0', ones + '0'};
-
-  delay(10);
-  PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
-  PORTD |= (1 << PD5);      // Enable COM Led
-  Serial.write(FloorNumbersInt, 8);
-  delay(10);
-  PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
-  PORTD &= ~(1 << PD5);     // Disable COM Led
-
+  
+  huns = 1;
+  tens = 2;
+  ones = 3;
+  
+  RS485Send(PCID, _floorNum, CMDLUT[6], huns + '0', tens + '0', ones + '0');
+  
 }

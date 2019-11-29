@@ -10,6 +10,7 @@ void RS485Send(char receiverID, char msgType, char command, char data1, char dat
   msg[5] = data1;
   msg[6] = data2;
   msg[7] = data3;
+  msg[8] = ETX;
 
   PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
   PORTC |= (1 << PC5);      // Enable COM Led
@@ -38,10 +39,10 @@ void RS485Receive() {
 //============================[RECEIVED_MY_ADDRESS]========================
 //checks if the address byte has own or floor address
 void isMyAddress() {
-  if (buff[0] == myID || buff[0] == floorID) {
+  if ((buff[0] == myID || buff[0] == floorID) && buff[7] == ETX) {
     newData = false;
     //moves all the buff[] to a stored message value while also clearing the buffer
-    for (int i = 0; i <= sizeBuff - 1; i++) {
+    for (int i = 0; i <= sizeBuff; i++) {
       recMsg[i] = buff[i];
       buff[i] = 0x00;
     }

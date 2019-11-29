@@ -8,7 +8,7 @@
 // 0x06 - ping/pong
 // 0x07 - sendDisplayCountToUSB
 // 0x08 - sendErrorReport
-// 0x09 - request power data
+// 0x09 - restart
 // 0x0A -
 // };     a look up table for every command
 
