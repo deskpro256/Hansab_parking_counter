@@ -54,7 +54,7 @@ void getCMD(char cmd, char msgType, char onesN, char tensN, char hundredsN) {
   }
   //--------------------------------------
   if (cmd == CMDLUT[4]) { // 0x05 - firstTimeSetup
-
+    ReceiveConfig();
   }
   //--------------------------------------
   if (cmd == CMDLUT[5]) { // 0x06 - ping/pong
