@@ -7,6 +7,7 @@ void writeEEPROMSettings(byte _type, byte _floorID, byte _count1, byte _count2, 
   EEPROM[2] = _count1;
   EEPROM[3] = _count2;
   EEPROM[4] = _count3;
+  SW_Reset();
 }
 
 //============================[EEPROM_WRITE]========================

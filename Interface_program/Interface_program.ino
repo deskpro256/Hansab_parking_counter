@@ -113,7 +113,7 @@ void setup() {
   //-----------[WDT]--------
   sei();
   Serial.begin(9600);   //starting UART with 9600 BAUD
-  fakeEEPROM();
+  //fakeEEPROM();
   readEEPROMSettings();
   tempF1Count = floorCount[0];
   tempF2Count = floorCount[1];

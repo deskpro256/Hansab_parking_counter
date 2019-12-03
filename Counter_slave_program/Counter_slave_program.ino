@@ -176,7 +176,7 @@ void setup() {
   //------------------------
 
   getMyID();  // reads its own address on power-up
-  fakeEEPROM();
+  //fakeEEPROM();
   readEEPROMSettings();
   Serial.begin(9600);   //starting UART with 9600 BAUD
   Display.begin(9600);

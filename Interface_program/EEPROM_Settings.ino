@@ -26,6 +26,7 @@ void writeEEPROMSettings( byte _slaveCount,
   EEPROM[11] = _Floor4Byte2;
   EEPROM[12] = _Floor4Byte3;
 
+  SW_Reset();
 }
 
 //============================[EEPROM_WRITE]========================
