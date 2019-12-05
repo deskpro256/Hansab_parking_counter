@@ -36,7 +36,7 @@ int a, b, c, i = 0;
 int digit[3] = {};
 int minCount = 0;
 int maxCount = 999;
-int count = 123;
+int count = 0;
 
 //////////////////////////////////
 char buff [sizeBuff];        // RECEIVING BUFFER

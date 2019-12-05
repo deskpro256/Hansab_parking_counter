@@ -12,11 +12,14 @@
 
 void sendErrorReport(int errcount) {      //sends the error report to master
   if (errorState) {
-    RS485Send(RXID, messageType[1], CMDLUT[0], 0x00 , 0x00, 0x00);
+    byte byteHuns = (errcount / 100) + 0x30;
+    byte byteTens = ((errcount % 100) / 10) + 0x30;
+    byte byteOnes = (errcount % 10) + 0x30;
+    RS485Send(RXID, messageType[1], CMDLUT[0], byteHuns, byteTens, byteOnes);
   }
   //send error with errcount
   else {
-    RS485Send(RXID, messageType[2], CMDLUT[0], 0x00, 0x00, 0x00);
+    RS485Send(RXID, messageType[2], CMDLUT[0], 0x78 , 0x78, 0x78);
     //reply with no error
   }
 }

@@ -136,8 +136,8 @@ void loop() {
   }
   else {
     foo = 0;
-    slaveCount = 1;
-    while (foo <= slaveCount) {
+    slaveCount = 3;
+    while (foo <= slaveCount-1) {
       currentAddress = addresses[foo];
       delay(100);
       getErrors(currentAddress);

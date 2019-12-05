@@ -50,7 +50,7 @@ void getCMD(char cmd, char msgType, char onesN, char tensN, char hundredsN) {
   }
   //--------------------------------------
   if (cmd == CMDLUT[3]) { // 0x04 - clearErrors
-
+    errorState = false;
   }
   //--------------------------------------
   if (cmd == CMDLUT[4]) { // 0x05 - firstTimeSetup
@@ -71,7 +71,7 @@ void getCMD(char cmd, char msgType, char onesN, char tensN, char hundredsN) {
   //--------------------------------------
   if (cmd == CMDLUT[8]) { // 0x09 - restart
 
-    RS485Send(PCID, messageType[1], CMDLUT[8], 'R', 's', 't');
+    //RS485Send(PCID, messageType[1], CMDLUT[8], 'R', 's', 't');
     SW_Reset();
   }
   //--------------------------------------

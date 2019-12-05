@@ -23,27 +23,29 @@ void getErrors(char receiverID) {
   }
 
   replied = false;
-  if (tries > 1) {
+  /*
+    if (tries > 1) {
     PORTD |= (1 << PD6);      // Enable ERR Led
     //add to error list
     addToErrorList(receiverID, errorCodes[1]);
     tries = 0;
-  }
-  else {
+    }
+    else {
     tries = 0;
-  }
+    }
+  */
   PORTD &= ~(1 << PD6);     // Disable ERR Led
 }
 
 //===================================[SEND_ERROR_REPORT]=======================================
 
 void sendErrorReport() {    //sends the errorDevices[] array to configurator program
-  char ErrorDeviceText[] = "Error devices:";
-  delay(10);
+  char ErrorDeviceText[] = "Error devices: \n";
+  delay(50);
   PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
   PORTD |= (1 << PD5);      // Enable COM Led
-  Serial.write(ErrorDeviceText, sizeof(ErrorDeviceText));
-  Serial.write(errorDevices, sizeof(errorDevices));
+  Serial.write(ErrorDeviceText, 14);
+  Serial.write(errorDevices, 32);
   delay(100);
   PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
   PORTD &= ~(1 << PD5);     // Disable COM Led

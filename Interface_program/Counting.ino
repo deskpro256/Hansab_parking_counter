@@ -19,6 +19,7 @@ void getChanges(int receiverID) {
       RS485Receive();
     }
   }
+  /*
   replied = false;
   if (tries > 1) {
     PORTD |= (1 << PD6);      // Enable ERR Led
@@ -29,6 +30,7 @@ void getChanges(int receiverID) {
   else {
     tries = 0;
   }
+  */
   PORTD &= ~(1 << PD6);     // Disable ERR Led
 }
 
@@ -89,13 +91,13 @@ void compareFloor(char _floorID, char sign, char _count) {
 //===================================[SEND_DISPLAY_COUNT]================================
 void sendDisplayCount() {
 
-  for (int i = 0; i <= activeFloors - 1; i++) {
-    huns = (floorCount[i] / 100);
-    tens = (floorCount[i] % 100) / 10;
-    ones = (floorCount[i] % 10);
-    char FloorNumbers[] = {huns + '0', tens + '0', ones + '0'};
-    RS485Send(floorNaddresses[i], messageType[0], CMDLUT[2], FloorNumbers[0], FloorNumbers[1], FloorNumbers[2]);
-    delay(50);
+  for (int i = 0; i <= 3; i++) {
+    byte byteHuns = (floorCount[i] / 100) + 0x30;
+    byte byteTens = ((floorCount[i] % 100) / 10) + 0x30;
+    byte byteOnes = (floorCount[i] % 10) + 0x30;
+    delay(20);
+    RS485Send(floorNaddresses[i], messageType[0], CMDLUT[2], byteHuns, byteTens, byteOnes);
+    delay(20);
   }
 }
 
@@ -108,12 +110,6 @@ void sendDisplayCountToUSB(byte _floorNum) {
     tempF3Count = floorCount[2];
     tempF4Count = floorCount[3];
   */
-
-  ///////why this shit doesnt worlkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
-  tempF1Count = 123;
-  tempF2Count = 456;
-  tempF3Count = 789;
-  tempF4Count = 145;
 
   if (_floorNum == 0xF1) {
     huns = (tempF1Count / 100);
@@ -135,11 +131,7 @@ void sendDisplayCountToUSB(byte _floorNum) {
     tens = (tempF4Count % 100) / 10;
     ones = (tempF4Count % 10);
   }
-  
-  huns = 1;
-  tens = 2;
-  ones = 3;
-  
+
   RS485Send(PCID, _floorNum, CMDLUT[6], huns + '0', tens + '0', ones + '0');
-  
+
 }
