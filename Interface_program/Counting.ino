@@ -19,7 +19,7 @@ void getChanges(int receiverID) {
       RS485Receive();
     }
   }
-  /*
+  
   replied = false;
   if (tries > 1) {
     PORTD |= (1 << PD6);      // Enable ERR Led
@@ -30,7 +30,7 @@ void getChanges(int receiverID) {
   else {
     tries = 0;
   }
-  */
+  
   PORTD &= ~(1 << PD6);     // Disable ERR Led
 }
 

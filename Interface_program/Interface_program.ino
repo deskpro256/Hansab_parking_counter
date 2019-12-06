@@ -136,8 +136,8 @@ void loop() {
   }
   else {
     foo = 0;
-    slaveCount = 3;
-    while (foo <= slaveCount-1) {
+    slaveCount = 2;
+    for (int a = 0; a <= slaveCount - 1; a++) {
       currentAddress = addresses[foo];
       delay(100);
       getErrors(currentAddress);
@@ -146,6 +146,17 @@ void loop() {
       delay(100);
       foo++;
     }
+    /*
+        while (foo <= slaveCount - 1) {
+          currentAddress = addresses[foo];
+          delay(100);
+          getErrors(currentAddress);
+          delay(100);
+          getChanges(currentAddress);
+          delay(100);
+          foo++;
+        }
+    */
     countNumbers();
     if (countChanged) {
       sendDisplayCount();

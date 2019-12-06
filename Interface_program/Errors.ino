@@ -23,7 +23,7 @@ void getErrors(char receiverID) {
   }
 
   replied = false;
-  /*
+  
     if (tries > 1) {
     PORTD |= (1 << PD6);      // Enable ERR Led
     //add to error list
@@ -33,7 +33,7 @@ void getErrors(char receiverID) {
     else {
     tries = 0;
     }
-  */
+  
   PORTD &= ~(1 << PD6);     // Disable ERR Led
 }
 
