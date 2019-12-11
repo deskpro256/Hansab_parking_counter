@@ -35,7 +35,7 @@ void NOPdelay(unsigned int z) {
 //char slaveData[16][4] {}; //GOES IN EEPROM
 /////////////////////////
 int maxCount = 999;
-int floorCount[4] = {123, 456, 789, 696};
+int floorCount[4] = {0, 0, 0, 0};
 int tempF1Count = 0;
 int tempF2Count = 0;
 int tempF3Count = 0;
@@ -136,32 +136,21 @@ void loop() {
   }
   else {
     foo = 0;
-    slaveCount = 2;
-    for (int a = 0; a <= slaveCount - 1; a++) {
-      currentAddress = addresses[foo];
-      delay(100);
-      getErrors(currentAddress);
-      delay(100);
-      getChanges(currentAddress);
-      delay(100);
+    //slaveCount = 2;
+    while (foo <= slaveCount) {
+      //currentAddress = addresses[foo];
+      getErrors(foo);
+      delay(10);
+      getChanges(foo);
+      delay(10);
       foo++;
     }
-    /*
-        while (foo <= slaveCount - 1) {
-          currentAddress = addresses[foo];
-          delay(100);
-          getErrors(currentAddress);
-          delay(100);
-          getChanges(currentAddress);
-          delay(100);
-          foo++;
-        }
-    */
+
     countNumbers();
     if (countChanged) {
       sendDisplayCount();
       countChanged = false;
     }
-    delay(1000);
+    delay(500);
   }
 }

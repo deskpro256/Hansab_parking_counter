@@ -63,3 +63,14 @@ void isMyAddress() {
     getCMD(CMD, mesType, ones, tens, huns);
   }
 }
+
+void sendStuff(char s){
+  char tests = s;
+  PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
+  PORTD |= (1 << PD5);      // Enable COM Led
+  delay(50);
+  Serial.write(tests);
+  delay(50);
+  PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
+  PORTD &= ~(1 << PD5);     // Disable COM Led
+  }

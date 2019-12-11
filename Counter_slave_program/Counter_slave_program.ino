@@ -91,7 +91,7 @@ bool errorState = false;
 int errorCount = 0;
 char errorCodes[4] = {'0', '1', '2', '3'}; // E0 E1 E2 E3
 
-volatile int type = 5;
+int type = 5;
 /*  type 1:  [↓↑]   single bidirectional entrance
     type 2: [↑][↓]  separate directional entrance and exit
     type 3:  [↑]    single entrance
@@ -178,6 +178,8 @@ void setup() {
   getMyID();  // reads its own address on power-up
   //fakeEEPROM();
   readEEPROMSettings();
+  //type = 1;
+  //floorID = 0xF2;
   Serial.begin(9600);   //starting UART with 9600 BAUD
   Display.begin(9600);
   oldCount = count;

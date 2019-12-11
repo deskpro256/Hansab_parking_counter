@@ -44,10 +44,8 @@ void getCMD(char cmd, char msgType, char onesN, char tensN, char hundredsN) {
   //--------------------------------------
   if (cmd == CMDLUT[2]) { // 0x03 - sendDisplayCount
 
-    PORTC |= (1 << PC3);
     displayCount = ((hundredsN - '0') * 100) + ((tensN - '0') * 10) + (onesN - '0');
     drawDisplay(onesN, tensN, hundredsN);
-    PORTC != ~(1 << PC3);
   }
   //--------------------------------------
   if (cmd == CMDLUT[3]) { // 0x04 - clearErrors
@@ -56,7 +54,9 @@ void getCMD(char cmd, char msgType, char onesN, char tensN, char hundredsN) {
   }
   //--------------------------------------
   if (cmd == CMDLUT[4]) { // 0x05 - firstTimeSetup
+    PORTC |= (1 << PC3);
     ReceiveConfig();
+    PORTC &= ~(1 << PC3);
   }
   //--------------------------------------
   if (cmd == CMDLUT[5]) { // 0x06 - ping/pong

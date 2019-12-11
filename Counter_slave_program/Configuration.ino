@@ -7,7 +7,7 @@
 
 void ReceiveConfig() {
   //reads the serial data,stores data in an 10 byte buffer
-  char lookForSTX;
+  lookForSTX;
   while (lookForSTX != STX) {
     lookForSTX = Serial.read();
   }

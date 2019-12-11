@@ -14,6 +14,7 @@
 void getErrors(char receiverID) {
   RS485Send(receiverID, messageType[0], CMDLUT[0], 'E', 'R', 'R');
   tries++;
+  delay(50);
   if (Serial.available() > 0) {
     lookForSTX = Serial.read();
     if (lookForSTX == STX) {
@@ -23,17 +24,17 @@ void getErrors(char receiverID) {
   }
 
   replied = false;
-  
-    if (tries > 1) {
+
+  if (tries > 2) {
     PORTD |= (1 << PD6);      // Enable ERR Led
     //add to error list
     addToErrorList(receiverID, errorCodes[1]);
     tries = 0;
-    }
-    else {
+  }
+  else {
     tries = 0;
-    }
-  
+  }
+
   PORTD &= ~(1 << PD6);     // Disable ERR Led
 }
 
@@ -44,7 +45,7 @@ void sendErrorReport() {    //sends the errorDevices[] array to configurator pro
   delay(50);
   PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
   PORTD |= (1 << PD5);      // Enable COM Led
-  Serial.write(ErrorDeviceText, 14);
+  Serial.write(ErrorDeviceText, 16);
   Serial.write(errorDevices, 32);
   delay(100);
   PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
