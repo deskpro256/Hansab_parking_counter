@@ -45,7 +45,11 @@ char floorNaddresses[4] = {0xF1, 0xF2, 0xF3, 0xF4};
 bool countChanged = false;
 
 //char errorDevices[32] = {}; //devices with errors. ID, ERROR, ID, ERROR ...
-char errorDevices[32] ; //devices with errors. ID, ERROR, ID, ERROR ...
+char errorDevices[32] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } ;
+//devices with errors. ID, ERROR, ID, ERROR ...
 char errorCodes[4] = {'0', '1', '2', '3'}; // E0 E1 E2 E3
 byte addresses[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
 int slaveCount = 15;
@@ -113,7 +117,7 @@ void setup() {
   //-----------[WDT]--------
   sei();
   Serial.begin(9600);   //starting UART with 9600 BAUD
-  //fakeEEPROM();
+
   readEEPROMSettings();
   tempF1Count = floorCount[0];
   tempF2Count = floorCount[1];
@@ -129,15 +133,14 @@ void loop() {
     if (Serial.available() > 0) {
       lookForSTX = Serial.read();
       if (lookForSTX == STX) {
-        PORTD ^= (1 << PD3);
+        PORTD ^= (1 << PD5);
         RS485Receive();
       }
     }
   }
   else {
     foo = 0;
-    //slaveCount = 2;
-    while (foo <= slaveCount) {
+    while (foo <= slaveCount - 1) {
       //currentAddress = addresses[foo];
       getErrors(foo);
       delay(10);
@@ -146,6 +149,7 @@ void loop() {
       foo++;
     }
 
+    sendDisplayCount();
     countNumbers();
     if (countChanged) {
       sendDisplayCount();

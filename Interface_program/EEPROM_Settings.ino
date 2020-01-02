@@ -7,38 +7,25 @@ void writeEEPROMSettings( byte _slaveCount,
                           byte _Floor2Byte1, byte _Floor2Byte2, byte _Floor2Byte3,
                           byte _Floor3Byte1, byte _Floor3Byte2, byte _Floor3Byte3,
                           byte _Floor4Byte1, byte _Floor4Byte2, byte _Floor4Byte3) {
+
   EEPROM.write(0, _slaveCount);
-  //EEPROM[0] = _slaveCount;
   //floor 1
   EEPROM.write(1, _Floor1Byte1);
   EEPROM.write(2, _Floor1Byte2);
   EEPROM.write(3, _Floor1Byte3);
-  //EEPROM[1] = _Floor1Byte1;
-  //EEPROM[2] = _Floor1Byte2;
-  //EEPROM[3] = _Floor1Byte3;
   //floor 2
   EEPROM.write(4, _Floor2Byte1);
   EEPROM.write(5, _Floor2Byte2);
   EEPROM.write(6, _Floor2Byte3);
-  //EEPROM[4] = _Floor2Byte1;
-  //EEPROM[5] = _Floor2Byte2;
-  //EEPROM[6] = _Floor2Byte3;
   //floor 3
   EEPROM.write(7, _Floor3Byte1);
   EEPROM.write(8, _Floor3Byte2);
   EEPROM.write(9, _Floor3Byte3);
-  //EEPROM[7] = _Floor3Byte1;
-  //EEPROM[8] = _Floor3Byte2;
-  //EEPROM[9] = _Floor3Byte3;
   //floor 4
   EEPROM.write(10, _Floor4Byte1);
   EEPROM.write(11, _Floor4Byte2);
   EEPROM.write(12, _Floor4Byte3);
-  //EEPROM[10] = _Floor4Byte1;
-  //EEPROM[11] = _Floor4Byte2;
-  //EEPROM[12] = _Floor4Byte3;
 
-  SW_Reset();
 }
 
 //============================[EEPROM_WRITE]========================
@@ -55,25 +42,4 @@ void readEEPROMSettings() {
   floorCount[1] = tempF2Count;
   floorCount[2] = tempF3Count;
   floorCount[3] = tempF4Count;
-}
-
-void fakeEEPROM() {
-  EEPROM[0] = 1;
-  //floor 1
-  EEPROM[1] = 0x31;
-  EEPROM[2] = 0x32;
-  EEPROM[3] = 0x33;
-  //floor 2
-  EEPROM[4] = 0x34;
-  EEPROM[5] = 0x35;
-  EEPROM[6] = 0x36;
-  //floor 3
-  EEPROM[7] = 0x37;
-  EEPROM[8] = 0x38;
-  EEPROM[9] = 0x39;
-  //floor 4
-  EEPROM[10] = 0x31;
-  EEPROM[11] = 0x31;
-  EEPROM[12] = 0x31;
-
 }

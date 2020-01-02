@@ -176,10 +176,7 @@ void setup() {
   //------------------------
 
   getMyID();  // reads its own address on power-up
-  //fakeEEPROM();
   readEEPROMSettings();
-  //type = 1;
-  //floorID = 0xF2;
   Serial.begin(9600);   //starting UART with 9600 BAUD
   Display.begin(9600);
   oldCount = count;
@@ -193,7 +190,7 @@ void loop() {
   if (Serial.available() > 0) {
     lookForSTX = Serial.read();
     if (lookForSTX == STX) {
-      PORTD ^= (1 << PD3);
+      PORTC ^= (1 << PC5);
       RS485Receive();
     }
   }

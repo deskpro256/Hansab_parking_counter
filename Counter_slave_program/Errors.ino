@@ -31,6 +31,7 @@ void errorCheck() {
     PORTC |= (1 << PC3); //error led on
     errorState = true;
     errorCount = count;
+    count = 0;
   }
   else {
     PORTC &= ~(1 << PC3);//error led off

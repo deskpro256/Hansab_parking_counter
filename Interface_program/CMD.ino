@@ -56,15 +56,18 @@ void getCMD(char cmd, char msgType, char _ones, char _tens, char _hundreds) {
   }
   //--------------------------------------
   if (cmd == CMDLUT[3]) { // 0x04 - clearErrors
-
+    for (int e = 0; e <= 32; e++) {
+      errorDevices[e] = 0x00;
+    }
   }
   //--------------------------------------
   if (cmd == CMDLUT[4]) { // 0x05 - firstTimeSetup
     ReceiveConfig();
+    SW_Reset();
   }
   //--------------------------------------
   if (cmd == CMDLUT[5]) { // 0x06 - ping/pong
-    //RS485Send(0x1C, messageType[1], 'P', 'O', 'N', 'G');
+    RS485Send(0x1C, messageType[1], 'P', 'O', 'N', 'G');
   }
   //--------------------------------------
   if (cmd == CMDLUT[6]) { // 0x07 - sendDisplayCountToUSB

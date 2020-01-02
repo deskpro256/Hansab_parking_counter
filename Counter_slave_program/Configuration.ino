@@ -21,11 +21,11 @@ void ReceiveConfig() {
   }
 
   // if received my address
-  if (recMsg[1] == myID) {
+  if (configBuff[0] == myID) {
     newData = false;
     //moves all the buff[] to a stored message value while also clearing the buffer
     for (int i = 0; i <= sizeConfigBuff; i++) {
-      recMsg[i] = configBuff[i];
+      recConfig[i] = configBuff[i];
       configBuff[i] = 0x00;
     }
     type = recConfig[3]; //type

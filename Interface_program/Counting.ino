@@ -9,7 +9,9 @@ void countNumbers() {
 }
 
 //===================================[GET_CHANGES]=======================================
-void getChanges(int receiverID) {
+
+void getChanges(char receiverID) {
+  replied = false;
   RS485Send(receiverID, messageType[0], CMDLUT[1], 'C', 'N', 'G');
   tries++;
   delay(50);
@@ -20,18 +22,18 @@ void getChanges(int receiverID) {
       RS485Receive();
     }
   }
-  
-  replied = false;
-  if (tries > 2) {
-    PORTD |= (1 << PD6);      // Enable ERR Led
-    //add to error list
-    addToErrorList(receiverID, errorCodes[1]);
-    tries = 0;
+  if (replied == false) {
+    if (tries < 2) {
+      getChanges(receiverID); // try again
+    }
+    else {
+      PORTD |= (1 << PD6);      // Enable ERR Led
+      //add to error list
+      addToErrorList(receiverID, errorCodes[1]);
+      tries = 0;
+      replied = false;
+    }
   }
-  else {
-    tries = 0;
-  }
-  
   PORTD &= ~(1 << PD6);     // Disable ERR Led
 }
 
