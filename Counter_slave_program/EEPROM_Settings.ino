@@ -7,7 +7,8 @@ void writeEEPROMSettings(byte _type, byte _floorID, byte _count1, byte _count2, 
   EEPROM.write(2, _count1);
   EEPROM.write(3, _count2);
   EEPROM.write(4, _count3);
-  SW_Reset();
+  //delay(myID * 100);
+  //EEPROMUpdated();
 }
 
 //============================[EEPROM_WRITE]========================

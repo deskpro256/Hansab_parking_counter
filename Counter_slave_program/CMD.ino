@@ -54,9 +54,8 @@ void getCMD(char cmd, char msgType, char onesN, char tensN, char hundredsN) {
   }
   //--------------------------------------
   if (cmd == CMDLUT[4]) { // 0x05 - firstTimeSetup
-    PORTC |= (1 << PC3);
     ReceiveConfig();
-    PORTC &= ~(1 << PC3);
+    SW_Reset();
   }
   //--------------------------------------
   if (cmd == CMDLUT[5]) { // 0x06 - ping/pong

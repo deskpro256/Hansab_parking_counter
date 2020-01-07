@@ -26,20 +26,21 @@ void writeEEPROMSettings( byte _slaveCount,
   EEPROM.write(11, _Floor4Byte2);
   EEPROM.write(12, _Floor4Byte3);
 
+
 }
 
 //============================[EEPROM_WRITE]========================
 void readEEPROMSettings() {
 
-  //slaveCount  = EEPROM[0];                                                                //Slave  count
-  slaveCount  = EEPROM.read(0);
-  tempF1Count = ((EEPROM[1]  - 48) * 100) + ((EEPROM[2]  - 48) * 10) + (EEPROM[3]  - 48); //Floor1 count
-  tempF2Count = ((EEPROM[4]  - 48) * 100) + ((EEPROM[5]  - 48) * 10) + (EEPROM[6]  - 48); //Floor2 count
-  tempF3Count = ((EEPROM[7]  - 48) * 100) + ((EEPROM[8]  - 48) * 10) + (EEPROM[9]  - 48); //Floor3 count
-  tempF4Count = ((EEPROM[10] - 48) * 100) + ((EEPROM[11] - 48) * 10) + (EEPROM[12] - 48); //Floor4 count
+    slaveCount  = EEPROM[0];                                                                //Slave  count
+    tempF1Count = ((EEPROM[1]  - 48) * 100) + ((EEPROM[2]  - 48) * 10) + (EEPROM[3]  - 48); //Floor1 count
+    tempF2Count = ((EEPROM[4]  - 48) * 100) + ((EEPROM[5]  - 48) * 10) + (EEPROM[6]  - 48); //Floor2 count
+    tempF3Count = ((EEPROM[7]  - 48) * 100) + ((EEPROM[8]  - 48) * 10) + (EEPROM[9]  - 48); //Floor3 count
+    tempF4Count = ((EEPROM[10] - 48) * 100) + ((EEPROM[11] - 48) * 10) + (EEPROM[12] - 48); //Floor4 count
 
-  floorCount[0] = tempF1Count;
-  floorCount[1] = tempF2Count;
-  floorCount[2] = tempF3Count;
-  floorCount[3] = tempF4Count;
+    floorCount[0] = tempF1Count;
+    floorCount[1] = tempF2Count;
+    floorCount[2] = tempF3Count;
+    floorCount[3] = tempF4Count;
+  
 }
