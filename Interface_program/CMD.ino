@@ -52,7 +52,10 @@ void getCMD(char cmd, char msgType, char _ones, char _tens, char _hundreds) {
       tempF4Count =  ((_hundreds - '0') * 100) + ((_tens - '0') * 10) + (_ones - '0');
     }
     countChanged = true;
-    countNumbers();
+    currentFloorCount[0] = tempF1Count;
+    currentFloorCount[1] = tempF2Count;
+    currentFloorCount[2] = tempF3Count;
+    currentFloorCount[3] = tempF4Count;
   }
   //--------------------------------------
   if (cmd == CMDLUT[3]) { // 0x04 - clearErrors

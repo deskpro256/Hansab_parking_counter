@@ -16,7 +16,7 @@ void RS485Send(char receiverID, char msgType, char command, char data1, char dat
   PORTC |= (1 << PC5);      // Enable COM Led
   delay(50);
   Serial.write(msg, sizeBuff);
-  delay(100);
+  delay(50);
   PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
   PORTC &= ~(1 << PC5);     // Disable COM Led
 }

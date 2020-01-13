@@ -16,7 +16,7 @@ void RS485Send(char receiverID, char msgType, char command, char data1, char dat
   PORTD |= (1 << PD5);      // Enable COM Led
   delay(50);
   Serial.write(msg, sizeBuff);
-  delay(100);
+  delay(50);
   PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
   PORTD &= ~(1 << PD5);     // Disable COM Led
 }
@@ -62,15 +62,4 @@ void isMyAddress() {
     ones = recMsg[6];
     getCMD(CMD, mesType, ones, tens, huns);
   }
-}
-
-void EEPROMUpdated() {
-  char cfgupd[] = "Configuration updated!\n";
-  PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
-  PORTD |= (1 << PD5);      // Enable COM Led
-  delay(50);
-  Serial.write(cfgupd,23) ;
-  delay(100);
-  PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
-  PORTD &= ~(1 << PD5);     // Disable COM Led
 }

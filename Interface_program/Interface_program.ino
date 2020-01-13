@@ -34,8 +34,9 @@ void NOPdelay(unsigned int z) {
 ////Slave data array/////
 //char slaveData[16][4] {}; //GOES IN EEPROM
 /////////////////////////
-int maxCount = 999;
-int floorCount[4] = {0, 0, 0, 0};
+int maxCount = 3996;
+int floorMaxCount[4] = {0, 0, 0, 0};
+int currentFloorCount[4] = {0, 0, 0, 0};
 int tempF1Count = 0;
 int tempF2Count = 0;
 int tempF3Count = 0;
@@ -52,7 +53,7 @@ char errorDevices[32] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 //devices with errors. ID, ERROR, ID, ERROR ...
 char errorCodes[4] = {'0', '1', '2', '3'}; // E0 E1 E2 E3
 byte addresses[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
-int slaveCount = 0;
+int slaveCount = 15;
 volatile bool ConfigEnabled = false;
 int tries = 0;  // counts retries
 byte currentAddress = 0;
@@ -119,10 +120,6 @@ void setup() {
   Serial.begin(9600);   //starting UART with 9600 BAUD
 
   readEEPROMSettings();
-  tempF1Count = floorCount[0];
-  tempF2Count = floorCount[1];
-  tempF3Count = floorCount[2];
-  tempF4Count = floorCount[3];
   sendDisplayCount();
 }
 
@@ -141,7 +138,6 @@ void loop() {
   else {
     foo = 0;
     while (foo <= slaveCount - 1) {
-      //currentAddress = addresses[foo];
       getErrors(foo);
       delay(10);
       getChanges(foo);
@@ -150,7 +146,7 @@ void loop() {
     }
 
     sendDisplayCount();
-    countNumbers();
+    //countNumbers();
     if (countChanged) {
       sendDisplayCount();
       countChanged = false;
