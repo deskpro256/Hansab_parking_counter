@@ -29,9 +29,9 @@ void errorCheck() {
   // error state check. If the count is not within the margins set by min/max turn on the error LED, master ticks the error in a log file
   if (count < 0 || count > maxCount) {
     PORTC |= (1 << PC3); //error led on
-    errorState = true;
-    errorCount = count;
-    count = 0;
+    //errorState = true;
+    //errorCount = count;
+    //count = 0;
   }
   else {
     PORTC &= ~(1 << PC3);//error led off

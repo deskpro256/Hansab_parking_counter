@@ -28,16 +28,75 @@ void getErrors(char receiverID) {
       getErrors(receiverID); // try again
     }
     else {
-      PORTD |= (1 << PD6);      // Enable ERR Led
       //add to error list
       addToErrorList(receiverID, errorCodes[1]);
       tries = 0;
       replied = false;
     }
   }
-
-  PORTD &= ~(1 << PD6);     // Disable ERR Led
 }
+
+
+//===================================[COUNT_ERROR_CHECK]=======================================
+
+void checkForCountError() {
+  //---------------------------
+  if (currentFloorCount[0] < 0) {
+    errorState = true;
+    currentFloorCount[0] = 0;
+  }
+  else if (currentFloorCount[0] > floorMaxCount[0]) {
+    errorState = true;
+    currentFloorCount[0] = floorMaxCount[0];
+  }
+  else {
+    errorState = false;
+  }
+  //---------------------------
+  if (currentFloorCount[1] < 0) {
+    errorState = true;
+    currentFloorCount[1] = 0;
+  }
+  else if (currentFloorCount[1] > floorMaxCount[1]) {
+    errorState = true;
+    currentFloorCount[1] = floorMaxCount[1];
+  }
+  else {
+    errorState = false;
+  }
+  //---------------------------
+  if (currentFloorCount[2] < 0) {
+    errorState = true;
+    currentFloorCount[2] = 0;
+  }
+  else if (currentFloorCount[2] > floorMaxCount[2]) {
+    errorState = true;
+    currentFloorCount[2] = floorMaxCount[2];
+  }
+  else {
+    errorState = false;
+  }
+  //---------------------------
+  if (currentFloorCount[3] < 0) {
+    errorState = true;
+    currentFloorCount[3] = 0;
+  }
+  else if (currentFloorCount[3] > floorMaxCount[3]) {
+    errorState = true;
+    currentFloorCount[3] = floorMaxCount[3];
+  }
+  else {
+    errorState = false;
+  }
+  //---------------------------
+  if (errorState) {
+    PORTD |= (1 << PD6); //error led on
+  }
+  else {
+    PORTD &= ~(1 << PD6);//error led off
+  }
+}
+
 
 //===================================[SEND_ERROR_REPORT]=======================================
 
@@ -55,6 +114,6 @@ void sendErrorReport() {    //sends the errorDevices[] array to configurator pro
 
 void addToErrorList(int id, char errCode) {
   //add to error list
-  errorDevices[id] = id;
-  errorDevices[id + 1] = errCode;
+  errorDevices[id*2] = id;
+  errorDevices[(id*2) + 1] = errCode;
 }

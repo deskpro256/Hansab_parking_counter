@@ -1,11 +1,3 @@
-//===================================[NUMBER_COUNTING]=======================================
-void countNumbers() {
-
-  currentFloorCount[0] = tempF1Count;
-  currentFloorCount[1] = tempF2Count;
-  currentFloorCount[2] = tempF3Count;
-  currentFloorCount[3] = tempF4Count;
-}
 
 //===================================[GET_CHANGES]=======================================
 
@@ -38,8 +30,6 @@ void getChanges(char receiverID) {
 
 //===================================[COMPARE_FLOOR_COUNT]================================
 void compareFloor(char _floorID, char sign, char _count) {
-
-  PORTD ^= (1 << PD6);
 
   tempF1Count = currentFloorCount[0];
   tempF2Count = currentFloorCount[1];
@@ -92,6 +82,8 @@ void compareFloor(char _floorID, char sign, char _count) {
   currentFloorCount[1] = tempF2Count;
   currentFloorCount[2] = tempF3Count;
   currentFloorCount[3] = tempF4Count;
+
+  sendDisplayCount();
 }
 
 //===================================[SEND_DISPLAY_COUNT]================================
@@ -110,7 +102,7 @@ void sendDisplayCount() {
 
 //===================================[SEND_DISPLAY_COUNT]================================
 void sendDisplayCountToUSB(byte _floorNum) {
-  
+
   tempF1Count = currentFloorCount[0];
   tempF2Count = currentFloorCount[1];
   tempF3Count = currentFloorCount[2];

@@ -42,7 +42,8 @@ void RS485Receive() {
 
 void isMyAddress() {
 
-  if ((buff[0] == myID || buff[0] == 0xF1 || buff[0] == 0xF2 || buff[0] == 0xF3 || buff[0] == 0xF4) && buff[7] == ETX) {
+  if ((buff[0] == myID || buff[0] == floorNaddresses[0] || buff[0] == floorNaddresses[1] || buff[0] == floorNaddresses[2] || buff[0] == floorNaddresses[3]) && buff[7] == ETX) {
+
     newData = false;
     replied = true;
     //moves all the buff[] to a stored message value while also clearing the buffer

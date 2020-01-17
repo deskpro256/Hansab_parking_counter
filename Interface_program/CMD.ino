@@ -41,27 +41,29 @@ void getCMD(char cmd, char msgType, char _ones, char _tens, char _hundreds) {
     //msgType == floorNaddresses[]
     if (msgType == floorNaddresses[0]) {
       tempF1Count =  ((_hundreds - '0') * 100) + ((_tens - '0') * 10) + (_ones - '0');
+      currentFloorCount[0] = tempF1Count;
     }
     else if (msgType == floorNaddresses[1]) {
       tempF2Count =  ((_hundreds - '0') * 100) + ((_tens - '0') * 10) + (_ones - '0');
+      currentFloorCount[1] = tempF2Count;
     }
     else if (msgType == floorNaddresses[2]) {
       tempF3Count =  ((_hundreds - '0') * 100) + ((_tens - '0') * 10) + (_ones - '0');
+      currentFloorCount[2] = tempF3Count;
     }
     else if (msgType == floorNaddresses[3]) {
       tempF4Count =  ((_hundreds - '0') * 100) + ((_tens - '0') * 10) + (_ones - '0');
+      currentFloorCount[3] = tempF4Count;
     }
     countChanged = true;
-    currentFloorCount[0] = tempF1Count;
-    currentFloorCount[1] = tempF2Count;
-    currentFloorCount[2] = tempF3Count;
-    currentFloorCount[3] = tempF4Count;
   }
   //--------------------------------------
   if (cmd == CMDLUT[3]) { // 0x04 - clearErrors
-    for (int e = 0; e <= 32; e++) {
-      errorDevices[e] = 0x00;
+    for (int e = 1; e <= 32; e += 2) {
+      errorDevices[e] = 0x30;
     }
+    PORTD &= ~(1 << PD6);//error led off
+    errorState = false;
   }
   //--------------------------------------
   if (cmd == CMDLUT[4]) { // 0x05 - firstTimeSetup

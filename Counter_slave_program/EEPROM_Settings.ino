@@ -13,7 +13,7 @@ void writeEEPROMSettings(byte _type, byte _floorID, byte _count1, byte _count2, 
 
 //============================[EEPROM_WRITE]========================
 void readEEPROMSettings() {
-  if (EEPROM.read(13) != 0x69) {
+  if (EEPROM.read(5) != 0x69) {
     //dafault values if the controller hasn't been configured. type 1, floor F1, 123 count
     EEPROM.write(0, 0x01);
     EEPROM.write(1, 0xF1);

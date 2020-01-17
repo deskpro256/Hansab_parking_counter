@@ -55,17 +55,3 @@ ISR(PCINT0_vect) {
     checkLoops();
   }
 }
-
-// If the address is changed after
-//-----------
-/*
-  #define ADR1 8 //PB0
-  #define ADR2 7 //PD7
-  #define ADR3 6 //PD6
-  #define ADR4 5 //PD5
-
-ISR(){
-  getMyID();
-  }
-
-*/

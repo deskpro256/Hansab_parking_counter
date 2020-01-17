@@ -1,12 +1,12 @@
 /* Interface device program for Hansab
-    Written by Karlis Reinis Ulmanis
+  Written by Karlis Reinis Ulmanis
 
-                2019
-    type 1:  [↓↑]   single bidirectional entrance
-    type 2: [↑][↓]  separate directional entrance and exit
-    type 3:  [↑]    single entrance
-    type 4:  [↓]    single exit
-    type 5:  eco    eco(sigle loop action)
+  2019
+  type 1 :  [↓↑]   single bidirectional entrance
+  type 2 : [↑][↓]  separate directional entrance and exit
+  type 3 :  [↑]    single entrance
+  type 4 :  [↓]    single exit
+  type 5 :  eco    eco(sigle loop action)
 */
 
 #include <EEPROM.h>
@@ -44,12 +44,14 @@ int tempF4Count = 0;
 int activeFloors = 4;
 char floorNaddresses[4] = {0xF1, 0xF2, 0xF3, 0xF4};
 bool countChanged = false;
+bool errorState = false;
 
 //char errorDevices[32] = {}; //devices with errors. ID, ERROR, ID, ERROR ...
-char errorDevices[32] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } ;
+char errorDevices[32] = {0x00, 0x30, 0x01, 0x30, 0x02, 0x30, 0x03, 0x30,
+                         0x04, 0x30, 0x05, 0x30, 0x06, 0x30, 0x07, 0x30,
+                         0x08, 0x30, 0x09, 0x30, 0x0A, 0x30, 0x0B, 0x30,
+                         0x0C, 0x30, 0x0D, 0x30, 0x0E, 0x30, 0x0F, 0x30
+                        };
 //devices with errors. ID, ERROR, ID, ERROR ...
 char errorCodes[4] = {'0', '1', '2', '3'}; // E0 E1 E2 E3
 byte addresses[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
@@ -138,19 +140,15 @@ void loop() {
   else {
     foo = 0;
     while (foo <= slaveCount - 1) {
-      getErrors(foo);
-      delay(10);
+      //getErrors(foo);
       getChanges(foo);
-      delay(10);
       foo++;
     }
 
-    sendDisplayCount();
-    //countNumbers();
+    checkForCountError();
     if (countChanged) {
       sendDisplayCount();
       countChanged = false;
     }
-    delay(500);
   }
 }

@@ -27,7 +27,6 @@ void drawDisplay(char onesN, char tensN, char hundredsN) {
   PORTC |= (1 << PC5);      // Enable COM Led
   delay(50);
   Display.write(dispNum, 11);
-  //Serial.write(dispNum, 11);
   delay(50);
   //PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
   PORTD &= ~(1 << PD4);     // (RE_DE, LOW) disable sending
