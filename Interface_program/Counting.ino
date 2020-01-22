@@ -18,14 +18,12 @@ void getChanges(char receiverID) {
       getChanges(receiverID); // try again
     }
     else {
-      PORTD |= (1 << PD6);      // Enable ERR Led
       //add to error list
       addToErrorList(receiverID, errorCodes[1]);
       tries = 0;
       replied = false;
     }
   }
-  PORTD &= ~(1 << PD6);     // Disable ERR Led
 }
 
 //===================================[COMPARE_FLOOR_COUNT]================================

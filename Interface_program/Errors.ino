@@ -1,3 +1,4 @@
+
 /*
   Error codes come in following a dash and device ID on which the error occoured on.
   Example:
@@ -101,12 +102,36 @@ void checkForCountError() {
 //===================================[SEND_ERROR_REPORT]=======================================
 
 void sendErrorReport() {    //sends the errorDevices[] array to configurator program
-  char ErrorDeviceText[] = "Error devices: \n";
+  int idGet = 0;
+  char dev[2] = {'0', '0'};
+  char code;
+  char ErrorDeviceText1[] = "Error devices: \n";
+  char ErrorDeviceText2[] = "ID | ErrorCode \n";
   delay(50);
   PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
   PORTD |= (1 << PD5);      // Enable COM Led
-  Serial.write(ErrorDeviceText, 16);
-  Serial.write(errorDevices, 32);
+  Serial.write(ErrorDeviceText1, 16);
+  delay(10);
+  Serial.write(ErrorDeviceText2, 16);
+  for (int i = 0; i <= 31; i += 2) {
+    idGet = errorDevices[i];
+    if (idGet < 10) {
+      dev[0] = '0';
+      dev[1] = errorDevices[i] + 48;
+    }
+    else {
+      dev[0] = '1';
+      dev[1] = errorDevices[i] + 38;
+    }
+    code = errorDevices[i + 1];
+
+    Serial.write(dev[0]);
+    Serial.write(dev[1]);
+    Serial.write(" - E");
+    Serial.write(code);
+    Serial.write("\n");
+    delay(10);
+  }
   delay(1000);
   PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
   PORTD &= ~(1 << PD5);     // Disable COM Led
@@ -114,6 +139,6 @@ void sendErrorReport() {    //sends the errorDevices[] array to configurator pro
 
 void addToErrorList(int id, char errCode) {
   //add to error list
-  errorDevices[id*2] = id;
-  errorDevices[(id*2) + 1] = errCode;
+  errorDevices[id * 2] = id;
+  errorDevices[(id * 2) + 1] = errCode;
 }

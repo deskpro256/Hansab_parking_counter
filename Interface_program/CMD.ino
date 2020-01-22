@@ -35,6 +35,7 @@ void getCMD(char cmd, char msgType, char _ones, char _tens, char _hundreds) {
     if (msgType == messageType[1]) { //if changes
       compareFloor(_ones, _hundreds, _tens);
     }
+    addToErrorList(foo, errorCodes[0]);
   }
   //--------------------------------------
   if (cmd == CMDLUT[2]) { // 0x03 - sendDisplayCount
