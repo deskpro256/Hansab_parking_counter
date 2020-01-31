@@ -38,12 +38,15 @@ void compareFloor(char _floorID, char sign, char _count) {
     if (sign == '-') {
       countChanged = true;
       tempF1Count -= _count;
-      //floorCount[0] -= _count;
     }
     else {
-      tempF1Count += _count;
-      //floorCount[0] += _count;
-      countChanged = true;
+      if (isF1Negative == true) {
+        isF1Negative = false;
+      }
+      else {
+        tempF1Count += _count;
+        countChanged = true;
+      }
     }
   }
   else if (_floorID == floorNaddresses[1]) {
@@ -52,8 +55,13 @@ void compareFloor(char _floorID, char sign, char _count) {
       countChanged = true;
     }
     else {
-      tempF2Count += _count;
-      countChanged = true;
+      if (isF2Negative == true) {
+        isF2Negative = false;
+      }
+      else {
+        tempF2Count += _count;
+        countChanged = true;
+      }
     }
   }
   else if (_floorID == floorNaddresses[2]) {
@@ -62,18 +70,28 @@ void compareFloor(char _floorID, char sign, char _count) {
       countChanged = true;
     }
     else {
-      tempF3Count += _count;
-      countChanged = true;
+      if (isF3Negative == true) {
+        isF3Negative = false;
+      }
+      else {
+        tempF3Count += _count;
+        countChanged = true;
+      }
     }
   }
-  else if (_floorID == floorNaddresses[4]) {
+  else if (_floorID == floorNaddresses[3]) {
     if (sign == '-') {
       tempF4Count -= _count;
       countChanged = true;
     }
     else {
-      tempF4Count += _count;
-      countChanged = true;
+      if (isF4Negative == true) {
+        isF4Negative = false;
+      }
+      else {
+        tempF4Count += _count;
+        countChanged = true;
+      }
     }
   }
   currentFloorCount[0] = tempF1Count;

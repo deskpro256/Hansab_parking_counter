@@ -44,6 +44,7 @@ void checkForCountError() {
   //---------------------------
   if (currentFloorCount[0] < 0) {
     errorState = true;
+    isF1Negative = true;
     currentFloorCount[0] = 0;
   }
   else if (currentFloorCount[0] > floorMaxCount[0]) {
@@ -56,6 +57,7 @@ void checkForCountError() {
   //---------------------------
   if (currentFloorCount[1] < 0) {
     errorState = true;
+    isF2Negative = true;
     currentFloorCount[1] = 0;
   }
   else if (currentFloorCount[1] > floorMaxCount[1]) {
@@ -68,6 +70,7 @@ void checkForCountError() {
   //---------------------------
   if (currentFloorCount[2] < 0) {
     errorState = true;
+    isF3Negative = true;
     currentFloorCount[2] = 0;
   }
   else if (currentFloorCount[2] > floorMaxCount[2]) {
@@ -80,6 +83,7 @@ void checkForCountError() {
   //---------------------------
   if (currentFloorCount[3] < 0) {
     errorState = true;
+    isF4Negative = true;
     currentFloorCount[3] = 0;
   }
   else if (currentFloorCount[3] > floorMaxCount[3]) {

@@ -46,6 +46,11 @@ char floorNaddresses[4] = {0xF1, 0xF2, 0xF3, 0xF4};
 bool countChanged = false;
 bool errorState = false;
 
+bool isF1Negative = false;
+bool isF2Negative = false;
+bool isF3Negative = false;
+bool isF4Negative = false;
+
 //char errorDevices[32] = {}; //devices with errors. ID, ERROR, ID, ERROR ...
 char errorDevices[32] = {0x00, 0x30, 0x01, 0x30, 0x02, 0x30, 0x03, 0x30,
                          0x04, 0x30, 0x05, 0x30, 0x06, 0x30, 0x07, 0x30,
