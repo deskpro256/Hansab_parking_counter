@@ -6,6 +6,7 @@
 
 //============================[DRAW_DISPLAY]========================
 void drawDisplay(char onesN, char tensN, char hundredsN) {
+  wdt_reset();
 
   checkSum = 0x00;
   packetSum = 0x00;

@@ -31,6 +31,7 @@ void writeEEPROMSettings( byte _slaveCount,
 
 //============================[EEPROM_WRITE]========================
 void readEEPROMSettings() {
+  wdt_reset();
   //if the controller hasn't been configured yet, put some default values in. 1 slave, 123 spaces in each floor
   if (EEPROM.read(13) != 0x69) {
     EEPROM.write(0, 0x01);
@@ -54,6 +55,7 @@ void readEEPROMSettings() {
     EEPROM.write(13, 0x69); // preset byte to look for
   }
   else {
+    wdt_reset();
     //slaveCount  = EEPROM[0];                                                                //Slave  count
     slaveCount  = EEPROM.read(0);
     tempF1Count = ((EEPROM[1]  - 48) * 100) + ((EEPROM[2]  - 48) * 10) + (EEPROM[3]  - 48); //Floor1 count

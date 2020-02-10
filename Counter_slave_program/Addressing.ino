@@ -1,6 +1,7 @@
 //============================[GET_MY_ADDRESS]========================
 // reads the DIP switches and translates that to an address for RS485 communication protocol
 void getMyID() {
+  wdt_reset();
   int adrINT;     //varialble to store slave's address as an int
   int DIP[4];     //array to store the SW1 DIP switch states
   //reading the states of SW1

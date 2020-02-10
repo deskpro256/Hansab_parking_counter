@@ -1,0 +1,25 @@
+Costs as prototype PCB's
+[Slave]
+Components: ~8 Eur
+PCB: ~5 eur
+Assembly: ~1hr \ can be automated with lower cost
+Custom TAX +15%
+-------------------------
+Total: ~30 Eur
+Sales price: Total*2,5 = 70Eur??
+
+Sales price * slave count
+===================================
+[Interface]
+Components: ~10 Eur
+PCB: ~5 eur
+Assembly: ~1hr by hand *  \ can be automated with lower cost
+
+SMT Assembly costs:
+
+Pad count = 200
+SMT assembly cost = 200 * 0,0002(fee per solder joint) = 
+Custom TAX +15%
+-------------------------
+Total: ~30 Eur
+Sales price: Total*2,5 = 70Eur??

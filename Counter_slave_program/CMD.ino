@@ -21,6 +21,7 @@
 //============================[GET_CMD_NAME]========================
 // gets the command byte from the message and executes the corresponding func
 void getCMD(char cmd, char msgType, char onesN, char tensN, char hundredsN) {
+  wdt_reset();
 
   //--------------------------------------
   if (cmd == CMDLUT[0]) {  // 0x01 - getErrors

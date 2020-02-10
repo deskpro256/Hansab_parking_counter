@@ -98,17 +98,17 @@ int foo = 0;//just a general slave counter iterator var
 //============================[SOFTWARE_RESET]========================
 void SW_Reset() {
   PORTD &=  ~(1 << PD5) | ~(1 << PD6) | ~(1 << PD7); //disable ALL LED'S
-  Serial.end();
-  //wdt_enable(WDTO_1S);
+  //Serial.end();
   PORTD |= (1 << PD5) | (1 << PD6) | (1 << PD7);  //ENABLE ALL LED'S
   delay(1000);
   PORTD &=  ~(1 << PD5) | ~(1 << PD6) | ~(1 << PD7); //disable ALL LED'S
-  setup();
+  wdt_enable(WDTO_2S);
 }
 
 //============================[SETUP]========================
 
 void setup() {
+  wdt_disable();
   //------[PIN COFING]-----
   //1 = OUTPUT // 0 = INPUT
   DDRB |= 0x00;
@@ -133,7 +133,9 @@ void setup() {
 //==============================[LOOP]========================
 
 void loop() {
+  wdt_reset();
   if (ConfigEnabled) {
+    wdt_reset();
     if (Serial.available() > 0) {
       lookForSTX = Serial.read();
       if (lookForSTX == STX) {
@@ -143,6 +145,7 @@ void loop() {
     }
   }
   else {
+    wdt_reset();
     foo = 0;
     while (foo <= slaveCount - 1) {
       //getErrors(foo);
@@ -152,6 +155,7 @@ void loop() {
 
     checkForCountError();
     if (countChanged) {
+      wdt_reset();
       sendDisplayCount();
       countChanged = false;
     }

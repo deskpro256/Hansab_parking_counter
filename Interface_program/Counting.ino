@@ -2,6 +2,7 @@
 //===================================[GET_CHANGES]=======================================
 
 void getChanges(char receiverID) {
+  wdt_reset();
   replied = false;
   RS485Send(receiverID, messageType[0], CMDLUT[1], 'C', 'N', 'G');
   tries++;
@@ -28,6 +29,7 @@ void getChanges(char receiverID) {
 
 //===================================[COMPARE_FLOOR_COUNT]================================
 void compareFloor(char _floorID, char sign, char _count) {
+  wdt_reset();
 
   tempF1Count = currentFloorCount[0];
   tempF2Count = currentFloorCount[1];
@@ -104,6 +106,7 @@ void compareFloor(char _floorID, char sign, char _count) {
 
 //===================================[SEND_DISPLAY_COUNT]================================
 void sendDisplayCount() {
+  wdt_reset();
 
   for (int i = 0; i <= 3; i++) {
     byte byteHuns = (currentFloorCount[i] / 100) + 0x30;
@@ -118,6 +121,7 @@ void sendDisplayCount() {
 
 //===================================[SEND_DISPLAY_COUNT]================================
 void sendDisplayCountToUSB(byte _floorNum) {
+  wdt_reset();
 
   tempF1Count = currentFloorCount[0];
   tempF2Count = currentFloorCount[1];

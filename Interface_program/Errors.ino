@@ -13,6 +13,7 @@
 //===================================[GET_ERRORS]=======================================
 
 void getErrors(char receiverID) {
+  wdt_reset();
   replied = false;
   RS485Send(receiverID, messageType[0], CMDLUT[0], 'E', 'R', 'R');
   tries++;
@@ -41,6 +42,7 @@ void getErrors(char receiverID) {
 //===================================[COUNT_ERROR_CHECK]=======================================
 
 void checkForCountError() {
+  wdt_reset();
   //---------------------------
   if (currentFloorCount[0] < 0) {
     errorState = true;
@@ -106,6 +108,7 @@ void checkForCountError() {
 //===================================[SEND_ERROR_REPORT]=======================================
 
 void sendErrorReport() {    //sends the errorDevices[] array to configurator program
+  wdt_reset();
   int idGet = 0;
   char dev[2] = {'0', '0'};
   char code;
@@ -117,7 +120,8 @@ void sendErrorReport() {    //sends the errorDevices[] array to configurator pro
   Serial.write(ErrorDeviceText1, 16);
   delay(10);
   Serial.write(ErrorDeviceText2, 16);
-  for (int i = 0; i <= 31; i += 2) {
+  //for (int i = 0; i <= 31; i += 2) {
+  for (int i = 0; i <= (slaveCount * 2) - 1; i += 2) {
     idGet = errorDevices[i];
     if (idGet < 10) {
       dev[0] = '0';
@@ -137,11 +141,13 @@ void sendErrorReport() {    //sends the errorDevices[] array to configurator pro
     delay(10);
   }
   delay(1000);
+  wdt_reset();
   PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
   PORTD &= ~(1 << PD5);     // Disable COM Led
 }
 
 void addToErrorList(int id, char errCode) {
+  wdt_reset();
   //add to error list
   errorDevices[id * 2] = id;
   errorDevices[(id * 2) + 1] = errCode;

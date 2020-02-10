@@ -8,6 +8,7 @@
     type 5:  eco    eco(sigle loop action) only in/ only out
 */
 void checkLoops() {
+  wdt_reset();
   //oldCount = count;
   contactPressed = false;
   PORTC ^= (1 << PC4);

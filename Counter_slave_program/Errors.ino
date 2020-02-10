@@ -11,6 +11,7 @@
 //============================[SEND_ERROR_REPORT]========================
 
 void sendErrorReport(int errcount) {      //sends the error report to master
+  wdt_reset();
   if (errorState) {
     byte byteHuns = (errcount / 100) + 0x30;
     byte byteTens = ((errcount % 100) / 10) + 0x30;
@@ -26,6 +27,7 @@ void sendErrorReport(int errcount) {      //sends the error report to master
 //============================[ERROR_CHECK]========================
 
 void errorCheck() {
+  wdt_reset();
   // error state check. If the count is not within the margins set by min/max turn on the error LED, master ticks the error in a log file
   if (count < 0 || count > maxCount) {
     PORTC |= (1 << PC3); //error led on
@@ -40,5 +42,6 @@ void errorCheck() {
 
 //============================[CLEAR_ERRORS]========================
 void clearErrors() {
+  wdt_reset();
   errorState = false;
 }

@@ -130,6 +130,7 @@ void NOPdelay(unsigned int z) {
 
 //============================[DEBOUNCE]========================
 void debounceISR() {
+  wdt_reset();
   current_millis = millis();
   if (current_millis - last_millis >= debounceTimeMin || current_millis - last_millis >= debounceTimeMax) {
     contactPressed = true;
@@ -141,18 +142,18 @@ void debounceISR() {
 //============================[SOFTWARE_RESET]========================
 void SW_Reset() {
   PORTC &= ~(1 << PC5) | ~(1 << PC4) | ~(1 << PC3);  //disable ALL LED'S
-  Serial.end();
-  Display.end();
-  //wdt_enable(WDTO_1S);
+  //Serial.end();
+  //Display.end();
   PORTC |= (1 << PC5) | (1 << PC4) | (1 << PC3);  //ENABLE ALL LED'S
   delay(1000);
   PORTC &= ~(1 << PC5) | ~(1 << PC4) | ~(1 << PC3);  //disable ALL LED'S
-  setup();
+  wdt_enable(WDTO_2S);
 }
 
 //============================[SETUP]========================
 
 void setup() {
+  wdt_disable();
   //------[PIN COFING]-----
   //1 = OUTPUT // 0 = INPUT
   DDRB |= 0x00;
@@ -171,21 +172,19 @@ void setup() {
   PCICR |= (1 << PCIE0);
   PCICR |= (1 << PCIE1);
 
-  //-----------[WDT]--------
-  //WDTCSR |= 0B00001110;   //watchdog on system reset mode, 1 second timer
-  //------------------------
 
   getMyID();  // reads its own address on power-up
   readEEPROMSettings();
   Serial.begin(9600);   //starting UART with 9600 BAUD
   Display.begin(9600);
-  oldCount = count;
+  drawDisplay(EEPROM[4], EEPROM[3], EEPROM[2]);
   sei(); //enable interrupts
 }
 
 //==============================[LOOP]========================
 
 void loop() {
+  wdt_reset();
   // if there is a message coming in, turn on the comm LED, read the message in buffer,then turn off the LED
   if (Serial.available() > 0) {
     lookForSTX = Serial.read();

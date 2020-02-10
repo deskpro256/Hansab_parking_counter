@@ -1,6 +1,7 @@
 
 //============================[EEPROM_WRITE]========================
 void writeEEPROMSettings(byte _type, byte _floorID, byte _count1, byte _count2, byte _count3) {
+  wdt_reset();
 
   EEPROM.write(0, _type);
   EEPROM.write(1, _floorID);
@@ -24,6 +25,7 @@ void readEEPROMSettings() {
     EEPROM.write(5, 0x69);
   }
   else {
+    wdt_reset();
     type = EEPROM[0];
     floorID = EEPROM[1];
     maxCount = ((EEPROM[2] - 48) * 100) + ((EEPROM[3] - 48) * 10) + (EEPROM[4] - 48); //count123

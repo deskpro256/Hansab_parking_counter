@@ -1,6 +1,7 @@
 //============================[RS485_SEND]========================
 
 void RS485Send(char receiverID, char msgType, char command, char data1, char data2, char data3) {
+  wdt_reset();
 
   msg[0] = STX;
   msg[1] = receiverID;
@@ -24,6 +25,7 @@ void RS485Send(char receiverID, char msgType, char command, char data1, char dat
 //===================================[RS485_RECEIVE]=======================================
 
 void RS485Receive() {
+  wdt_reset();
   //reads the serial data,stores data in an 8 byte buffer
   if (lookForSTX == STX) {
     lookForSTX = 0x00;
@@ -39,6 +41,7 @@ void RS485Receive() {
 //============================[RECEIVED_MY_ADDRESS]========================
 //checks if the address byte has own or floor address
 void isMyAddress() {
+  wdt_reset();
   if ((buff[0] == myID || buff[0] == floorID) && buff[7] == ETX) {
     newData = false;
     //moves all the buff[] to a stored message value while also clearing the buffer

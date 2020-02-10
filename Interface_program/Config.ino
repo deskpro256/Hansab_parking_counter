@@ -6,9 +6,11 @@
 /*  STX RXID TXID CMD SLAVECNT  COUNT1 COUNT2 COUNT3  COUNT1 COUNT2 COUNT3  COUNT1 COUNT2 COUNT3  COUNT1 COUNT2 COUNT3 ETX */
 
 void ReceiveConfig() {
+  wdt_reset();
   //reads the serial data,stores data in an 10 byte buffer
   char lookForSTX;
   while (lookForSTX != STX) {
+  wdt_reset();
     lookForSTX = Serial.read();
   }
   if (lookForSTX == STX) {

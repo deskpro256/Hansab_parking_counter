@@ -6,6 +6,7 @@
 /*  STX RXID TXID CMD TYPE FLOORID COUNT1 COUNT2 COUNT3 ETX*/
 
 void ReceiveConfig() {
+  wdt_reset();
   //reads the serial data,stores data in an 10 byte buffer
   lookForSTX;
   while (lookForSTX != STX) {

@@ -1,6 +1,6 @@
 //============================[COUNT_CHECK]========================
 void countCheck() {
-
+  wdt_reset();
   if (oldCount != count) {
     countChanged = true;
     if (oldCount > count) {
