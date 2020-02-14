@@ -135,6 +135,9 @@ void debounceISR() {
   if (current_millis - last_millis >= debounceTimeMin || current_millis - last_millis >= debounceTimeMax) {
     contactPressed = true;
   }
+  else {
+    contactPressed = false;
+  }
   last_millis = current_millis;
 }
 
@@ -148,6 +151,7 @@ void SW_Reset() {
   delay(1000);
   PORTC &= ~(1 << PC5) | ~(1 << PC4) | ~(1 << PC3);  //disable ALL LED'S
   wdt_enable(WDTO_2S);
+  delay(2000);
 }
 
 //============================[SETUP]========================

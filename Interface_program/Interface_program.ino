@@ -103,6 +103,7 @@ void SW_Reset() {
   delay(1000);
   PORTD &=  ~(1 << PD5) | ~(1 << PD6) | ~(1 << PD7); //disable ALL LED'S
   wdt_enable(WDTO_2S);
+  delay(2000);
 }
 
 //============================[SETUP]========================

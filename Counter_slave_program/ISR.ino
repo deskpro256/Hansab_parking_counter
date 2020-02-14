@@ -13,6 +13,7 @@
 ISR(PCINT1_vect) {
   debounceISR();
   if (contactPressed) {
+    
     //L1
     if (!(PINC & (1 << PC2))) {
       L1_flag = true;
@@ -25,13 +26,16 @@ ISR(PCINT1_vect) {
     if (!(PINC & (1 << PC0))) {
       L3_flag = true;
     }
-    checkLoops();
+    
+    //checkLoops();
+    checkLoops2();
   }
 }
 
 ISR(PCINT0_vect) {
   debounceISR();
   if (contactPressed) {
+    
     //L4
     if (!(PINB & (1 << PB5))) {
       L4_flag = true;
@@ -52,6 +56,8 @@ ISR(PCINT0_vect) {
     if (!(PINB & (1 << PB1))) {
       L8_flag = true;
     }
-    checkLoops();
+    
+    //checkLoops();
+    checkLoops2();
   }
 }

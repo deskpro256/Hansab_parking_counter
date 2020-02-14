@@ -59,6 +59,7 @@ void getCMD(char cmd, char msgType, char onesN, char tensN, char hundredsN) {
   //--------------------------------------
   if (cmd == CMDLUT[4]) { // 0x05 - firstTimeSetup
     ReceiveConfig();
+    readEEPROMSettings();
     SW_Reset();
   }
   //--------------------------------------
