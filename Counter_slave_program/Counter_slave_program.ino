@@ -145,18 +145,23 @@ void debounceISR() {
 //============================[SOFTWARE_RESET]========================
 void SW_Reset() {
   PORTC &= ~(1 << PC5) | ~(1 << PC4) | ~(1 << PC3);  //disable ALL LED'S
-  //Serial.end();
-  //Display.end();
-  PORTC |= (1 << PC5) | (1 << PC4) | (1 << PC3);  //ENABLE ALL LED'S
   delay(1000);
-  PORTC &= ~(1 << PC5) | ~(1 << PC4) | ~(1 << PC3);  //disable ALL LED'S
+  PORTC |= (1 << PC5) | (1 << PC4) | (1 << PC3);  //ENABLE ALL LED'S
   wdt_enable(WDTO_2S);
-  delay(2000);
+  while(1){}//wait for it to reset
 }
 
 //============================[SETUP]========================
 
 void setup() {
+  
+  /* Clear WDRF in MCUSR */
+  MCUSR &= ~(1 << WDRF);
+  /* Write logical one to WDCE and WDE */
+  /* Keep old prescaler setting to prevent unintentional time-out
+  */
+  WDTCSR |= (1 << WDCE) | (1 << WDE);
+  
   wdt_disable();
   //------[PIN COFING]-----
   //1 = OUTPUT // 0 = INPUT
@@ -182,6 +187,7 @@ void setup() {
   Serial.begin(9600);   //starting UART with 9600 BAUD
   Display.begin(9600);
   drawDisplay(EEPROM[4], EEPROM[3], EEPROM[2]);
+  PORTC &= ~(1 << PC5) | ~(1 << PC4) | ~(1 << PC3);  //disable ALL LED'S
   sei(); //enable interrupts
 }
 

@@ -98,17 +98,21 @@ int foo = 0;//just a general slave counter iterator var
 //============================[SOFTWARE_RESET]========================
 void SW_Reset() {
   PORTD &=  ~(1 << PD5) | ~(1 << PD6) | ~(1 << PD7); //disable ALL LED'S
-  //Serial.end();
-  PORTD |= (1 << PD5) | (1 << PD6) | (1 << PD7);  //ENABLE ALL LED'S
   delay(1000);
-  PORTD &=  ~(1 << PD5) | ~(1 << PD6) | ~(1 << PD7); //disable ALL LED'S
+  PORTD |= (1 << PD5) | (1 << PD6) | (1 << PD7);  //ENABLE ALL LED'S
   wdt_enable(WDTO_2S);
-  delay(2000);
+  while(1){}//wait for it to reset
 }
 
 //============================[SETUP]========================
 
 void setup() {
+  /* Clear WDRF in MCUSR */
+  MCUSR &= ~(1 << WDRF);
+  /* Write logical one to WDCE and WDE */
+  /* Keep old prescaler setting to prevent unintentional time-out
+  */
+  WDTCSR |= (1 << WDCE) | (1 << WDE);
   wdt_disable();
   //------[PIN COFING]-----
   //1 = OUTPUT // 0 = INPUT
@@ -127,6 +131,7 @@ void setup() {
   sei();
   Serial.begin(9600);   //starting UART with 9600 BAUD
 
+  PORTD &=  ~(1 << PD5) | ~(1 << PD6) | ~(1 << PD7); //disable ALL LED'S
   readEEPROMSettings();
   sendDisplayCount();
 }
