@@ -41,7 +41,7 @@ void compareFloor(char _floorID, char sign, char _count) {
       countChanged = true;
       tempF1Count -= _count;
     }
-    else {
+    else if (sign == '+') {
       if (isF1Negative == true) {
         isF1Negative = false;
       }
@@ -56,7 +56,7 @@ void compareFloor(char _floorID, char sign, char _count) {
       tempF2Count -= _count;
       countChanged = true;
     }
-    else {
+    else if (sign == '+') {
       if (isF2Negative == true) {
         isF2Negative = false;
       }
@@ -71,7 +71,7 @@ void compareFloor(char _floorID, char sign, char _count) {
       tempF3Count -= _count;
       countChanged = true;
     }
-    else {
+    else if (sign == '+') {
       if (isF3Negative == true) {
         isF3Negative = false;
       }
@@ -86,7 +86,7 @@ void compareFloor(char _floorID, char sign, char _count) {
       tempF4Count -= _count;
       countChanged = true;
     }
-    else {
+    else if (sign == '+') {
       if (isF4Negative == true) {
         isF4Negative = false;
       }
