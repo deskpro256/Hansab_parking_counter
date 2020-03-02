@@ -1,103 +1,155 @@
 
-//============================[CHECK_LOOPS]========================<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-//from ISR to this in order to correctly know the vehicles direction
-/*  type 1:  [↓↑]   single bidirectional entrance
-    type 2: [↑][↓]  separate directional entrance and exit
-    type 3:  [↑]    single entrance
-    type 4:  [↓]    single exit
-    type 5:  eco    eco(sigle loop action) only in/ only out
+//============================[CHECK_LOOPS]========================
+
+/* Types
+    Type 1: [↑][↓]  separate directional entrance and exit
+      L1 - L4 = OUT (L1&&L2)|(L3&&L4)
+      L5 - L8 = IN  (L5&&L6)|(L7&&L8)
+    Type 2:  eco   eco(sigle loop action)
+      L1 - L4 = OUT (L1)(L2)(L3)(L4)
+      L5 - L8 = IN  (L5)(L6)(L7)(L8)
+    Type 3: [↓↑]   single bidirectional entrance
+      L1 - L4 = IN/OUT (L1::L2)(L3::L4)
+      L5 - L8 = IN/OUT (L5::L6)(L7::L8)
 */
+
 void checkLoops() {
+
   wdt_reset();
-  //oldCount = count;
-  contactPressed = false;
   PORTC ^= (1 << PC4);
+
+  //====================================================================================
+  /*
+    Type 1: [↑][↓]  separate directional entrance and exit
+      L1 - L4 = OUT (L1&&L2)|(L3&&L4)
+      L5 - L8 = IN  (L5&&L6)|(L7&&L8)
+  */
   if (type == 1) {
-    // L1, L2
-    if (L1_flag == true) {
-      //carIN
-      count--;
-      L1_flag = false;
-    }
-    else if (L2_flag == true) {
+    //==========================OUT==============================
+    //L1 && L2
+    if (!(PINC & (1 << PC2)) && !(PINC & (1 << PC1))) {
       //carOUT
       count++;
-      L2_flag = false;
+    }
+    //L3 && L4
+    if (!(PINC & (1 << PC0)) && !(PINB & (1 << PB5))) {
+      //carOUT
+      count++;
+    }
+    //==========================IN==============================
+    //L5 && L6
+    if (!(PINB & (1 << PB4)) && !(PINB & (1 << PB3))) {
+      //carIN
+      count--;
+    }
+    //L7 && L8
+    if (!(PINB & (1 << PB2)) && !(PINB & (1 << PB1))) {
+      //carIN
+      count--;
     }
 
-    // L3, L4
-    if (L3_flag == true) {
-      //carIN
-      count--;
-      L3_flag = false;
-    }
-    else if (L4_flag == true) {
-      //carOUT
-      count++;
-      L4_flag = false;
-    }
   }
 
-
+  //====================================================================================
+  /*
+    Type 2:  eco   eco(sigle loop action)
+      L1 - L4 = OUT (L1)(L2)(L3)(L4)
+      L5 - L8 = IN  (L5)(L6)(L7)(L8)
+  */
   else if (type == 2) {
-    //L5, L6
-    if (L5_flag == true && L6_flag == true) {
+    //==========OUT==============
+    //L1
+    if (!(PINC & (1 << PC2))) {
       //carOUT
       count++;
-      L5_flag = false;
-      L6_flag = false;
+    }
+    //L2
+    if (!(PINC & (1 << PC1))) {
+      //carOUT
+      count++;
+    }
+    //L3
+    if (!(PINC & (1 << PC0))) {
+      //carOUT
+      count++;
+    }
+    //L4
+    if (!(PINB & (1 << PB5))) {
+      //carOUT
+      count++;
     }
 
-    //L7, L8
-    if (L7_flag == true && L8_flag == true) {
+    //==========IN=============
+    //L5
+    if (!(PINB & (1 << PB4))) {
       //carIN
       count--;
-      L7_flag = false;
-      L8_flag = false;
+    }
+    //L6
+    if (!(PINB & (1 << PB3))) {
+      //carIN
+      count--;
+    }
+    //L7
+    if (!(PINB & (1 << PB2))) {
+      //carIN
+      count--;
+    }
+    //L8
+    if (!(PINB & (1 << PB1))) {
+      //carIN
+      count--;
     }
   }
-  // in
+
+  //====================================================================================
+  /*
+    Type 3: [↓↑]   single bidirectional entrance
+      L1 - L4 = IN/OUT (L1::L2)(L3::L4)
+      L5 - L8 = IN/OUT (L5::L6)(L7::L8)
+  */
   else if (type == 3) {
-    //L7, L8
-    if (L7_flag == true && L8_flag == true) {
+    //L1
+    if (!(PINC & (1 << PC2))) {
       //carIN
       count--;
-      L7_flag = false;
-      L8_flag = false;
     }
-  }
-  // out
-  else if (type == 4) {
-    //L5, L6
-    if (L5_flag == true && L6_flag == true) {
+    //L2
+    if (!(PINC & (1 << PC1))) {
       //carOUT
       count++;
-      L5_flag = false;
-      L6_flag = false;
     }
-  }
-  //eco / single loop action
-  else if (type == 5) {
-    //L5, L6, L7, L8
-    if (L5_flag == true) {
-      //carOUT
-      count++;
-      L5_flag = false;
-    }
-    if (L6_flag == true) {
-      //carOUT
-      count++;
-      L6_flag = false;
-    }
-    if (L7_flag == true) {
+    //L3
+    if (!(PINC & (1 << PC0))) {
       //carIN
       count--;
-      L7_flag = false;
     }
-    if (L8_flag == true) {
+    //L4
+    if (!(PINB & (1 << PB5))) {
+      //carOUT
+      count++;
+    }
+    //L5
+    if (!(PINB & (1 << PB4))) {
       //carIN
       count--;
-      L8_flag = false;
+    }
+    //L6
+    if (!(PINB & (1 << PB3))) {
+      //carOUT
+      count++;
+    }
+    //L7
+    if (!(PINB & (1 << PB2))) {
+      //carIN
+      count--;
+    }
+    //L8
+    if (!(PINB & (1 << PB1))) {
+      //carOUT
+      count++;
     }
   }
-}
+
+
+}//checkloops

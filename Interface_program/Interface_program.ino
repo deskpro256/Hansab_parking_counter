@@ -46,6 +46,12 @@ char floorNaddresses[4] = {0xF1, 0xF2, 0xF3, 0xF4};
 bool countChanged = false;
 bool errorState = false;
 
+bool countF1Changed = false;
+bool countF2Changed = false;
+bool countF3Changed = false;
+bool countF4Changed = false;
+
+
 bool isF1Negative = false;
 bool isF2Negative = false;
 bool isF3Negative = false;
@@ -101,7 +107,7 @@ void SW_Reset() {
   delay(1000);
   PORTD |= (1 << PD5) | (1 << PD6) | (1 << PD7);  //ENABLE ALL LED'S
   wdt_enable(WDTO_2S);
-  while(1){}//wait for it to reset
+  while (1) {} //wait for it to reset
 }
 
 //============================[SETUP]========================
@@ -133,7 +139,10 @@ void setup() {
 
   PORTD &=  ~(1 << PD5) | ~(1 << PD6) | ~(1 << PD7); //disable ALL LED'S
   readEEPROMSettings();
-  sendDisplayCount();
+  // update the displays with current count
+  for (int i = 0; i <= 3; i++) {
+  sendDisplayCount(i);
+  }
 }
 
 //==============================[LOOP]========================
@@ -154,16 +163,12 @@ void loop() {
     wdt_reset();
     foo = 0;
     while (foo <= slaveCount - 1) {
+      wdt_reset();
       //getErrors(foo);
       getChanges(foo);
       foo++;
     }
-
     checkForCountError();
-    if (countChanged) {
-      wdt_reset();
-      sendDisplayCount();
-      countChanged = false;
-    }
+    UpdateCount();
   }
 }

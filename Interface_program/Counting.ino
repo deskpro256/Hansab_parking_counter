@@ -38,7 +38,7 @@ void compareFloor(char _floorID, char sign, char _count) {
 
   if (_floorID == floorNaddresses[0]) {
     if (sign == '-') {
-      countChanged = true;
+      countF1Changed = true;
       tempF1Count -= _count;
     }
     else if (sign == '+') {
@@ -47,14 +47,14 @@ void compareFloor(char _floorID, char sign, char _count) {
       }
       else {
         tempF1Count += _count;
-        countChanged = true;
+        countF1Changed = true;
       }
     }
   }
   else if (_floorID == floorNaddresses[1]) {
     if (sign == '-') {
       tempF2Count -= _count;
-      countChanged = true;
+      countF2Changed = true;
     }
     else if (sign == '+') {
       if (isF2Negative == true) {
@@ -62,14 +62,14 @@ void compareFloor(char _floorID, char sign, char _count) {
       }
       else {
         tempF2Count += _count;
-        countChanged = true;
+        countF2Changed = true;
       }
     }
   }
   else if (_floorID == floorNaddresses[2]) {
     if (sign == '-') {
       tempF3Count -= _count;
-      countChanged = true;
+      countF3Changed = true;
     }
     else if (sign == '+') {
       if (isF3Negative == true) {
@@ -77,14 +77,14 @@ void compareFloor(char _floorID, char sign, char _count) {
       }
       else {
         tempF3Count += _count;
-        countChanged = true;
+        countF3Changed = true;
       }
     }
   }
   else if (_floorID == floorNaddresses[3]) {
     if (sign == '-') {
       tempF4Count -= _count;
-      countChanged = true;
+      countF4Changed = true;
     }
     else if (sign == '+') {
       if (isF4Negative == true) {
@@ -92,7 +92,7 @@ void compareFloor(char _floorID, char sign, char _count) {
       }
       else {
         tempF4Count += _count;
-        countChanged = true;
+        countF4Changed = true;
       }
     }
   }
@@ -101,11 +101,50 @@ void compareFloor(char _floorID, char sign, char _count) {
   currentFloorCount[2] = tempF3Count;
   currentFloorCount[3] = tempF4Count;
 
-  sendDisplayCount();
 }
 
+//===================================[UPDATE_COUNT]================================
+void UpdateCount() {
+  wdt_reset();
+
+  if (countF1Changed) {
+    sendDisplayCount(0);
+    countF1Changed = false;
+  }
+  if (countF2Changed) {
+    sendDisplayCount(1);
+    countF2Changed = false;
+  }
+  if (countF3Changed) {
+    sendDisplayCount(2);
+    countF3Changed = false;
+  }
+  if (countF4Changed) {
+    sendDisplayCount(3);
+    countF4Changed = false;
+  }
+
+}
+
+
+
 //===================================[SEND_DISPLAY_COUNT]================================
-void sendDisplayCount() {
+void sendDisplayCount(unsigned int num) {
+  wdt_reset();
+
+  byte byteHuns = (currentFloorCount[num] / 100) + 0x30;
+  byte byteTens = ((currentFloorCount[num] % 100) / 10) + 0x30;
+  byte byteOnes = (currentFloorCount[num] % 10) + 0x30;
+  delay(20);
+  RS485Send(floorNaddresses[num], messageType[0], CMDLUT[2], byteHuns, byteTens, byteOnes);
+  delay(20);
+
+}
+
+/*
+
+//===================================[SEND_DISPLAY_COUNT]================================
+void sendDisplayCountOld() {
   wdt_reset();
 
   for (int i = 0; i <= 3; i++) {
@@ -117,7 +156,7 @@ void sendDisplayCount() {
     delay(20);
   }
 }
-
+*/
 
 //===================================[SEND_DISPLAY_COUNT]================================
 void sendDisplayCountToUSB(byte _floorNum) {

@@ -92,12 +92,6 @@ int errorCount = 0;
 char errorCodes[4] = {'0', '1', '2', '3'}; // E0 E1 E2 E3
 
 int type = 5;
-/*  type 1:  [↓↑]   single bidirectional entrance
-    type 2: [↑][↓]  separate directional entrance and exit
-    type 3:  [↑]    single entrance
-    type 4:  [↓]    single exit
-    type 5:  eco    eco(sigle loop action)
-*/
 
 char CMD = 0x00;  //by default on startup,there hasn't been any messages, so the command byte is just null
 char plusMinus[] = {0x2B, 0x2D, 0x3D}; // + / - / =

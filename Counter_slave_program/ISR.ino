@@ -27,8 +27,7 @@ ISR(PCINT1_vect) {
       L3_flag = true;
     }
 
-    //checkLoops();
-    checkLoops2();
+    checkLoops();
   }
 }
 
@@ -57,7 +56,6 @@ ISR(PCINT0_vect) {
       L8_flag = true;
     }
 
-    //checkLoops();
-    checkLoops2();
+    checkLoops();
   }
 }
