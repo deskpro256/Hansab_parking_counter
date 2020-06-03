@@ -9,7 +9,7 @@
 // 0x07 - sendDisplayCountToUSB
 // 0x08 - sendErrorReport
 // 0x09 - restart
-// 0x0A - networkSettings
+// 0x0A -
 // };     a look up table for every command
 
 //char messageType[] = {
@@ -91,8 +91,7 @@ void getCMD(char cmd, char msgType, char _ones, char _tens, char _hundreds) {
   }
   //--------------------------------------
   if (cmd == CMDLUT[9]) { // 0x0A -
-    //Network Settings
-    ReceiveNWConfig();
+    //reserved
   }
   //--------------------------------------
 }

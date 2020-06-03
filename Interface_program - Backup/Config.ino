@@ -5,6 +5,9 @@
 //  0    1    2    3     4        5      6      7       8      9      10      11     12     13     14     15     16    17
 /*  STX RXID TXID CMD SLAVECNT  COUNT1 COUNT2 COUNT3  COUNT1 COUNT2 COUNT3  COUNT1 COUNT2 COUNT3  COUNT1 COUNT2 COUNT3 ETX */
 
+// WITH NETWORK SETTINGS:
+//  0    1    2    3     4        5      6      7       8      9      10      11     12     13     14     15     16      17  18  19 20    21  22  23  24   25  26  27  28   29
+/*  STX RXID TXID CMD SLAVECNT  COUNT1 COUNT2 COUNT3  COUNT1 COUNT2 COUNT3  COUNT1 COUNT2 COUNT3  COUNT1 COUNT2 COUNT3  IP1 IP2 IP3 IP4   GW1 GW2 GW3 G4   SN1 SN2 SN3 SN4  ETX */
 
 void ReceiveConfig() {
   wdt_reset();

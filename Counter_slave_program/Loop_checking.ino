@@ -5,7 +5,7 @@
     Type 1: [↑][↓]  separate directional entrance and exit
       L1 - L4 = OUT (L1&&L2)|(L3&&L4)
       L5 - L8 = IN  (L5&&L6)|(L7&&L8)
-    Type 2:  eco   eco(sigle loop action)
+    Type 2:  eco   sigle loop action
       L1 - L4 = OUT (L1)(L2)(L3)(L4)
       L5 - L8 = IN  (L5)(L6)(L7)(L8)
     Type 3: [↓↑]   single bidirectional entrance

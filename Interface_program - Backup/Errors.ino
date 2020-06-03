@@ -109,11 +109,11 @@ void checkForCountError() {
 
 void sendErrorReport() {    //sends the errorDevices[] array to configurator program
   wdt_reset();
-  int idGet = 0; // Device ID got from error device list to add to the string if the ID is 9 and lower, have 0 in fron, if larger then add a 1 in front.
-  char dev[2] = {'0', '0'};  //device ID 00 - 0F
-  char code; // error code to add
-  char ErrorDeviceText1[] = "Error devices: \n"; //string to send to the software
-  char ErrorDeviceText2[] = "ID | ErrorCode \n"; //string to send to the software
+  int idGet = 0;
+  char dev[2] = {'0', '0'};
+  char code;
+  char ErrorDeviceText1[] = "Error devices: \n";
+  char ErrorDeviceText2[] = "ID | ErrorCode \n";
   delay(50);
   PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
   PORTD |= (1 << PD5);      // Enable COM Led

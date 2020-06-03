@@ -9,7 +9,7 @@
 // 0x07 - sendDisplayCountToUSB
 // 0x08 - sendErrorReport
 // 0x09 - restart
-// 0x0A -
+// 0x0A - networkSettings
 // };     a look up table for every command
 
 //char messageType[] = {

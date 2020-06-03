@@ -28,14 +28,34 @@ void writeEEPROMSettings( byte _slaveCount,
   EEPROM.write(11, _Floor4Byte2);
   EEPROM.write(12, _Floor4Byte3);
 
-  EEPROM.write(13, 0x69); // add the preset byte for further boot cycles
+  EEPROM.write(13, 0x69); // preset byte to look for
 
+  // NETWORK SETTINGS
+  /*
+    // IP ADDRESS
+    EEPROM.write(14, IP_Byte1);
+    EEPROM.write(15, IP_Byte2);
+    EEPROM.write(16, IP_Byte3);
+    EEPROM.write(17, IP_Byte4);
+
+    // GATEWAY
+    EEPROM.write(18, GW_Byte1);
+    EEPROM.write(19, GW_Byte2);
+    EEPROM.write(20, GW_Byte3);
+    EEPROM.write(21, GW_Byte4);
+
+    // SUBNET
+    EEPROM.write(22, SN_Byte1);
+    EEPROM.write(23, SN_Byte2);
+    EEPROM.write(24, SN_Byte3);
+    EEPROM.write(25, SN_Byte4);
+  */
 }
 
 //============================[EEPROM_WRITE]========================
 void readEEPROMSettings() {
   wdt_reset();
-  //if the controller hasn't been configured yet, put some default IP values in.
+  //if the controller hasn't been configured yet, put some default values in. 1 slave, 123 spaces in each floor
   if (EEPROM.read(13) != 0x69) {
     EEPROM.write(0, 0x01);
     //floor 1
@@ -55,10 +75,29 @@ void readEEPROMSettings() {
     EEPROM.write(11, 0x32);
     EEPROM.write(12, 0x33);
 
-    EEPROM.write(13, 0x69); // add the preset byte for further boot cycles
+    EEPROM.write(13, 0x69); // preset byte to look for
 
+    // NETWORK SETTINGS
+    /*
+      // IP ADDRESS
+      EEPROM.write(14, 192);
+      EEPROM.write(15, 168);
+      EEPROM.write(16, 0);
+      EEPROM.write(17, 177);
+
+      // GATEWAY
+      EEPROM.write(18, 255);
+      EEPROM.write(19, 255);
+      EEPROM.write(20, 255);
+      EEPROM.write(21, 0);
+
+      // SUBNET
+      EEPROM.write(22, 192);
+      EEPROM.write(23, 168);
+      EEPROM.write(24, 0);
+      EEPROM.write(25, 1);
+    */
   }
-  // read the saved settings
   else {
     wdt_reset();
     slaveCount  = EEPROM[0];                                                                //Slave  count
@@ -76,81 +115,6 @@ void readEEPROMSettings() {
     currentFloorCount[1] = tempF2Count;
     currentFloorCount[2] = tempF3Count;
     currentFloorCount[3] = tempF4Count;
-  }
-
-}
-
-
-//============================[NETWORK_WRITE]=======================
-void NetworkWrite(byte IP_Byte1, byte IP_Byte2, byte IP_Byte3, byte IP_Byte4,
-                  byte GW_Byte1, byte GW_Byte2, byte GW_Byte3, byte GW_Byte4,
-                  byte SN_Byte1, byte SN_Byte2, byte SN_Byte3, byte SN_Byte4
-                 ) {
-  wdt_reset();
-
-  // IP ADDRESS
-  EEPROM.write(14, IP_Byte1);
-  EEPROM.write(15, IP_Byte2);
-  EEPROM.write(16, IP_Byte3);
-  EEPROM.write(17, IP_Byte4);
-
-  // GATEWAY
-  EEPROM.write(18, GW_Byte1);
-  EEPROM.write(19, GW_Byte2);
-  EEPROM.write(20, GW_Byte3);
-  EEPROM.write(21, GW_Byte4);
-
-  // SUBNET
-  EEPROM.write(22, SN_Byte1);
-  EEPROM.write(23, SN_Byte2);
-  EEPROM.write(24, SN_Byte3);
-  EEPROM.write(25, SN_Byte4);
-
-}
-//============================[NETWORK_READ]========================
-void NetworkRead() {
-  //if the controller hasn't been configured yet, put some default IP values in.
-  if (EEPROM.read(26) != 0x69) {
-
-    // IP ADDRESS
-    EEPROM.write(14, 192); //0xC0
-    EEPROM.write(15, 168); //0xA8
-    EEPROM.write(16, 0);   //0x00
-    EEPROM.write(17, 177); //0xB1
-
-    // GATEWAY
-    EEPROM.write(18, 255); //0xFF
-    EEPROM.write(19, 255); //0xFF
-    EEPROM.write(20, 255); //0xFF
-    EEPROM.write(21, 0);   //0x00
-
-    // SUBNET
-    EEPROM.write(22, 192); //0xC0
-    EEPROM.write(23, 168); //0xA8
-    EEPROM.write(24, 0);   //0x00
-    EEPROM.write(25, 1);   //0x01
-    EEPROM.write(26, 0x69); // add the preset byte for further boot cycles
-
-  }
-  // get the saved settings
-  else {
-    wdt_reset();
-    
-    IP[0]  = EEPROM[14];
-    IP[1]  = EEPROM[15];
-    IP[2]  = EEPROM[16];
-    IP[3]  = EEPROM[17];
-
-    GW[0]  = EEPROM[18];
-    GW[1]  = EEPROM[19];
-    GW[2]  = EEPROM[20];
-    GW[3]  = EEPROM[21];
-
-    SN[0]  = EEPROM[22];
-    SN[1]  = EEPROM[23];
-    SN[2]  = EEPROM[24];
-    SN[3]  = EEPROM[25];
-
   }
 
 }

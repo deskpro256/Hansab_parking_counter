@@ -29,9 +29,7 @@ void NOPdelay(unsigned int z) {
 
 //number of bytes in buffer and message buff[sizeBuff] & msg[sizeBuff]
 #define sizeBuff 9
-#define sizeConfigBuff 18
-#define sizeNWConfigBuff 17 //ethernet settings
-
+#define sizeConfigBuff 18 // 30 w/ ethernet settings
 
 ////Slave data array/////
 //char slaveData[16][4] {}; //GOES IN EEPROM
@@ -74,17 +72,8 @@ byte currentAddress = 0;
 
 char buff [sizeBuff];        // RECEIVING BUFFER
 char recMsg [sizeBuff];      // RECEIVED MESSAGE
-byte configBuff [sizeConfigBuff];   // RECEIVED CONFIG BUFFER
+byte configBuff [sizeConfigBuff];   // RECEIVED MESSAGE
 byte recConfig [sizeConfigBuff];    // RECEIVED CONFIG MESSAGE
-byte NWConfigBuff [sizeNWConfigBuff];    // RECEIVED NW CONFIG CONFIG
-byte NWConfig [sizeNWConfigBuff];    // RECEIVED NW CONFIG MESSAGE
-
-int IP[4] = {192, 168, 0, 177}; // IP Address
-int GW[4] = {255, 255, 255, 0}; // Gateway
-int SN[4] = {192, 168, 0, 1};   // Subnet
-byte MAC[6] = {0xFF, 0x4C, 0x1D, 0xE4, 0xB5, 0x21};
-// FF-4C-1D-E4-B5-21
-
 
 bool newData = false;           // flag var to see if there is new data on the UART
 bool replied = false;           // flag to see if slave has replied
@@ -151,7 +140,7 @@ void setup() {
   readEEPROMSettings();
   // update the displays with current count
   for (int i = 0; i <= 3; i++) {
-    sendDisplayCount(i);
+  sendDisplayCount(i);
   }
 }
 
