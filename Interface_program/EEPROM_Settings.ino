@@ -7,7 +7,9 @@ void writeEEPROMSettings( byte _slaveCount,
                           byte _Floor2Byte1, byte _Floor2Byte2, byte _Floor2Byte3,
                           byte _Floor3Byte1, byte _Floor3Byte2, byte _Floor3Byte3,
                           byte _Floor4Byte1, byte _Floor4Byte2, byte _Floor4Byte3) {
-
+                            
+  //DEVICE SETTINGS
+  
   EEPROM.write(0, _slaveCount);
   //floor 1
   EEPROM.write(1, _Floor1Byte1);
@@ -27,6 +29,27 @@ void writeEEPROMSettings( byte _slaveCount,
   EEPROM.write(12, _Floor4Byte3);
 
   EEPROM.write(13, 0x69); // preset byte to look for
+  
+  // NETWORK SETTINGS
+  /*
+  // IP ADDRESS
+  EEPROM.write(14, IP_Byte1);
+  EEPROM.write(15, IP_Byte2);
+  EEPROM.write(16, IP_Byte3);
+  EEPROM.write(17, IP_Byte4);
+  
+  // GATEWAY
+  EEPROM.write(18, GW_Byte1);
+  EEPROM.write(19, GW_Byte2);
+  EEPROM.write(20, GW_Byte3);
+  EEPROM.write(21, GW_Byte4);
+  
+  // SUBNET
+  EEPROM.write(22, SN_Byte1);
+  EEPROM.write(23, SN_Byte2);
+  EEPROM.write(24, SN_Byte3);
+  EEPROM.write(25, SN_Byte4);
+  */
 }
 
 //============================[EEPROM_WRITE]========================

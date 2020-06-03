@@ -29,7 +29,7 @@ void NOPdelay(unsigned int z) {
 
 //number of bytes in buffer and message buff[sizeBuff] & msg[sizeBuff]
 #define sizeBuff 9
-#define sizeConfigBuff 18
+#define sizeConfigBuff 18 // 30 w/ ethernet settings
 
 ////Slave data array/////
 //char slaveData[16][4] {}; //GOES IN EEPROM
@@ -50,7 +50,6 @@ bool countF1Changed = false;
 bool countF2Changed = false;
 bool countF3Changed = false;
 bool countF4Changed = false;
-
 
 bool isF1Negative = false;
 bool isF2Negative = false;
