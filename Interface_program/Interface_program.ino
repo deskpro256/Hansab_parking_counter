@@ -1,18 +1,13 @@
 /* Interface device program for Hansab
   Written by Karlis Reinis Ulmanis
-
-  2019
-  type 1 :  [↓↑]   single bidirectional entrance
-  type 2 : [↑][↓]  separate directional entrance and exit
-  type 3 :  [↑]    single entrance
-  type 4 :  [↓]    single exit
-  type 5 :  eco    eco(sigle loop action)
 */
 
 #include <EEPROM.h>
 #include <avr/io.h>
 #include <avr/wdt.h>
 #include <avr/interrupt.h>
+#include <SPI.h>
+#include <Ethernet.h>
 
 #define NOP __asm__ __volatile__ ("nop\n\t")  //NO OPERATION
 
@@ -30,11 +25,8 @@ void NOPdelay(unsigned int z) {
 //number of bytes in buffer and message buff[sizeBuff] & msg[sizeBuff]
 #define sizeBuff 9
 #define sizeConfigBuff 18
-#define sizeNWConfigBuff 17 //ethernet settings
+#define sizeNWConfigBuff 18 //ethernet settings
 
-
-////Slave data array/////
-//char slaveData[16][4] {}; //GOES IN EEPROM
 /////////////////////////
 int maxCount = 3996;
 int floorMaxCount[4] = {0, 0, 0, 0};
@@ -67,7 +59,7 @@ char errorDevices[32] = {0x00, 0x30, 0x01, 0x30, 0x02, 0x30, 0x03, 0x30,
 //devices with errors. ID, ERROR, ID, ERROR ...
 char errorCodes[4] = {'0', '1', '2', '3'}; // E0 E1 E2 E3
 byte addresses[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
-int slaveCount = 15;
+int slaveCount = 16;
 volatile bool ConfigEnabled = false;
 int tries = 0;  // counts retries
 byte currentAddress = 0;
@@ -76,14 +68,53 @@ char buff [sizeBuff];        // RECEIVING BUFFER
 char recMsg [sizeBuff];      // RECEIVED MESSAGE
 byte configBuff [sizeConfigBuff];   // RECEIVED CONFIG BUFFER
 byte recConfig [sizeConfigBuff];    // RECEIVED CONFIG MESSAGE
+
+//Network settings start
+// nw setting buffers
 byte NWConfigBuff [sizeNWConfigBuff];    // RECEIVED NW CONFIG CONFIG
 byte NWConfig [sizeNWConfigBuff];    // RECEIVED NW CONFIG MESSAGE
+// ip address stuff
+byte IP[4] = {192, 168, 0, 177}; // IP Address
+byte SN[4] = {255, 255, 255, 0}; // Gateway
+byte GW[4] = {192, 168, 0, 1};   // Subnet
+byte MAC[6] = {0xFA, 0x4C, 0x1D, 0xE4, 0xB5, 0x21};
+// FA-4C-1D-E4-B5-21  mac address
+byte DHCP = 0; // dhcp off
+IPAddress ip(IP[0], IP[1], IP[2], IP[3]);
+IPAddress gateway(GW[0], GW[1], GW[2], GW[3]);
+IPAddress subnet(SN[0], SN[1], SN[2], SN[3]);
+IPAddress dns(GW[0], GW[1], GW[2], GW[3]);// same as GW, so use that
+IPAddress myIP;
+EthernetClient client;
+EthernetServer server(80); // web server on port 80
+// auth stuff
+char linebuf[80];
+int charcount = 0;
+boolean authentificated = false;
+//auth : admin:Hansab123  /default user & pass
+char auth[] = "YWRtaW46SGFuc2FiMTIz";
 
-int IP[4] = {192, 168, 0, 177}; // IP Address
-int GW[4] = {255, 255, 255, 0}; // Gateway
-int SN[4] = {192, 168, 0, 1};   // Subnet
-byte MAC[6] = {0xFF, 0x4C, 0x1D, 0xE4, 0xB5, 0x21};
-// FF-4C-1D-E4-B5-21
+// Network settings end
+//[=====================================]
+// HTML Tags
+char docTypeHTML[] = "<!DOCTYPE html>";
+char htmlStart[] = "<html>";
+char htmlEnd[] = "</html>";
+char autoScaleMeta[] = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">";
+char headStart[] = "<head>";
+char headEnd[] = "</head>";
+char bodyStart[] = "<body>";
+char bodyEnd[] = "</body>";
+char styleStart[] = "<style>";
+char styleEnd[] = "</style>";
+char scriptStart[] = "<script>";
+char scriptEnd[] = "</script>";
+char centerStart[] = "<center>";
+char centerEnd[] = "</center>";
+char divStart[] = "<div>";
+char divEnd[] = "</div>";
+
+//HTML TAG END
 
 
 bool newData = false;           // flag var to see if there is new data on the UART
@@ -113,9 +144,15 @@ int foo = 0;//just a general slave counter iterator var
 
 //============================[SOFTWARE_RESET]========================
 void SW_Reset() {
-  PORTD &=  ~(1 << PD5) | ~(1 << PD6) | ~(1 << PD7); //disable ALL LED'S
+  // uncomment next line for custom PCB's
+  //PORTC &=  ~(1 << PC2) | ~(1 << PC3) | ~(1 << PC4); //disable ALL LED'S
+  // test Perfboard device
+  PORTC &=  ~(1 << PC1) | ~(1 << PC2) | ~(1 << PC3); //disable ALL LED'S
   delay(1000);
-  PORTD |= (1 << PD5) | (1 << PD6) | (1 << PD7);  //ENABLE ALL LED'S
+  // uncomment next line for custom PCB's
+  //PORTC |= (1 << PC2) | (1 << PC3) | (1 << PC4);  //ENABLE ALL LED'S
+  // test Perfboard device
+  PORTC |= (1 << PC1) | (1 << PC2) | (1 << PC3);  //ENABLE ALL LED'S
   wdt_enable(WDTO_2S);
   while (1) {} //wait for it to reset
 }
@@ -133,26 +170,37 @@ void setup() {
   //------[PIN COFING]-----
   //1 = OUTPUT // 0 = INPUT
   DDRB |= 0x00;
-  DDRC |= 0x0C;
-  DDRD |= 0xE4;
+  DDRC |= 0x0E;
+  DDRD |= 0x10;
 
   PORTB |= 0B00000000;
   PORTC |= 0B00000000;
-  PORTD |= 0B00001000;
+  PORTD |= 0B00011100;
+  /*
+    DDRB |= 0x00;
+    DDRC |= 0x0C;
+    DDRD |= 0xE4;
 
+    PORTB |= 0B00000000;
+    PORTC |= 0B00000000;
+    PORTD |= 0B00001000;
+  */
   //------[ISR SETUP]------
   EICRA = 0B00000100;
   EIMSK = 0B00000010;
   //-----------[WDT]--------
   sei();
   Serial.begin(9600);   //starting UART with 9600 BAUD
-
-  PORTD &=  ~(1 << PD5) | ~(1 << PD6) | ~(1 << PD7); //disable ALL LED'S
+  // uncomment next line for custom PCB's
+  //PORTC &=  ~(1 << PC2) | ~(1 << PC3) | ~(1 << PC4); //disable ALL LED'S
+  // test Perfboard device
+  PORTC |=  (1 << PC1) | (1 << PC2) | (1 << PC3); //disable ALL LED'S
   readEEPROMSettings();
   // update the displays with current count
   for (int i = 0; i <= 3; i++) {
     sendDisplayCount(i);
   }
+  EthernetSetup();
 }
 
 //==============================[LOOP]========================
@@ -164,7 +212,7 @@ void loop() {
     if (Serial.available() > 0) {
       lookForSTX = Serial.read();
       if (lookForSTX == STX) {
-        PORTD ^= (1 << PD5);
+        PORTC ^= (1 << PC2);
         RS485Receive();
       }
     }
@@ -181,4 +229,6 @@ void loop() {
     checkForCountError();
     UpdateCount();
   }
+  DHCPMaintain();
+  handleEthernet();
 }

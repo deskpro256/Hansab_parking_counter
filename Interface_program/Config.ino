@@ -11,7 +11,7 @@ void ReceiveConfig() {
   //reads the serial data,stores data in an 17 byte buffer
   char lookForSTX;
   while (lookForSTX != STX) {
-  wdt_reset();
+    wdt_reset();
     lookForSTX = Serial.read();
   }
   if (lookForSTX == STX) {

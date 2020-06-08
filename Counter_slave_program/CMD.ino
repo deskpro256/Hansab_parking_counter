@@ -10,6 +10,7 @@
 // 0x08 - sendErrorReport
 // 0x09 - restart
 // 0x0A - networkSettings
+// 0x0B - sendNWSettings
 // };     a look up table for every command
 
 //char messageType[] = {
@@ -80,7 +81,11 @@ void getCMD(char cmd, char msgType, char onesN, char tensN, char hundredsN) {
     SW_Reset();
   }
   //--------------------------------------
-  if (cmd == CMDLUT[9]) { // 0x0A - getConfig?
-
+  if (cmd == CMDLUT[9]) { // 0x0A - networkSettings
+    //do nothing
+  }
+  //--------------------------------------
+  if (cmd == CMDLUT[10]) { // 0x0B - sendNWSettings
+    //do nothing
   }
 }

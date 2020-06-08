@@ -10,7 +10,7 @@ void getChanges(char receiverID) {
   if (Serial.available() > 0) {
     lookForSTX = Serial.read();
     if (lookForSTX == STX) {
-      PORTD ^= (1 << PD3);
+      PORTC ^= (1 << PC1);      // Toggle COM Led
       RS485Receive();
     }
   }
@@ -143,8 +143,8 @@ void sendDisplayCount(unsigned int num) {
 
 /*
 
-//===================================[SEND_DISPLAY_COUNT]================================
-void sendDisplayCountOld() {
+  //===================================[SEND_DISPLAY_COUNT]================================
+  void sendDisplayCountOld() {
   wdt_reset();
 
   for (int i = 0; i <= 3; i++) {
@@ -155,7 +155,7 @@ void sendDisplayCountOld() {
     RS485Send(floorNaddresses[i], messageType[0], CMDLUT[2], byteHuns, byteTens, byteOnes);
     delay(20);
   }
-}
+  }
 */
 
 //===================================[SEND_DISPLAY_COUNT]================================
