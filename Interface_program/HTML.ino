@@ -23,6 +23,7 @@ void SendMainPage(EthernetClient &client) {
   client.println();
   // Response header
   
+  // web page
   client.println("<!DOCTYPE HTML>");
   client.println("<HTML><BODY>");
   //form added to send data from browser and view received data in serial monitor

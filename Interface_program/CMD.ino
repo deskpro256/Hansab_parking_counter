@@ -98,7 +98,7 @@ void getCMD(char cmd, char msgType, char _ones, char _tens, char _hundreds) {
   //--------------------------------------
   if (cmd == CMDLUT[10]) { // 0x0B - sendNWSettings
     // Send Network Settings
-    checkLinkStatus();
+    //checkLinkStatus();
     sendNWSettings();
   }
   //--------------------------------------

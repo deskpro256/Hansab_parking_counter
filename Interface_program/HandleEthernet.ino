@@ -2,13 +2,25 @@
 //=================[CHECK ETH LINK STATUS]=======================
 
 void checkLinkStatus() {
+  PORTD |= (1 << PD4);      // (RE_DE, HIGH) enable sending
+  //PORTC |= (1 << PC2);      // Enable COM Led
+  //perf test device
+  PORTC |= (1 << PC1);      // Enable COM Led
+  delay(50);
   if (Ethernet.linkStatus() == LinkON) {
-    Serial.println(F("Link status: On"));
+    Serial.println(F("\n\rLink status: On"));
   }
   else if (Ethernet.linkStatus() == LinkOFF) {
-    Serial.println(F("Link status: Off"));
+    Serial.println(F("\n\rLink status: Off"));
   }
+  delay(100);
+  PORTD &= ~(1 << PD4);     // (RE_DE, LOW) disable sending
+  //PORTC &= ~(1 << PC2);     // Disable COM Led
+  //perf test device
+  PORTC &= ~(1 << PC1);     // Disable COM Led
 }
+
+
 //=================[DHCP MAINTAIN]=======================
 void DHCPMaintain() {
   // if DHCP is on, need to maintain the connection
@@ -54,8 +66,16 @@ void DHCPMaintain() {
 //=================[ETHERNET SETUP]=======================
 void EthernetSetup() {
   wdt_reset();
+  //Reset W5500
+  //PORTB &= ~(1 << PB1);     // ETH RST
+  PORTC &= ~(1 << PC0);     // ETH RST
+  delay(10);
+  //PORTB |= (1 << PB1);     // ETH RST
+  PORTC |= (1 << PC0);     // ETH RST
+
   //check for DHCP byte to see how the device is supposed to get network settings
-  DHCP = EEPROM[14]; //get the byte frm memory
+  //DHCP = EEPROM[14]; //get the byte frm memory
+  NetworkRead();
   // if DHCP = 0, use manually entered settings
   if (DHCP == 0x00) {
     // start the Ethernet connection and the server:
@@ -72,7 +92,9 @@ void EthernetSetup() {
 
   server.begin();
   myIP = Ethernet.localIP();
-  checkLinkStatus();
+  mySN = Ethernet.subnetMask();
+  myGW = Ethernet.gatewayIP();
+  //checkLinkStatus();
   sendNWSettings();
 }
 
@@ -104,15 +126,17 @@ void handleEthernet() {
           // Here is where the POST data is.
           while (client.available())
           {
-
+            //getPOSTData();
             Serial.write(client.read());
           }
           Serial.println();
 
-          if (authentificated)
-            SendLogin(client);
-          else
+          if (authentificated) {
             SendMainPage(client);
+          }
+          else {
+            SendLogin(client);
+          }
           break;
         }
         if (c == '\n') {

@@ -85,6 +85,8 @@ IPAddress gateway(GW[0], GW[1], GW[2], GW[3]);
 IPAddress subnet(SN[0], SN[1], SN[2], SN[3]);
 IPAddress dns(GW[0], GW[1], GW[2], GW[3]);// same as GW, so use that
 IPAddress myIP;
+IPAddress mySN;
+IPAddress myGW;
 EthernetClient client;
 EthernetServer server(80); // web server on port 80
 // auth stuff
@@ -93,6 +95,16 @@ int charcount = 0;
 boolean authentificated = false;
 //auth : admin:Hansab123  /default user & pass
 char auth[] = "YWRtaW46SGFuc2FiMTIz";
+
+// strings to send to terminal
+char DHCPSetting[] = "\n\rDHCP: ";
+char IPSettings[] = "\n\rIP: ";
+char SNSettings[] = "\n\rSN: ";
+char GWSettings[] = "\n\rGW: ";
+char MACSettings[] = "\n\rMAC: ";
+char dhcpOn[] = "On";
+char dhcpOff[] = "Off";
+char colon = ':';
 
 // Network settings end
 //[=====================================]
@@ -195,12 +207,14 @@ void setup() {
   //PORTC &=  ~(1 << PC2) | ~(1 << PC3) | ~(1 << PC4); //disable ALL LED'S
   // test Perfboard device
   PORTC |=  (1 << PC1) | (1 << PC2) | (1 << PC3); //disable ALL LED'S
+  // read the settings saved in eeprom
   readEEPROMSettings();
+  // ethernet settings
+  EthernetSetup();
   // update the displays with current count
   for (int i = 0; i <= 3; i++) {
     sendDisplayCount(i);
   }
-  EthernetSetup();
 }
 
 //==============================[LOOP]========================
@@ -212,7 +226,8 @@ void loop() {
     if (Serial.available() > 0) {
       lookForSTX = Serial.read();
       if (lookForSTX == STX) {
-        PORTC ^= (1 << PC2);
+        //PORTC ^= (1 << PC2);
+        PORTC ^= (1 << PC1);
         RS485Receive();
       }
     }

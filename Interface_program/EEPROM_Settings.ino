@@ -114,20 +114,22 @@ void NetworkWrite(byte dhcp,
   EEPROM.write(27, 0x69); // add the preset byte for further boot cycles
 
   if (dhcp == 0x00) {
-    IPAddress newIp(IP_Byte1, IP_Byte2, IP_Byte3, IP_Byte4);
-    Ethernet.setLocalIP(newIp);  // change the IP address
 
-    IPAddress newSN(SN_Byte1, SN_Byte2, SN_Byte3, SN_Byte4);
-    Ethernet.setLocalIP(newSN);  // change the SN address
+    IPAddress ip(IP_Byte1, IP_Byte2, IP_Byte3, IP_Byte4);
+    Ethernet.setLocalIP(ip);  // change the IP address
 
-    IPAddress newGW(GW_Byte1, GW_Byte2, GW_Byte3, GW_Byte4);
-    Ethernet.setLocalIP(newGW);  // change the IP address
+    IPAddress subnet(SN_Byte1, SN_Byte2, SN_Byte3, SN_Byte4);
+    Ethernet.setLocalIP(subnet);  // change the SN address
 
-    IPAddress newDNS(GW_Byte1, GW_Byte2, GW_Byte3, GW_Byte4);
-    Ethernet.setLocalIP(newDNS);  // change the DNS address
+    IPAddress gateway(GW_Byte1, GW_Byte2, GW_Byte3, GW_Byte4);
+    Ethernet.setLocalIP(gateway);  // change the IP address
+
+    IPAddress dns(GW_Byte1, GW_Byte2, GW_Byte3, GW_Byte4);
+    Ethernet.setLocalIP(dns);  // change the DNS address
 
   }
-
+  // restart ethernet chip with new ethernet settings
+  EthernetSetup(); 
 }
 //============================[NETWORK_READ]========================
 void NetworkRead() {

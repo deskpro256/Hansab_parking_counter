@@ -38,7 +38,7 @@ void ReceiveNWConfig() {
     SN[1]  = NWConfig[9];
     SN[2]  = NWConfig[10];
     SN[3]  = NWConfig[11];
-    
+
     GW[0]  = NWConfig[12];
     GW[1]  = NWConfig[13];
     GW[2]  = NWConfig[14];
@@ -55,23 +55,44 @@ void ReceiveNWConfig() {
 
 //===================================[SEND NETWORK SETTINGS]=======================================
 void sendNWSettings() {
-  char IPSettings[] = "IP:\n";
-  char SNSettings[] = "SN:\n"; 
-  char GWSettings[] = "GW:\n";
-  char MACSettings[] = "MAC:\n";
+  // convert bytes to numbers
+
   PORTD |= (1 << PD4);      // (RE_DE, HIGH) enable sending
   //PORTC |= (1 << PC2);      // Enable COM Led
   //perf test device
   PORTC |= (1 << PC1);      // Enable COM Led
   delay(50);
-  Serial.write(IPSettings, 4);
-  Serial.write(Ethernet.localIP());
-  Serial.write(SNSettings, 4);
-  Serial.write(Ethernet.subnetMask());
-  Serial.write(GWSettings, 4);
-  Serial.write(Ethernet.gatewayIP());
-  Serial.write(MACSettings, 5);
-  Serial.write(Ethernet.MACAddress());
+
+  Serial.write(DHCPSetting, 8);
+  if (DHCP == 0x01) {
+    Serial.write(dhcpOn, 2);
+  }
+  else {
+    Serial.write(dhcpOff, 3);
+  }
+
+  Serial.write(IPSettings, 6);
+  Serial.print(myIP);
+
+  Serial.write(SNSettings, 6);
+  Serial.print(mySN);
+
+  Serial.write(GWSettings, 6);
+  Serial.print(myGW);
+
+  Serial.write(MACSettings, 7);
+  Serial.print(MAC[0], HEX);
+  Serial.print(colon);
+  Serial.print(MAC[1], HEX);
+  Serial.print(colon);
+  Serial.print(MAC[2], HEX);
+  Serial.print(colon);
+  Serial.print(MAC[3], HEX);
+  Serial.print(colon);
+  Serial.print(MAC[4], HEX);
+  Serial.print(colon);
+  Serial.println(MAC[5], HEX);
+
   delay(1000);
   PORTD &= ~(1 << PD4);     // (RE_DE, LOW) disable sending
   //PORTC &= ~(1 << PC2);     // Disable COM Led
