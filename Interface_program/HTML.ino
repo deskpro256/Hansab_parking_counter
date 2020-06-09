@@ -282,9 +282,9 @@ void SendMainPage(EthernetClient &client) {
   client.println(scriptEnd);
   client.println(F("<br><br>"));
 
-  client.print(F("<form action=\"http://\""));
+  client.print(F("<form action=\"http://"));
   client.print(myIP);
-  client.println(F(" method=\"post\">"));
+  client.println(F("\" method=\"post\">"));
   client.println(F("<input type=\"submit\" value=\"Exit\" onclick=\"Exit()\">"));
 
   client.println(formEnd);

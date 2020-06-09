@@ -151,10 +151,10 @@ void NetworkRead() {
   if (EEPROM.read(27) != 0x69) {
 
     // DHCP on/off
-    EEPROM.write(14, 0); //dhcp off, default IP address
+    EEPROM.write(14, 0x01); //dhcp off, default IP address
 
     // IP ADDRESS
-    EEPROM.write(15, 192); //0xC0
+    EEPROM.write(15, 192); //0xC01
     EEPROM.write(16, 168); //0xA8
     EEPROM.write(17, 0);   //0x00
     EEPROM.write(18, 177); //0xB1
