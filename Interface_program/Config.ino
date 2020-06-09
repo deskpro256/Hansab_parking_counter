@@ -31,19 +31,21 @@ void ReceiveConfig() {
       recConfig[i] = configBuff[i];
       configBuff[i] = 0x00;
     }
-
     slaveCount  = recConfig[3];                                                                           //Slave  count
 
     tempF1Count = ((recConfig[4]   - 48) * 100) + ((recConfig[5]   - 48) * 10) + (recConfig[6]   - 48);   //Floor1 count
     tempF2Count = ((recConfig[7]   - 48) * 100) + ((recConfig[8]   - 48) * 10) + (recConfig[9]   - 48);   //Floor2 count
     tempF3Count = ((recConfig[10]  - 48) * 100) + ((recConfig[11]  - 48) * 10) + (recConfig[12]  - 48);   //Floor3 count
     tempF4Count = ((recConfig[13]  - 48) * 100) + ((recConfig[14]  - 48) * 10) + (recConfig[15]  - 48);   //Floor4 count
+    
+    activeFloors  = recConfig[16];                                                                        //Active floor  count
 
     writeEEPROMSettings(recConfig[3],
                         recConfig[4], recConfig[5], recConfig[6],
                         recConfig[7], recConfig[8], recConfig[9],
                         recConfig[10], recConfig[11], recConfig[12],
-                        recConfig[13], recConfig[14], recConfig[15]);
+                        recConfig[13], recConfig[14], recConfig[15],
+                        recConfig[16]);
   }
 
 }

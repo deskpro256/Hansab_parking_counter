@@ -94,6 +94,7 @@ void EthernetSetup() {
   myIP = Ethernet.localIP();
   mySN = Ethernet.subnetMask();
   myGW = Ethernet.gatewayIP();
+  DHCP = EEPROM[14];
   //checkLinkStatus();
   sendNWSettings();
 }
@@ -114,6 +115,7 @@ void handleEthernet() {
     // an http request ends with a blank line
     boolean currentLineIsBlank = true;
     while (client.connected()) {
+      wdt_reset();
       if (client.available()) {
         char c = client.read();
         linebuf[charcount] = c;
@@ -140,6 +142,7 @@ void handleEthernet() {
           break;
         }
         if (c == '\n') {
+          wdt_reset();
           // you're starting a new line
           currentLineIsBlank = true;
           if (strstr(linebuf, "Authorization: Basic") > 0 && strstr(linebuf, auth) > 0)

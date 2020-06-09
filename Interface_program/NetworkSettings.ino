@@ -57,6 +57,15 @@ void ReceiveNWConfig() {
 void sendNWSettings() {
   // convert bytes to numbers
 
+  wdt_reset();
+  
+  myIP = Ethernet.localIP();
+  mySN = Ethernet.subnetMask();
+  myGW = Ethernet.gatewayIP();
+  DHCP = EEPROM[14];
+  
+  wdt_reset();
+  
   PORTD |= (1 << PD4);      // (RE_DE, HIGH) enable sending
   //PORTC |= (1 << PC2);      // Enable COM Led
   //perf test device
@@ -94,6 +103,7 @@ void sendNWSettings() {
   Serial.println(MAC[5], HEX);
 
   delay(1000);
+  wdt_reset();
   PORTD &= ~(1 << PD4);     // (RE_DE, LOW) disable sending
   //PORTC &= ~(1 << PC2);     // Disable COM Led
   //perf test device

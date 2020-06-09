@@ -6,10 +6,12 @@ void writeEEPROMSettings( byte _slaveCount,
                           byte _Floor1Byte1, byte _Floor1Byte2, byte _Floor1Byte3,
                           byte _Floor2Byte1, byte _Floor2Byte2, byte _Floor2Byte3,
                           byte _Floor3Byte1, byte _Floor3Byte2, byte _Floor3Byte3,
-                          byte _Floor4Byte1, byte _Floor4Byte2, byte _Floor4Byte3) {
+                          byte _Floor4Byte1, byte _Floor4Byte2, byte _Floor4Byte3,
+                          byte actFloors) {
 
   //DEVICE SETTINGS
 
+  wdt_reset();
   EEPROM.write(0, _slaveCount);
   //floor 1
   EEPROM.write(1, _Floor1Byte1);
@@ -27,7 +29,9 @@ void writeEEPROMSettings( byte _slaveCount,
   EEPROM.write(10, _Floor4Byte1);
   EEPROM.write(11, _Floor4Byte2);
   EEPROM.write(12, _Floor4Byte3);
-
+  
+  EEPROM.write(28, actFloors);
+  
   EEPROM.write(13, 0x69); // add the preset byte for further boot cycles
 
 }
@@ -54,6 +58,8 @@ void readEEPROMSettings() {
     EEPROM.write(10, 0x31);
     EEPROM.write(11, 0x32);
     EEPROM.write(12, 0x33);
+    //active floor count
+    EEPROM.write(28, 0x01);
 
     EEPROM.write(13, 0x69); // add the preset byte for further boot cycles
     readEEPROMSettings(); // now read the newly set values
@@ -77,6 +83,8 @@ void readEEPROMSettings() {
     currentFloorCount[1] = tempF2Count;
     currentFloorCount[2] = tempF3Count;
     currentFloorCount[3] = tempF4Count;
+    //get active floor count
+    activeFloors = EEPROM[28];
   }
 
 }
@@ -128,11 +136,17 @@ void NetworkWrite(byte dhcp,
     Ethernet.setLocalIP(dns);  // change the DNS address
 
   }
+  
+  myIP = Ethernet.localIP();
+  mySN = Ethernet.subnetMask();
+  myGW = Ethernet.gatewayIP();
+  DHCP = EEPROM[14];
   // restart ethernet chip with new ethernet settings
-  EthernetSetup(); 
+  //EthernetSetup();
 }
 //============================[NETWORK_READ]========================
 void NetworkRead() {
+  wdt_reset();
   //if the controller hasn't been configured yet, put some default IP values in.
   if (EEPROM.read(27) != 0x69) {
 

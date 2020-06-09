@@ -24,7 +24,7 @@ void NOPdelay(unsigned int z) {
 
 //number of bytes in buffer and message buff[sizeBuff] & msg[sizeBuff]
 #define sizeBuff 9
-#define sizeConfigBuff 18
+#define sizeConfigBuff 19
 #define sizeNWConfigBuff 18 //ethernet settings
 
 /////////////////////////
@@ -35,7 +35,7 @@ int tempF1Count = 0;
 int tempF2Count = 0;
 int tempF3Count = 0;
 int tempF4Count = 0;
-int activeFloors = 4;
+int activeFloors = 1;
 char floorNaddresses[4] = {0xF1, 0xF2, 0xF3, 0xF4};
 bool countChanged = false;
 bool errorState = false;
@@ -125,6 +125,7 @@ char centerStart[] = "<center>";
 char centerEnd[] = "</center>";
 char divStart[] = "<div>";
 char divEnd[] = "</div>";
+char formEnd[] = "</form>";
 
 //HTML TAG END
 
