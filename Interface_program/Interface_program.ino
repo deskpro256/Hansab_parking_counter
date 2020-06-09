@@ -79,7 +79,7 @@ byte SN[4] = {255, 255, 255, 0}; // Gateway
 byte GW[4] = {192, 168, 0, 1};   // Subnet
 byte MAC[6] = {0xFA, 0x4C, 0x1D, 0xE4, 0xB5, 0x21};
 // FA-4C-1D-E4-B5-21  mac address
-byte DHCP = 0; // dhcp off
+byte DHCP; // dhcp
 IPAddress ip(IP[0], IP[1], IP[2], IP[3]);
 IPAddress gateway(GW[0], GW[1], GW[2], GW[3]);
 IPAddress subnet(SN[0], SN[1], SN[2], SN[3]);

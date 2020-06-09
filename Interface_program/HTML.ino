@@ -56,9 +56,9 @@ void SendMainPage(EthernetClient &client) {
   client.println(divEnd);
   client.println(F("<div id=\"Current\" class=\"tabcontent\">"));
 
-  client.print(F("<form action=\"http://\""));
+  client.print(F("<form action=\"http://"));
   client.print(myIP);
-  client.println(" method=\"post\">");
+  client.println("\" method=\"post\">");
 
   client.println(F("<h3>Current statistics</h3>"));
 
@@ -216,9 +216,9 @@ void SendMainPage(EthernetClient &client) {
   client.print(slaveCount);
   client.println(F("<br><br>"));
 
-  client.print(F("<form action=\"http://\""));
+  client.print(F("<form action=\"http://"));
   client.print(myIP);
-  client.println(" method=\"post\">");
+  client.println("\" method=\"post\">");
   client.println(F("<input type=\"submit\" value=\"Restart\" onclick=\"Restart()\">"));
   client.println(formEnd);
 
