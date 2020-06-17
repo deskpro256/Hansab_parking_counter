@@ -74,19 +74,15 @@ byte recConfig [sizeConfigBuff];    // RECEIVED CONFIG MESSAGE
 byte NWConfigBuff [sizeNWConfigBuff];    // RECEIVED NW CONFIG CONFIG
 byte NWConfig [sizeNWConfigBuff];    // RECEIVED NW CONFIG MESSAGE
 // ip address stuff
-byte IP[4] = {192, 168, 0, 177}; // IP Address
+byte IP[4] = {192, 168, 2, 134}; // IP Address
 byte SN[4] = {255, 255, 255, 0}; // Gateway
-byte GW[4] = {192, 168, 0, 1};   // Subnet
+byte GW[4] = {192, 168, 2, 1};   // Subnet
 byte MAC[6] = {0xFA, 0x4C, 0x1D, 0xE4, 0xB5, 0x21};
 // FA-4C-1D-E4-B5-21  mac address
 byte DHCP; // dhcp
-IPAddress ip(IP[0], IP[1], IP[2], IP[3]);
-IPAddress gateway(GW[0], GW[1], GW[2], GW[3]);
-IPAddress subnet(SN[0], SN[1], SN[2], SN[3]);
-IPAddress dns(GW[0], GW[1], GW[2], GW[3]);// same as GW, so use that
-IPAddress myIP;
-IPAddress mySN;
-IPAddress myGW;
+IPAddress myIP = {IP[0], IP[1], IP[2], IP[3]};
+IPAddress mySN = {SN[0], SN[1], SN[2], SN[3]};
+IPAddress myGW = {GW[0], GW[1], GW[2], GW[3]};
 EthernetClient client;
 EthernetServer server(80); // web server on port 80
 // auth stuff
@@ -211,6 +207,7 @@ void setup() {
   // read the settings saved in eeprom
   readEEPROMSettings();
   // ethernet settings
+  NetworkRead();
   EthernetSetup();
   // update the displays with current count
   for (int i = 0; i <= 3; i++) {
@@ -245,6 +242,6 @@ void loop() {
     checkForCountError();
     UpdateCount();
   }
-  DHCPMaintain();
+  //DHCPMaintain();
   handleEthernet();
 }

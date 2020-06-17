@@ -91,8 +91,8 @@ void getCMD(char cmd, char msgType, char _ones, char _tens, char _hundreds) {
     SW_Reset();
   }
   //--------------------------------------
-  if (cmd == CMDLUT[9]) { // 0x0A - networkSettings
-    //Network Settings
+  if (cmd == CMDLUT[9]) { // 0x0A - GetNetworkSettingsCFG
+    // Get Network Setting Config
     ReceiveNWConfig();
   }
   //--------------------------------------

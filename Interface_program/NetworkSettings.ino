@@ -29,26 +29,13 @@ void ReceiveNWConfig() {
     }
     DHCP   = NWConfig[3];
 
-    IP[0]  = NWConfig[4];
-    IP[1]  = NWConfig[5];
-    IP[2]  = NWConfig[6];
-    IP[3]  = NWConfig[7];
-
-    SN[0]  = NWConfig[8];
-    SN[1]  = NWConfig[9];
-    SN[2]  = NWConfig[10];
-    SN[3]  = NWConfig[11];
-
-    GW[0]  = NWConfig[12];
-    GW[1]  = NWConfig[13];
-    GW[2]  = NWConfig[14];
-    GW[3]  = NWConfig[15];
-
-
     NetworkWrite(NWConfig[3],
                  NWConfig[4], NWConfig[5], NWConfig[6], NWConfig[7],
                  NWConfig[8], NWConfig[9], NWConfig[10], NWConfig[11],
                  NWConfig[12], NWConfig[13], NWConfig[14], NWConfig[15]);
+
+    // restart chip with new ethernet settings
+    SW_Reset();
   }
 
 }
@@ -58,14 +45,16 @@ void sendNWSettings() {
   // convert bytes to numbers
 
   wdt_reset();
-  
-  myIP = Ethernet.localIP();
-  mySN = Ethernet.subnetMask();
-  myGW = Ethernet.gatewayIP();
+
   DHCP = EEPROM[14];
-  
+  NetworkRead();
+  /*
+    myIP = Ethernet.localIP();
+    mySN = Ethernet.subnetMask();
+    myGW = Ethernet.gatewayIP();
+  */
   wdt_reset();
-  
+
   PORTD |= (1 << PD4);      // (RE_DE, HIGH) enable sending
   //PORTC |= (1 << PC2);      // Enable COM Led
   //perf test device
@@ -81,13 +70,34 @@ void sendNWSettings() {
   }
 
   Serial.write(IPSettings, 6);
-  Serial.print(myIP);
+  Serial.print(IP[0]);
+  Serial.print('.');
+  Serial.print(IP[1]);
+  Serial.print('.');
+  Serial.print(IP[2]);
+  Serial.print('.');
+  Serial.print(IP[3]);
+  Serial.print(Ethernet.localIP());
 
   Serial.write(SNSettings, 6);
-  Serial.print(mySN);
+  Serial.print(SN[0]);
+  Serial.print('.');
+  Serial.print(SN[1]);
+  Serial.print('.');
+  Serial.print(SN[2]);
+  Serial.print('.');
+  Serial.print(SN[3]);
+  Serial.print(Ethernet.subnetMask());
 
   Serial.write(GWSettings, 6);
-  Serial.print(myGW);
+  Serial.print(GW[0]);
+  Serial.print('.');
+  Serial.print(GW[1]);
+  Serial.print('.');
+  Serial.print(GW[2]);
+  Serial.print('.');
+  Serial.print(GW[3]);
+  Serial.print(Ethernet.gatewayIP());
 
   Serial.write(MACSettings, 7);
   Serial.print(MAC[0], HEX);

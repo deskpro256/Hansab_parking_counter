@@ -35,7 +35,7 @@ void DHCPMaintain() {
 
     switch (Ethernet.maintain()) {
       case 0:
-        Serial.println(F("\n\rDHCP: Nothing happened"));
+        //Serial.println(F("\n\rDHCP: Nothing happened"));
         break;
       case 1:
         Serial.println(F("\n\rDHCP: Renew failed"));
@@ -53,7 +53,7 @@ void DHCPMaintain() {
         Serial.println(F("\n\rDHCP: Unexpected number"));
         break;
     }
-    checkLinkStatus();
+    //checkLinkStatus();
 
     delay(50);
     PORTD &= ~(1 << PD4);     // (RE_DE, LOW) disable sending
@@ -66,35 +66,37 @@ void DHCPMaintain() {
 //=================[ETHERNET SETUP]=======================
 void EthernetSetup() {
   wdt_reset();
-  //Reset W5500
-  //PORTB &= ~(1 << PB1);     // ETH RST
-  PORTC &= ~(1 << PC0);     // ETH RST
-  delay(10);
-  //PORTB |= (1 << PB1);     // ETH RST
-  PORTC |= (1 << PC0);     // ETH RST
 
-  //check for DHCP byte to see how the device is supposed to get network settings
-  //DHCP = EEPROM[14]; //get the byte frm memory
   NetworkRead();
   // if DHCP = 0, use manually entered settings
   if (DHCP == 0x00) {
-    // start the Ethernet connection and the server:
-    Ethernet.init(10);  // PB2
-    Ethernet.begin(MAC, ip, dns, gateway, subnet);
 
+    // start the Ethernet connection and the server:
+    IPAddress newIP(IP[0], IP[1], IP[2], IP[3]);
+    IPAddress newSN(SN[0], SN[1], SN[2], SN[3]);
+    IPAddress newGW(GW[0], GW[1], GW[2], GW[3]);
+    Ethernet.init(10);  // PB2
+    Ethernet.begin(MAC, newIP, newGW, newGW, newSN);
+    /*
+        myIP = Ethernet.localIP();
+        mySN = Ethernet.subnetMask();
+        myGW = Ethernet.gatewayIP();
+    */
   }
+
   //if DHCP = 1, use DHCP address
   else {
     // start the Ethernet connection and the server:
     Ethernet.init(10);  // PB2
     Ethernet.begin(MAC);
+    /*
+      myIP = Ethernet.localIP();
+      mySN = Ethernet.subnetMask();
+      myGW = Ethernet.gatewayIP();
+    */
   }
 
   server.begin();
-  myIP = Ethernet.localIP();
-  mySN = Ethernet.subnetMask();
-  myGW = Ethernet.gatewayIP();
-  DHCP = EEPROM[14];
   //checkLinkStatus();
   sendNWSettings();
 }

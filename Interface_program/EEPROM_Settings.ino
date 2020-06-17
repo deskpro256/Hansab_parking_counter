@@ -29,9 +29,9 @@ void writeEEPROMSettings( byte _slaveCount,
   EEPROM.write(10, _Floor4Byte1);
   EEPROM.write(11, _Floor4Byte2);
   EEPROM.write(12, _Floor4Byte3);
-  
+
   EEPROM.write(28, actFloors);
-  
+
   EEPROM.write(13, 0x69); // add the preset byte for further boot cycles
 
 }
@@ -121,28 +121,13 @@ void NetworkWrite(byte dhcp,
 
   EEPROM.write(27, 0x69); // add the preset byte for further boot cycles
 
-  if (dhcp == 0x00) {
-
-    IPAddress ip(IP_Byte1, IP_Byte2, IP_Byte3, IP_Byte4);
-    Ethernet.setLocalIP(ip);  // change the IP address
-
-    IPAddress subnet(SN_Byte1, SN_Byte2, SN_Byte3, SN_Byte4);
-    Ethernet.setLocalIP(subnet);  // change the SN address
-
-    IPAddress gateway(GW_Byte1, GW_Byte2, GW_Byte3, GW_Byte4);
-    Ethernet.setLocalIP(gateway);  // change the IP address
-
-    IPAddress dns(GW_Byte1, GW_Byte2, GW_Byte3, GW_Byte4);
-    Ethernet.setLocalIP(dns);  // change the DNS address
-
-  }
-  
-  myIP = Ethernet.localIP();
-  mySN = Ethernet.subnetMask();
-  myGW = Ethernet.gatewayIP();
   DHCP = EEPROM[14];
-  // restart ethernet chip with new ethernet settings
-  //EthernetSetup();
+
+  /*
+    myIP = Ethernet.localIP();
+    mySN = Ethernet.subnetMask();
+    myGW = Ethernet.gatewayIP();
+  */
 }
 //============================[NETWORK_READ]========================
 void NetworkRead() {
@@ -151,7 +136,7 @@ void NetworkRead() {
   if (EEPROM.read(27) != 0x69) {
 
     // DHCP on/off
-    EEPROM.write(14, 0x01); //dhcp off, default IP address
+    EEPROM.write(14, 0x00); //dhcp off, default IP address
 
     // IP ADDRESS
     EEPROM.write(15, 192); //0xC01
@@ -178,23 +163,22 @@ void NetworkRead() {
   // get the saved settings
   else {
     wdt_reset();
-
     DHCP   = EEPROM[14];
 
     IP[0]  = EEPROM[15];
     IP[1]  = EEPROM[16];
     IP[2]  = EEPROM[17];
-    GW[3]  = EEPROM[18];
+    IP[3]  = EEPROM[18];
 
-    GW[0]  = EEPROM[19];
-    GW[1]  = EEPROM[20];
-    GW[2]  = EEPROM[21];
+    SN[0]  = EEPROM[19];
+    SN[1]  = EEPROM[20];
+    SN[2]  = EEPROM[21];
     SN[3]  = EEPROM[22];
 
-    SN[0]  = EEPROM[23];
-    SN[1]  = EEPROM[24];
-    SN[2]  = EEPROM[25];
-    SN[3]  = EEPROM[26];
+    GW[0]  = EEPROM[23];
+    GW[1]  = EEPROM[24];
+    GW[2]  = EEPROM[25];
+    GW[3]  = EEPROM[26];
 
   }
 
