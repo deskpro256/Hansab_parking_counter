@@ -5,7 +5,7 @@ https://web.archive.org/web/20170504071329/https://www.instructables.com/id/Ardu
 
 
 // EXIT
-
+//authentificated = false;
 
 
 
@@ -13,6 +13,10 @@ https://web.archive.org/web/20170504071329/https://www.instructables.com/id/Ardu
 
 // CURRENT DATA
 
+//currentFloorCount[0] = 123;
+//currentFloorCount[1] = 123;
+//currentFloorCount[2] = 123;
+//currentFloorCount[3] = 123;
 
 
 

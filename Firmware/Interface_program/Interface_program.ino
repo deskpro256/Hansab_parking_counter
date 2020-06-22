@@ -26,6 +26,7 @@ void NOPdelay(unsigned int z) {
 #define sizeBuff 9
 #define sizeConfigBuff 19
 #define sizeNWConfigBuff 18 //ethernet settings
+#define sizeMACConfigBuff 11 //MAC settings
 
 /////////////////////////
 int maxCount = 3996;
@@ -68,6 +69,8 @@ char buff [sizeBuff];        // RECEIVING BUFFER
 char recMsg [sizeBuff];      // RECEIVED MESSAGE
 byte configBuff [sizeConfigBuff];   // RECEIVED CONFIG BUFFER
 byte recConfig [sizeConfigBuff];    // RECEIVED CONFIG MESSAGE
+byte MACBuff [sizeConfigBuff];   // RECEIVED MAC CONFIG BUFFER
+byte MACConfig [sizeConfigBuff];    // RECEIVED MAC CONFIG MESSAGE
 
 //Network settings start
 // nw setting buffers
@@ -77,8 +80,8 @@ byte NWConfig [sizeNWConfigBuff];    // RECEIVED NW CONFIG MESSAGE
 byte IP[4] = {192, 168, 2, 134}; // IP Address
 byte SN[4] = {255, 255, 255, 0}; // Gateway
 byte GW[4] = {192, 168, 2, 1};   // Subnet
-byte MAC[6] = {0xFA, 0x4C, 0x1D, 0xE4, 0xB5, 0x21};
-// FA-4C-1D-E4-B5-21  mac address
+byte MAC[6] = {0xB2, 0xE7, 0x53, 0x44, 0x74, 0xEA};
+// B2-E7-53-44-74-EA  mac address
 byte DHCP; // dhcp
 IPAddress myIP = {IP[0], IP[1], IP[2], IP[3]};
 IPAddress mySN = {SN[0], SN[1], SN[2], SN[3]};
@@ -91,6 +94,8 @@ int charcount = 0;
 boolean authentificated = false;
 //auth : admin:Hansab123  /default user & pass
 char auth[] = "YWRtaW46SGFuc2FiMTIz";
+// also send this shit from PC program
+// [ newAuthShitMSG
 
 // strings to send to terminal
 char DHCPSetting[] = "\n\rDHCP: ";
@@ -137,7 +142,7 @@ byte ETX = 0x5D;       // end bit of the message    0x5D
 char lookForSTX = 0x00;
 
 byte CMD = 0x00;  // by default on startup,there hasn't been any messages, so the command byte is just null
-byte CMDLUT[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B}; // a look up table for every command
+byte CMDLUT[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C}; // a look up table for every command
 
 byte myID = 0x1D;    // my address
 byte PCID = 0x1C;    // my address
@@ -207,7 +212,8 @@ void setup() {
   // read the settings saved in eeprom
   readEEPROMSettings();
   // ethernet settings
-  NetworkRead();
+  NetworkEEPROMRead();
+  MACEEPROMRead();
   EthernetSetup();
   // update the displays with current count
   for (int i = 0; i <= 3; i++) {

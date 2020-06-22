@@ -67,7 +67,7 @@ void DHCPMaintain() {
 void EthernetSetup() {
   wdt_reset();
 
-  NetworkRead();
+  NetworkEEPROMRead();
   // if DHCP = 0, use manually entered settings
   if (DHCP == 0x00) {
 

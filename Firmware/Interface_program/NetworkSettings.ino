@@ -29,10 +29,10 @@ void ReceiveNWConfig() {
     }
     DHCP   = NWConfig[3];
 
-    NetworkWrite(NWConfig[3],
-                 NWConfig[4], NWConfig[5], NWConfig[6], NWConfig[7],
-                 NWConfig[8], NWConfig[9], NWConfig[10], NWConfig[11],
-                 NWConfig[12], NWConfig[13], NWConfig[14], NWConfig[15]);
+    NetworkEEPROMWrite(NWConfig[3],
+                       NWConfig[4], NWConfig[5], NWConfig[6], NWConfig[7],
+                       NWConfig[8], NWConfig[9], NWConfig[10], NWConfig[11],
+                       NWConfig[12], NWConfig[13], NWConfig[14], NWConfig[15]);
 
     // restart chip with new ethernet settings
     SW_Reset();
@@ -47,7 +47,7 @@ void sendNWSettings() {
   wdt_reset();
 
   DHCP = EEPROM[14];
-  NetworkRead();
+  NetworkEEPROMRead();
   /*
     myIP = Ethernet.localIP();
     mySN = Ethernet.subnetMask();
@@ -77,7 +77,7 @@ void sendNWSettings() {
   Serial.print(IP[2]);
   Serial.print('.');
   Serial.print(IP[3]);
-  Serial.print(Ethernet.localIP());
+  //Serial.print(Ethernet.localIP());
 
   Serial.write(SNSettings, 6);
   Serial.print(SN[0]);
@@ -87,7 +87,7 @@ void sendNWSettings() {
   Serial.print(SN[2]);
   Serial.print('.');
   Serial.print(SN[3]);
-  Serial.print(Ethernet.subnetMask());
+  //Serial.print(Ethernet.subnetMask());
 
   Serial.write(GWSettings, 6);
   Serial.print(GW[0]);
@@ -97,7 +97,7 @@ void sendNWSettings() {
   Serial.print(GW[2]);
   Serial.print('.');
   Serial.print(GW[3]);
-  Serial.print(Ethernet.gatewayIP());
+  //Serial.print(Ethernet.gatewayIP());
 
   Serial.write(MACSettings, 7);
   Serial.print(MAC[0], HEX);
@@ -118,4 +118,42 @@ void sendNWSettings() {
   //PORTC &= ~(1 << PC2);     // Disable COM Led
   //perf test device
   PORTC &= ~(1 << PC1);     // Disable COM Led
+}
+
+
+//===================================[RECEIVE MAC SETTINGS]=======================================
+//                                                [   int    pc  maccmd MAC1  MAC2  MAC3  MAC4  MAC5  MAC6   ]  11 BYTES
+void ReceiveMAC() {
+
+  wdt_reset();
+  //reads the serial data,stores data in an 17 byte buffer
+  char lookForSTX;
+  while (lookForSTX != STX) {
+    wdt_reset();
+    lookForSTX = Serial.read();
+  }
+  if (lookForSTX == STX) {
+    Serial.readBytes(MACBuff, sizeMACConfigBuff - 1);
+    newData = true;
+  }
+  else {
+    newData = false;
+    ReceiveMAC();
+  }
+
+  // if received my address
+  if (MACBuff[0] == myID) {
+    newData = false;
+    //moves all the buff[] to a stored message value while also clearing the buffer
+    for (int i = 0; i <= sizeMACConfigBuff; i++) {
+      MACConfig[i] = MACBuff[i];
+      MACBuff[i] = 0x00;
+    }
+    //DHCP   = MACConfig[3];
+
+    MACEEPROMWrite(MACConfig[3],MACConfig[4], MACConfig[5], MACConfig[6], MACConfig[7],MACConfig[8]);
+
+    // restart chip with new ethernet settings
+    SW_Reset();
+  }
 }

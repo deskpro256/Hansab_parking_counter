@@ -11,6 +11,7 @@
 // 0x09 - restart
 // 0x0A - networkSettings
 // 0x0B - sendNWSettings
+// 0x0C - sendMACSettings
 // };     a look up table for every command
 
 //char messageType[] = {
@@ -102,4 +103,8 @@ void getCMD(char cmd, char msgType, char _ones, char _tens, char _hundreds) {
     sendNWSettings();
   }
   //--------------------------------------
+  if (cmd == CMDLUT[11]) { // 0x0C - sendMACsettings
+    //do something
+    ReceiveMAC();
+  }
 }
