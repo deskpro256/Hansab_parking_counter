@@ -106,7 +106,9 @@ char MACSettings[] = "\n\rMAC: ";
 char dhcpOn[] = "On";
 char dhcpOff[] = "Off";
 char colon = ':';
-
+bool EthSetup = true; //if the ethernet cable is plugged in, do the setup, if now, don't and retry later
+String POSTData;
+bool reading = false;
 // Network settings end
 //[=====================================]
 // HTML Tags
@@ -248,6 +250,9 @@ void loop() {
     checkForCountError();
     UpdateCount();
   }
-  //DHCPMaintain();
+  //checkLinkStatus();
   handleEthernet();
+  if (DHCP == 0x00) {
+    Ethernet.maintain();
+  }
 }

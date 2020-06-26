@@ -62,42 +62,51 @@ void sendNWSettings() {
   delay(50);
 
   Serial.write(DHCPSetting, 8);
+
   if (DHCP == 0x01) {
     Serial.write(dhcpOn, 2);
+
+    Serial.write(IPSettings, 6);
+    Serial.print(Ethernet.localIP());
+    Serial.write(SNSettings, 6);
+    Serial.print(Ethernet.subnetMask());
+    Serial.write(GWSettings, 6);
+    Serial.print(Ethernet.gatewayIP());
+
   }
   else {
     Serial.write(dhcpOff, 3);
+
+    Serial.write(IPSettings, 6);
+    Serial.print(IP[0]);
+    Serial.print('.');
+    Serial.print(IP[1]);
+    Serial.print('.');
+    Serial.print(IP[2]);
+    Serial.print('.');
+    Serial.print(IP[3]);
+    //Serial.print(Ethernet.localIP());
+
+    Serial.write(SNSettings, 6);
+    Serial.print(SN[0]);
+    Serial.print('.');
+    Serial.print(SN[1]);
+    Serial.print('.');
+    Serial.print(SN[2]);
+    Serial.print('.');
+    Serial.print(SN[3]);
+    //Serial.print(Ethernet.subnetMask());
+
+    Serial.write(GWSettings, 6);
+    Serial.print(GW[0]);
+    Serial.print('.');
+    Serial.print(GW[1]);
+    Serial.print('.');
+    Serial.print(GW[2]);
+    Serial.print('.');
+    Serial.print(GW[3]);
+    //Serial.print(Ethernet.gatewayIP());
   }
-
-  Serial.write(IPSettings, 6);
-  Serial.print(IP[0]);
-  Serial.print('.');
-  Serial.print(IP[1]);
-  Serial.print('.');
-  Serial.print(IP[2]);
-  Serial.print('.');
-  Serial.print(IP[3]);
-  //Serial.print(Ethernet.localIP());
-
-  Serial.write(SNSettings, 6);
-  Serial.print(SN[0]);
-  Serial.print('.');
-  Serial.print(SN[1]);
-  Serial.print('.');
-  Serial.print(SN[2]);
-  Serial.print('.');
-  Serial.print(SN[3]);
-  //Serial.print(Ethernet.subnetMask());
-
-  Serial.write(GWSettings, 6);
-  Serial.print(GW[0]);
-  Serial.print('.');
-  Serial.print(GW[1]);
-  Serial.print('.');
-  Serial.print(GW[2]);
-  Serial.print('.');
-  Serial.print(GW[3]);
-  //Serial.print(Ethernet.gatewayIP());
 
   Serial.write(MACSettings, 7);
   Serial.print(MAC[0], HEX);
@@ -151,7 +160,7 @@ void ReceiveMAC() {
     }
     //DHCP   = MACConfig[3];
 
-    MACEEPROMWrite(MACConfig[3],MACConfig[4], MACConfig[5], MACConfig[6], MACConfig[7],MACConfig[8]);
+    MACEEPROMWrite(MACConfig[3], MACConfig[4], MACConfig[5], MACConfig[6], MACConfig[7], MACConfig[8]);
 
     // restart chip with new ethernet settings
     SW_Reset();

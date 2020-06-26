@@ -63,75 +63,69 @@ void SendMainPage(EthernetClient &client) {
   client.println(F("<h3>Current statistics</h3>"));
 
   wdt_reset();
-  switch (activeFloors) {
-    case 1:
+    //client.print(activeFloors);
+    //client.println(F("<br>"));
+  if (activeFloors == 0x01) {
 
-      client.println(F("<label for=\"Zone 1\">Zone 1 Count:</label>"));
-      client.print(F("<input type=\"number\" id=\"zone\" name=\"zone1\" value = \""));
-      client.print(currentFloorCount[0]);
-      client.println(F("\" min=\"0\" max=\"999\"><br>"));
-
-      break;
-
-    case 2:
-
-      client.println(F("<label for=\"Zone 1\">Zone 1 Count:</label>"));
-      client.print(F("<input type=\"number\" id=\"zone\" name=\"zone1\" value = \""));
-      client.print(currentFloorCount[0]);
-      client.println(F("\" min=\"0\" max=\"999\"><br>"));
-
-      client.println(F("<label for=\"Zone 2\">Zone 2 Count:</label>"));
-      client.print(F("<input type=\"number\" id=\"zone\" name=\"zone2\" value = \""));
-      client.print(currentFloorCount[1]);
-      client.println(F("\" min=\"0\" max=\"999\"><br>"));
-
-      break;
-
-    case 3:
-
-      client.println(F("<label for=\"Zone 1\">Zone 1 Count:</label>"));
-      client.print(F("<input type=\"number\" id=\"zone\" name=\"zone1\" value = \""));
-      client.print(currentFloorCount[0]);
-      client.println(F("\" min=\"0\" max=\"999\"><br>"));
-
-      client.println(F("<label for=\"Zone 2\">Zone 2 Count:</label>"));
-      client.print(F("<input type=\"number\" id=\"zone\" name=\"zone2\" value = \""));
-      client.print(currentFloorCount[1]);
-      client.println(F("\" min=\"0\" max=\"999\"><br>"));
-
-      client.println(F("<label for=\"Zone 3\">Zone 3 Count:</label>"));
-      client.print(F("<input type=\"number\" id=\"zone\" name=\"zone3\" value = \""));
-      client.print(currentFloorCount[2]);
-      client.println(F("\" min=\"0\" max=\"999\"><br>"));
-
-      break;
-
-    case 4:
-
-      client.println(F("<label for=\"Zone 1\">Zone 1 Count:</label>"));
-      client.print(F("<input type=\"number\" id=\"zone\" name=\"zone1\" value = \""));
-      client.print(currentFloorCount[0]);
-      client.println(F("\" min=\"0\" max=\"999\"><br>"));
-
-      client.println(F("<label for=\"Zone 2\">Zone 2 Count:</label>"));
-      client.print(F("<input type=\"number\" id=\"zone\" name=\"zone2\" value = \""));
-      client.print(currentFloorCount[1]);
-      client.println(F("\" min=\"0\" max=\"999\"><br>"));
-
-      client.println(F("<label for=\"Zone 3\">Zone 3 Count:</label>"));
-      client.print(F("<input type=\"number\" id=\"zone\" name=\"zone3\" value = \""));
-      client.print(currentFloorCount[2]);
-      client.println(F("\" min=\"0\" max=\"999\"><br>"));
-
-      client.println(F("<label for=\"Zone 4\">Zone 4 Count:</label>"));
-      client.print(F("<input type=\"number\" id=\"zone\" name=\"zone4\" value = \""));
-      client.print(currentFloorCount[3]);
-      client.println(F("\" min=\"0\" max=\"999\"><br>"));
-
-      break;
-
+    client.println(F("<label for=\"Zone 1\">Zone 1 Count:</label>"));
+    client.print(F("<input type=\"number\" id=\"zone\" name=\"zone1\" value = \""));
+    client.print(currentFloorCount[0]);
+    client.println(F("\" min=\"0\" max=\"999\"><br>"));
   }
-  
+
+  if (activeFloors == 0x02) {
+    client.println(F("<label for=\"Zone 1\">Zone 1 Count:</label>"));
+    client.print(F("<input type=\"number\" id=\"zone\" name=\"zone1\" value = \""));
+    client.print(currentFloorCount[0]);
+    client.println(F("\" min=\"0\" max=\"999\"><br>"));
+
+    client.println(F("<label for=\"Zone 2\">Zone 2 Count:</label>"));
+    client.print(F("<input type=\"number\" id=\"zone\" name=\"zone2\" value = \""));
+    client.print(currentFloorCount[1]);
+    client.println(F("\" min=\"0\" max=\"999\"><br>"));
+  }
+
+  if (activeFloors == 0x03) {
+
+    client.println(F("<label for=\"Zone 1\">Zone 1 Count:</label>"));
+    client.print(F("<input type=\"number\" id=\"zone\" name=\"zone1\" value = \""));
+    client.print(currentFloorCount[0]);
+    client.println(F("\" min=\"0\" max=\"999\"><br>"));
+
+    client.println(F("<label for=\"Zone 2\">Zone 2 Count:</label>"));
+    client.print(F("<input type=\"number\" id=\"zone\" name=\"zone2\" value = \""));
+    client.print(currentFloorCount[1]);
+    client.println(F("\" min=\"0\" max=\"999\"><br>"));
+
+    client.println(F("<label for=\"Zone 3\">Zone 3 Count:</label>"));
+    client.print(F("<input type=\"number\" id=\"zone\" name=\"zone3\" value = \""));
+    client.print(currentFloorCount[2]);
+    client.println(F("\" min=\"0\" max=\"999\"><br>"));
+  }
+
+  if (activeFloors == 0x04) {
+    client.println(F("<label for=\"Zone 1\">Zone 1 Count:</label>"));
+    client.print(F("<input type=\"number\" id=\"zone\" name=\"zone1\" value = \""));
+    client.print(currentFloorCount[0]);
+    client.println(F("\" min=\"0\" max=\"999\"><br>"));
+
+    client.println(F("<label for=\"Zone 2\">Zone 2 Count:</label>"));
+    client.print(F("<input type=\"number\" id=\"zone\" name=\"zone2\" value = \""));
+    client.print(currentFloorCount[1]);
+    client.println(F("\" min=\"0\" max=\"999\"><br>"));
+
+    client.println(F("<label for=\"Zone 3\">Zone 3 Count:</label>"));
+    client.print(F("<input type=\"number\" id=\"zone\" name=\"zone3\" value = \""));
+    client.print(currentFloorCount[2]);
+    client.println(F("\" min=\"0\" max=\"999\"><br>"));
+
+    client.println(F("<label for=\"Zone 4\">Zone 4 Count:</label>"));
+    client.print(F("<input type=\"number\" id=\"zone\" name=\"zone4\" value = \""));
+    client.print(currentFloorCount[3]);
+    client.println(F("\" min=\"0\" max=\"999\"><br>"));
+  }
+
+
   wdt_reset();
   client.println(F("<input type=\"submit\" value=\"Change\">"));
 
@@ -147,69 +141,54 @@ void SendMainPage(EthernetClient &client) {
 
 
   wdt_reset();
-  switch (activeFloors) {
-
-    case 1:
-
-      client.print(F("Zone 1 max count: "));
-      client.print(currentFloorCount[0]);
-      client.println(F("<br>"));
-
-      break;
-
-
-    case 2:
-
-      client.print(F("Zone 1 max count: "));
-      client.print(currentFloorCount[0]);
-      client.println(F("<br>"));
-
-      client.print(F("Zone 2 max count: "));
-      client.print(currentFloorCount[1]);
-      client.println(F("<br>"));
-
-      break;
-
-
-    case 3:
-
-      client.print(F("Zone 1 max count: "));
-      client.print(currentFloorCount[0]);
-      client.println(F("<br>"));
-
-      client.print(F("Zone 2 max count: "));
-      client.print(currentFloorCount[1]);
-      client.println(F("<br>"));
-
-      client.print(F("Zone 3 max count: "));
-      client.print(currentFloorCount[2]);
-      client.println(F("<br>"));
-
-      break;
-
-
-    case 4:
-
-      client.print(F("Zone 1 max count: "));
-      client.print(currentFloorCount[0]);
-      client.println(F("<br>"));
-
-      client.print(F("Zone 2 max count: "));
-      client.print(currentFloorCount[1]);
-      client.println(F("<br>"));
-
-      client.print(F("Zone 3 max count: "));
-      client.print(currentFloorCount[2]);
-      client.println(F("<br>"));
-
-      client.print(F("Zone 4 max count: "));
-      client.print(currentFloorCount[3]);
-      client.println(F("<br>"));
-
-      break;
-
-
+  if (activeFloors == 0x01) {
+    client.print(F("Zone 1 max count: "));
+    client.print(floorMaxCount[0]);
+    client.println(F("<br>"));
   }
+
+  if (activeFloors == 0x02) {
+    client.print(F("Zone 1 max count: "));
+    client.print(floorMaxCount[0]);
+    client.println(F("<br>"));
+
+    client.print(F("Zone 2 max count: "));
+    client.print(floorMaxCount[1]);
+    client.println(F("<br>"));
+  }
+
+  if (activeFloors == 0x03) {
+    client.print(F("Zone 1 max count: "));
+    client.print(floorMaxCount[0]);
+    client.println(F("<br>"));
+
+    client.print(F("Zone 2 max count: "));
+    client.print(floorMaxCount[1]);
+    client.println(F("<br>"));
+
+    client.print(F("Zone 3 max count: "));
+    client.print(floorMaxCount[2]);
+    client.println(F("<br>"));
+  }
+  
+  if (activeFloors == 0x04) {
+    client.print(F("Zone 1 max count: "));
+    client.print(floorMaxCount[0]);
+    client.println(F("<br>"));
+
+    client.print(F("Zone 2 max count: "));
+    client.print(floorMaxCount[1]);
+    client.println(F("<br>"));
+
+    client.print(F("Zone 3 max count: "));
+    client.print(floorMaxCount[2]);
+    client.println(F("<br>"));
+
+    client.print(F("Zone 4 max count: "));
+    client.print(floorMaxCount[3]);
+    client.println(F("<br>"));
+  }
+
 
   wdt_reset();
   client.print(F("Node count: "));
@@ -240,15 +219,15 @@ void SendMainPage(EthernetClient &client) {
 
 
   client.print(F("IP Address: "));
-  client.print(myIP);
+  client.print(Ethernet.localIP());
   client.println(F("<br>"));
 
   client.print(F("Subnet: "));
-  client.print(mySN);
+  client.print(Ethernet.subnetMask());
   client.println(F("<br>"));
 
   client.print(F("Gateway: "));
-  client.print(myGW);
+  client.print(Ethernet.gatewayIP());
   client.println(F("<br>"));
 
   client.print(F("MAC Address: "));
