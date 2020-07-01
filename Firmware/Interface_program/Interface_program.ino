@@ -6,6 +6,7 @@
 #include <avr/io.h>
 #include <avr/wdt.h>
 #include <avr/interrupt.h>
+#include <string.h>
 #include <SPI.h>
 #include <Ethernet.h>
 
@@ -36,7 +37,7 @@ int tempF1Count = 0;
 int tempF2Count = 0;
 int tempF3Count = 0;
 int tempF4Count = 0;
-int activeFloors = 1;
+int activeFloors = 0x01;
 char floorNaddresses[4] = {0xF1, 0xF2, 0xF3, 0xF4};
 bool countChanged = false;
 bool errorState = false;
@@ -95,7 +96,7 @@ boolean authentificated = false;
 //auth : admin:Hansab123  /default user & pass
 char auth[] = "YWRtaW46SGFuc2FiMTIz";
 // also send this shit from PC program
-// [ newAuthShitMSG
+// [ newAuthShitMSG ]
 
 // strings to send to terminal
 char DHCPSetting[] = "\n\rDHCP: ";
@@ -109,6 +110,7 @@ char colon = ':';
 bool EthSetup = true; //if the ethernet cable is plugged in, do the setup, if now, don't and retry later
 String POSTData;
 bool reading = false;
+bool handleEth = false;
 // Network settings end
 //[=====================================]
 // HTML Tags
@@ -202,6 +204,7 @@ void setup() {
     PORTD |= 0B00001000;
   */
   //------[ISR SETUP]------
+  // INT1 = ANY CHANGE  // INT0 = FALLING
   EICRA = 0B00000100;
   EIMSK = 0B00000010;
   //-----------[WDT]--------
@@ -227,6 +230,7 @@ void setup() {
 
 void loop() {
   wdt_reset();
+
   if (ConfigEnabled) {
     wdt_reset();
     if (Serial.available() > 0) {
@@ -250,9 +254,16 @@ void loop() {
     checkForCountError();
     UpdateCount();
   }
-  //checkLinkStatus();
-  handleEthernet();
-  if (DHCP == 0x00) {
+
+  int timer = 1000;
+  while (timer > 0) {
+    handleEthernet();
+    delay(1);
+    timer--;
+  }
+  //handleEthernet();
+  if (DHCP == 0x01) {
     Ethernet.maintain();
   }
+
 }

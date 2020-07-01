@@ -10,9 +10,11 @@
   E3 : Reserved
 */
 
-//===================================[GET_ERRORS]=======================================
+/*
+   Currently unused as the system takes care of false count on troubled devices
+  //===================================[GET_ERRORS]=======================================
 
-void getErrors(char receiverID) {
+  void getErrors(char receiverID) {
   wdt_reset();
   replied = false;
   RS485Send(receiverID, messageType[0], CMDLUT[0], 'E', 'R', 'R');
@@ -36,8 +38,8 @@ void getErrors(char receiverID) {
       replied = false;
     }
   }
-}
-
+  }
+*/
 
 //===================================[COUNT_ERROR_CHECK]=======================================
 
@@ -97,10 +99,12 @@ void checkForCountError() {
   }
   //---------------------------
   if (errorState) {
-    PORTD |= (1 << PD6); //error led on
+    //PORTC |= (1 << PC3); //error led on
+    PORTC &= ~(1 << PC3);//error led on
   }
   else {
-    PORTD &= ~(1 << PD6);//error led off
+    //PORTC &= ~(1 << PC3);//error led off
+    PORTC |= (1 << PC3); //error led off
   }
 }
 
@@ -109,14 +113,16 @@ void checkForCountError() {
 
 void sendErrorReport() {    //sends the errorDevices[] array to configurator program
   wdt_reset();
-  int idGet = 0;
-  char dev[2] = {'0', '0'};
-  char code;
-  char ErrorDeviceText1[] = "Error devices: \n";
-  char ErrorDeviceText2[] = "ID | ErrorCode \n";
+  int idGet = 0; // Device ID got from error device list to add to the string if the ID is 9 and lower, have 0 in fron, if larger then add a 1 in front.
+  char dev[2] = {'0', '0'};  //device ID 00 - 0F
+  char code; // error code to add
+  char ErrorDeviceText1[] = "Error devices: \n"; //string to send to the software
+  char ErrorDeviceText2[] = "ID | ErrorCode \n"; //string to send to the software
   delay(50);
-  PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
-  PORTD |= (1 << PD5);      // Enable COM Led
+  PORTD |= (1 << PD4);      // (RE_DE, HIGH) enable sending
+  //PORTC |= (1 << PC2);      // Enable COM Led
+  //perf test device
+  PORTC |= (1 << PC1);      // Enable COM Led
   Serial.write(ErrorDeviceText1, 16);
   delay(10);
   Serial.write(ErrorDeviceText2, 16);
@@ -142,8 +148,10 @@ void sendErrorReport() {    //sends the errorDevices[] array to configurator pro
   }
   delay(1000);
   wdt_reset();
-  PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
-  PORTD &= ~(1 << PD5);     // Disable COM Led
+  PORTD &= ~(1 << PD4);     // (RE_DE, LOW) disable sending
+  //PORTC &= ~(1 << PC2);     // Disable COM Led
+  //perf test device
+  PORTC &= ~(1 << PC1);     // Disable COM Led
 }
 
 void addToErrorList(int id, char errCode) {

@@ -5,16 +5,13 @@
 //  0    1    2    3     4        5      6      7       8      9      10      11     12     13     14     15     16    17
 /*  STX RXID TXID CMD SLAVECNT  COUNT1 COUNT2 COUNT3  COUNT1 COUNT2 COUNT3  COUNT1 COUNT2 COUNT3  COUNT1 COUNT2 COUNT3 ETX */
 
-// WITH NETWORK SETTINGS:
-//  0    1    2    3     4        5      6      7       8      9      10      11     12     13     14     15     16      17  18  19 20    21  22  23  24   25  26  27  28   29
-/*  STX RXID TXID CMD SLAVECNT  COUNT1 COUNT2 COUNT3  COUNT1 COUNT2 COUNT3  COUNT1 COUNT2 COUNT3  COUNT1 COUNT2 COUNT3  IP1 IP2 IP3 IP4   GW1 GW2 GW3 G4   SN1 SN2 SN3 SN4  ETX */
 
 void ReceiveConfig() {
   wdt_reset();
   //reads the serial data,stores data in an 17 byte buffer
   char lookForSTX;
   while (lookForSTX != STX) {
-  wdt_reset();
+    wdt_reset();
     lookForSTX = Serial.read();
   }
   if (lookForSTX == STX) {
@@ -34,7 +31,6 @@ void ReceiveConfig() {
       recConfig[i] = configBuff[i];
       configBuff[i] = 0x00;
     }
-
     slaveCount  = recConfig[3];                                                                           //Slave  count
 
     tempF1Count = ((recConfig[4]   - 48) * 100) + ((recConfig[5]   - 48) * 10) + (recConfig[6]   - 48);   //Floor1 count
@@ -42,11 +38,14 @@ void ReceiveConfig() {
     tempF3Count = ((recConfig[10]  - 48) * 100) + ((recConfig[11]  - 48) * 10) + (recConfig[12]  - 48);   //Floor3 count
     tempF4Count = ((recConfig[13]  - 48) * 100) + ((recConfig[14]  - 48) * 10) + (recConfig[15]  - 48);   //Floor4 count
 
+    activeFloors  = recConfig[16];                                                                        //Active floor  count
+
     writeEEPROMSettings(recConfig[3],
                         recConfig[4], recConfig[5], recConfig[6],
                         recConfig[7], recConfig[8], recConfig[9],
                         recConfig[10], recConfig[11], recConfig[12],
-                        recConfig[13], recConfig[14], recConfig[15]);
+                        recConfig[13], recConfig[14], recConfig[15],
+                        recConfig[16]);
   }
 
 }

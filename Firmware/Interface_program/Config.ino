@@ -37,7 +37,7 @@ void ReceiveConfig() {
     tempF2Count = ((recConfig[7]   - 48) * 100) + ((recConfig[8]   - 48) * 10) + (recConfig[9]   - 48);   //Floor2 count
     tempF3Count = ((recConfig[10]  - 48) * 100) + ((recConfig[11]  - 48) * 10) + (recConfig[12]  - 48);   //Floor3 count
     tempF4Count = ((recConfig[13]  - 48) * 100) + ((recConfig[14]  - 48) * 10) + (recConfig[15]  - 48);   //Floor4 count
-    
+
     activeFloors  = recConfig[16];                                                                        //Active floor  count
 
     writeEEPROMSettings(recConfig[3],

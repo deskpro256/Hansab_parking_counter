@@ -13,13 +13,17 @@ void RS485Send(char receiverID, char msgType, char command, char data1, char dat
   msg[7] = data3;
   msg[8] = ETX;
 
-  PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
-  PORTD |= (1 << PD5);      // Enable COM Led
+  PORTD |= (1 << PD4);      // (RE_DE, HIGH) enable sending
+  //PORTC |= (1 << PC2);      // Enable COM Led
+  //perf test device
+  PORTC |= (1 << PC1);      // Enable COM Led
   delay(50);
   Serial.write(msg, sizeBuff);
   delay(50);
-  PORTD &= ~(1 << PD2);     // (RE_DE, LOW) disable sending
-  PORTD &= ~(1 << PD5);     // Disable COM Led
+  PORTD &= ~(1 << PD4);     // (RE_DE, LOW) disable sending
+  //PORTC &= ~(1 << PC2);     // Disable COM Led
+  //perf test device
+  PORTC &= ~(1 << PC1);     // Disable COM Led
 }
 
 //===================================[RS485_RECEIVE]=======================================

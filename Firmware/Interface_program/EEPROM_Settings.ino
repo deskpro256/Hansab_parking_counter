@@ -168,7 +168,6 @@ void NetworkEEPROMWrite(byte dhcp,
   EEPROM.write(27, 0x69); // add the preset byte for further boot cycles
 
   DHCP = EEPROM[14];
-
   /*
     myIP = Ethernet.localIP();
     mySN = Ethernet.subnetMask();
@@ -187,8 +186,8 @@ void NetworkEEPROMRead() {
     // IP ADDRESS
     EEPROM.write(15, 192); //0xC0
     EEPROM.write(16, 168); //0xA8
-    EEPROM.write(17, 0);   //0x00
-    EEPROM.write(18, 177); //0xB1
+    EEPROM.write(17, 2);   //0x00
+    EEPROM.write(18, 122); //0xB1
 
     // GATEWAY
     EEPROM.write(19, 255); //0xFF
@@ -199,7 +198,7 @@ void NetworkEEPROMRead() {
     // SUBNET
     EEPROM.write(23, 192); //0xC0
     EEPROM.write(24, 168); //0xA8
-    EEPROM.write(25, 0);   //0x00
+    EEPROM.write(25, 2);   //0x00
     EEPROM.write(26, 1);   //0x01
 
     EEPROM.write(27, 0x69); // add the preset byte for further boot cycles
