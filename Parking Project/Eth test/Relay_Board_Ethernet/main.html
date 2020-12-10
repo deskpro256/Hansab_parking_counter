@@ -1,0 +1,20 @@
+<!DOCTYPE html> 
+<HTML>
+   <head>
+      <meta charset="utf-8">
+      <title>Monitoring</title>
+      <link href="/trc.css" rel="stylesheet" type="text/css"/>
+      <link href="favicon.ico" rel="shortcut icon" type="image/x-icon">
+      <script src="/trc.js" type="text/javascript"></script> 
+   </head>
+   <body onload=ldMonitor()>
+      <br> 
+      <center class="menu"> <span id="mMon" class="mi" onclick=ldMonitor()>Monitoring</span> <span id="mNet" class="mi" onclick=ldNet()>Network setup</span> <span id="mSNMP" class="mi" onclick=ldSNMP()>SNMP setup</span> <span id="mIO" class="mi" onclick=ldIO()>I/O setup</span> <span id="mUp" class="mi" onclick=ldUp()>Update</span> <span class="mi" onclick="javascript: location.href='logout.htm'">Logout</span> <br> <br> </center>
+      <center>
+         <div id="content"> </div>
+      </center>
+      <script type="text/javascript">
+         setTimeout("newAJAXCommand('monitor.xml', setMonResult, true)",500);
+      </script> 
+   </body>
+</HTML>

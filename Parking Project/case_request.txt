@@ -1,0 +1,50 @@
+Hello!
+I have been working on an electronics project for a while and now I need it to have a home.
+As I'm doing everything on this project, unfortunately, the case design has fallen to be the last priority but after searching for cases in similar dimensions as my prototype PCB's, I have stumbled found a good candidate and would like to use your services.
+
+The project consists of 2 device types:
+- master device
+- multiple slave devices
+
+I have made the PCB's the size of the available space in the RL6105-FBK case.
+I also found a CP-6105-F from my local electronics store, which has the same dimensions, to test out the PCB size on paper, just to be safe I can get everything in well.
+
+Now the "problem" is that I need some holes in the sides of the case cover.
+
+The modified cases would also be 2 different designs.
+
+The master PCB has the port openings on one side.
+ The connectors: 
+- 5 pin (3.81mm pitch) terminal block;
+- RJ45 Ethernet port;
+- USB-Type B female.
+
+The slave PCB has the port openings on all 4 sides.
+ The connectors: 
+- 4 pin (3.81mm pitch) terminal block;
+- 8 pin (3.81mm pitch) terminal block;
+- 2 pin (3.81mm pitch) terminal block;
+- 12 pin (3.81mm pitch) terminal block;
+
+There are also some indicator LED's on the PCB's, I'm planning to just have some small holes drilled where the LED's would be, no light pipes.
+LED's are 0805' size, so maybe a 2mm diameter hole to see it? Or maybe a 2mm diameter slot as long as the LED's are there.
+
+I have enclosed the file "Project_case.zip" where you can see the PCB's 3D render and some of my test tries on the case modification.
+The .DXF files have been exported from EasyEDA PCB CAD software which help me to create cutout templates for the cases.
+
+When mounted, the case needs to be screwed together from the bottom, so accessing the terminal blocks with a screwdriver becomes a problem. So my idea is to have the side cutouts go through to the top of the case.
+
+
+This is also my first time modifying a case for manufacturing, help me make this easy for you!
+
+What files and formats do you need them to be in?
+
+What would the costs be?
+NRE, Case modification, drilling, silkscreening, etc.
+
+Do you also have facilities in Europe also where you modify cases? If not, what are the shipping prices going to be for, let's say, the minimum order of 25 units?
+
+Is there anything else I'd need to take into consideration? Feel free to guide me through this process as you are the experts!
+
+Thank you and I'll be waiting for a reply from you soon!
+Karlis.

@@ -1,0 +1,10 @@
+[Configuration data] 
+
+[Master settings]
+
+Used slave count: 1
+Floor 1 MAX count: 555
+
+[Slave settings]
+
+Slave0 MAX count:555, Type: 2, Floor: 1

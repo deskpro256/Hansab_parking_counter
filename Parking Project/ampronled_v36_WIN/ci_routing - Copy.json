@@ -1,0 +1,33 @@
+{
+    
+    "PICDEMO": {
+        "PICTURE": {
+            "coordinates": "0 0 63 31",
+            "type": "image",
+ 	        "gifAllowed": "true",             
+			"params": {
+						"PICTURE1": "pic1.gif",
+						"PICTURE2": "pic2.png"
+            }
+        }
+    },
+	"TEXTandPICDEMO": {
+	
+        "TEXT": {
+            "coordinates": "20 0 63 31",			
+            "type": "text",
+            "scrollSpeed":"3",
+            "fontSize": "20",
+            "fontColor": "255 255 255"
+        },
+		"PICTURE": {
+            "coordinates": "0 0 19 31",
+            "type": "image",
+ 	        "gifAllowed": "true",             
+			"params": {
+						"SMALLPICTURE1": "pic3.gif",
+						"SMALLPICTURE2": "pic4.png"
+            }
+        }
+    }
+}

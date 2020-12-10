@@ -1,0 +1,119 @@
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T06:55:26.696Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T06:55:26.698Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T07:16:11.797Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T07:16:11.799Z"}
+{"port":"9527","displays":{"DISPLAY1":{"displayName":"DISPLAY1","displayIp":"192.168.168.101","sensorBrightness":false,"displayPort":"9527","controllerType":"D10","displayHeight":"32","displayWidth":"64","layout":{"FREESPACES":{"TEXT":{"coordinates":"0 0 39 19","type":"text","align":"center","fontSize":"18","fontColor":"255 255 255"}}}}},"level":"info","message":"Configuration:","timestamp":"2020-10-23T07:16:12.262Z"}
+{"level":"info","message":"Server started on port: 9527","timestamp":"2020-10-23T07:16:12.267Z"}
+{"level":"info","message":"DISPLAY1 -> 192.168.168.101:9527","timestamp":"2020-10-23T07:16:12.267Z"}
+{"level":"info","message":"Displays total: 1","timestamp":"2020-10-23T07:16:12.268Z"}
+{"level":"info","message":"Stopping server...","timestamp":"2020-10-23T07:22:09.647Z"}
+{"level":"info","message":"Could not close connections in time, exiting now.","timestamp":"2020-10-23T07:22:19.655Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T07:22:47.340Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T07:22:47.341Z"}
+{"port":"9527","displays":{"DISPLAY1":{"displayName":"DISPLAY1","displayIp":"192.168.168.101","sensorBrightness":false,"displayPort":"9527","controllerType":"D10","displayHeight":"32","displayWidth":"64","layout":{"FREESPACES":{"TEXT":{"coordinates":"0 0 60 30","type":"text","align":"center","scrollSpeed":"0","fontSize":"10","fontColor":"255 255 255"}}}}},"level":"info","message":"Configuration:","timestamp":"2020-10-23T07:22:47.817Z"}
+{"level":"info","message":"Server started on port: 9527","timestamp":"2020-10-23T07:22:47.817Z"}
+{"level":"info","message":"DISPLAY1 -> 192.168.168.101:9527","timestamp":"2020-10-23T07:22:47.819Z"}
+{"level":"info","message":"Displays total: 1","timestamp":"2020-10-23T07:22:47.819Z"}
+{"level":"info","message":"Stopping server...","timestamp":"2020-10-23T07:24:10.704Z"}
+{"level":"info","message":"Could not close connections in time, exiting now.","timestamp":"2020-10-23T07:24:20.714Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T07:24:38.502Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T07:24:38.504Z"}
+{"port":"9527","displays":{"DISPLAY1":{"displayName":"DISPLAY1","displayIp":"192.168.168.101","sensorBrightness":false,"displayPort":"9527","controllerType":"D10","displayHeight":"32","displayWidth":"64","layout":{"FREESPACES":{"TEXT":{"coordinates":"0 0 60 31","type":"text","align":"center","scrollSpeed":"0","fontSize":"25","fontColor":"255 255 255"}}}}},"level":"info","message":"Configuration:","timestamp":"2020-10-23T07:24:38.975Z"}
+{"level":"info","message":"Server started on port: 9527","timestamp":"2020-10-23T07:24:38.976Z"}
+{"level":"info","message":"DISPLAY1 -> 192.168.168.101:9527","timestamp":"2020-10-23T07:24:38.977Z"}
+{"level":"info","message":"Displays total: 1","timestamp":"2020-10-23T07:24:38.977Z"}
+{"level":"info","message":"Stopping server...","timestamp":"2020-10-23T07:25:49.406Z"}
+{"level":"info","message":"Could not close connections in time, exiting now.","timestamp":"2020-10-23T07:25:59.421Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T07:26:05.773Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T07:26:05.775Z"}
+{"port":"9527","displays":{"DISPLAY1":{"displayName":"DISPLAY1","displayIp":"192.168.168.101","sensorBrightness":false,"displayPort":"9527","controllerType":"D10","displayHeight":"32","displayWidth":"64","layout":{"FREESPACES":{"TEXT":{"coordinates":"0 0 63 31","type":"text","align":"center","scrollSpeed":"0","fontSize":"25","fontColor":"255 255 255"}}}}},"level":"info","message":"Configuration:","timestamp":"2020-10-23T07:26:06.243Z"}
+{"level":"info","message":"Server started on port: 9527","timestamp":"2020-10-23T07:26:06.244Z"}
+{"level":"info","message":"DISPLAY1 -> 192.168.168.101:9527","timestamp":"2020-10-23T07:26:06.245Z"}
+{"level":"info","message":"Displays total: 1","timestamp":"2020-10-23T07:26:06.245Z"}
+{"level":"info","message":"Stopping server...","timestamp":"2020-10-23T07:27:12.426Z"}
+{"level":"info","message":"Could not close connections in time, exiting now.","timestamp":"2020-10-23T07:27:22.437Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T07:31:56.643Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T07:31:56.645Z"}
+{"port":"9527","displays":{"DISPLAY1":{"displayName":"DISPLAY1","displayIp":"192.168.168.101","sensorBrightness":false,"displayPort":"9527","controllerType":"D10","displayHeight":"32","displayWidth":"64","layout":{"FREESPACES":{"TEXT":{"coordinates":"0 0 63 31","type":"text","align":"center","scrollSpeed":"0","fontSize":"25","fontColor":"255 255 255"}}}}},"level":"info","message":"Configuration:","timestamp":"2020-10-23T07:31:57.120Z"}
+{"level":"info","message":"Server started on port: 9527","timestamp":"2020-10-23T07:31:57.121Z"}
+{"level":"info","message":"DISPLAY1 -> 192.168.168.101:9527","timestamp":"2020-10-23T07:31:57.122Z"}
+{"level":"info","message":"Displays total: 1","timestamp":"2020-10-23T07:31:57.122Z"}
+{"level":"info","message":"Stopping server...","timestamp":"2020-10-23T07:43:23.021Z"}
+{"level":"info","message":"Stopping server...","timestamp":"2020-10-23T07:43:23.176Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T07:43:50.356Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T07:43:50.357Z"}
+{"port":"9527","displays":{"DISPLAY1":{"displayName":"DISPLAY1","displayIp":"192.168.168.101","sensorBrightness":false,"displayPort":"9527","controllerType":"D10","displayHeight":"32","displayWidth":"64","layout":{"FREESPACES":{"TEXT":{"coordinates":"0 0 63 31","type":"text","align":"center","scrollSpeed":"6","fontSize":"25","fontColor":"255 255 255"}}}}},"level":"info","message":"Configuration:","timestamp":"2020-10-23T07:43:50.826Z"}
+{"level":"info","message":"Server started on port: 9527","timestamp":"2020-10-23T07:43:50.827Z"}
+{"level":"info","message":"DISPLAY1 -> 192.168.168.101:9527","timestamp":"2020-10-23T07:43:50.828Z"}
+{"level":"info","message":"Displays total: 1","timestamp":"2020-10-23T07:43:50.828Z"}
+{"level":"info","message":"Stopping server...","timestamp":"2020-10-23T07:44:20.846Z"}
+{"level":"info","message":"Could not close connections in time, exiting now.","timestamp":"2020-10-23T07:44:30.845Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T07:44:32.813Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T07:44:32.815Z"}
+{"port":"9527","displays":{"DISPLAY1":{"displayName":"DISPLAY1","displayIp":"192.168.168.101","sensorBrightness":false,"displayPort":"9527","controllerType":"D10","displayHeight":"32","displayWidth":"64","layout":{"FREESPACES":{"TEXT":{"coordinates":"0 0 63 31","type":"text","align":"center","scrollSpeed":"3","fontSize":"25","fontColor":"255 255 255"}}}}},"level":"info","message":"Configuration:","timestamp":"2020-10-23T07:44:33.282Z"}
+{"level":"info","message":"Server started on port: 9527","timestamp":"2020-10-23T07:44:33.282Z"}
+{"level":"info","message":"DISPLAY1 -> 192.168.168.101:9527","timestamp":"2020-10-23T07:44:33.283Z"}
+{"level":"info","message":"Displays total: 1","timestamp":"2020-10-23T07:44:33.284Z"}
+{"level":"info","message":"Stopping server...","timestamp":"2020-10-23T08:00:34.804Z"}
+{"level":"info","message":"Could not close connections in time, exiting now.","timestamp":"2020-10-23T08:00:44.802Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T08:02:55.422Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T08:02:55.424Z"}
+{"port":"9527","displays":{"DISPLAY1":{"displayName":"DISPLAY1","displayIp":"192.168.168.101","sensorBrightness":false,"displayPort":"9527","controllerType":"D10","displayHeight":"32","displayWidth":"64","layout":{"FREESPACES":{"TEXT":{"coordinates":"0 0 63 31","type":"text","align":"center","scrollSpeed":"3","fontSize":"20","fontColor":"255 255 255"}}}}},"level":"info","message":"Configuration:","timestamp":"2020-10-23T08:02:55.903Z"}
+{"level":"info","message":"Server started on port: 9527","timestamp":"2020-10-23T08:02:55.904Z"}
+{"level":"info","message":"DISPLAY1 -> 192.168.168.101:9527","timestamp":"2020-10-23T08:02:55.905Z"}
+{"level":"info","message":"Displays total: 1","timestamp":"2020-10-23T08:02:55.905Z"}
+{"level":"warn","message":"fault command: /mlds?id=DISPLAY1&layout=333 error: layout","timestamp":"2020-10-23T08:19:41.925Z"}
+{"level":"info","message":"Stopping server...","timestamp":"2020-10-23T08:21:58.184Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T08:22:17.012Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T08:22:17.014Z"}
+{"port":"9527","displays":{"DISPLAY1":{"displayName":"DISPLAY1","displayIp":"192.168.168.101","sensorBrightness":false,"displayPort":"9527","controllerType":"D10","displayHeight":"32","displayWidth":"64","layout":{"FREESPACES":{"TEXT1":{"coordinates":"0 0 63 16","type":"text","align":"center","scrollSpeed":"3","fontSize":"10","fontColor":"0 255 0"},"TEXT2":{"coordinates":"0 31 63 31","type":"text","align":"center","scrollSpeed":"3","fontSize":"10","fontColor":"255 0 0"}}}}},"level":"info","message":"Configuration:","timestamp":"2020-10-23T08:22:17.487Z"}
+{"level":"info","message":"Server started on port: 9527","timestamp":"2020-10-23T08:22:17.488Z"}
+{"level":"info","message":"DISPLAY1 -> 192.168.168.101:9527","timestamp":"2020-10-23T08:22:17.489Z"}
+{"level":"info","message":"Displays total: 1","timestamp":"2020-10-23T08:22:17.489Z"}
+{"level":"info","message":"Stopping server...","timestamp":"2020-10-23T08:23:17.283Z"}
+{"level":"info","message":"Stopping server...","timestamp":"2020-10-23T08:23:19.814Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T08:25:09.818Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T08:25:09.820Z"}
+{"port":"9527","displays":{"DISPLAY1":{"displayName":"DISPLAY1","displayIp":"192.168.168.101","sensorBrightness":false,"displayPort":"9527","controllerType":"D10","displayHeight":"32","displayWidth":"64","layout":{"FREESPACES":{"TEXT1":{"coordinates":"0 0 63 15","type":"text","align":"center","scrollSpeed":"3","fontSize":"10","fontColor":"0 255 0"},"TEXT2":{"coordinates":"0 16 63 31","type":"text","align":"center","scrollSpeed":"3","fontSize":"10","fontColor":"255 0 0"}}}}},"level":"info","message":"Configuration:","timestamp":"2020-10-23T08:25:10.295Z"}
+{"level":"info","message":"Server started on port: 9527","timestamp":"2020-10-23T08:25:10.296Z"}
+{"level":"info","message":"DISPLAY1 -> 192.168.168.101:9527","timestamp":"2020-10-23T08:25:10.297Z"}
+{"level":"info","message":"Displays total: 1","timestamp":"2020-10-23T08:25:10.297Z"}
+{"level":"warn","message":"fault command: /mlds?id=DISPLAY1&layout=FREESPACESTEXT2=Jauns%20teksts%20tikai%20%C5%A1eit error: layout","timestamp":"2020-10-23T08:26:15.642Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T08:46:34.457Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T08:46:34.459Z"}
+{"port":"9527","displays":{"DISPLAY1":{"displayName":"DISPLAY1","displayIp":"192.168.168.101","sensorBrightness":false,"displayPort":"9527","controllerType":"D10","displayHeight":"32","displayWidth":"64","layout":{"FREESPACES":{"TEXT1":{"coordinates":"0 0 63 5","type":"text","align":"center","scrollSpeed":"3","fontSize":"10","fontColor":"255 0 0"},"TEXT2":{"coordinates":"0 6 63 10","type":"text","align":"center","scrollSpeed":"3","fontSize":"10","fontColor":"0 255 0"},"TEXT3":{"coordinates":"0 11 63 15","type":"text","align":"center","scrollSpeed":"3","fontSize":"10","fontColor":"0 0 255"},"TEXT4":{"coordinates":"0 16 63 20","type":"text","align":"center","scrollSpeed":"3","fontSize":"10","fontColor":"255 255 0"},"TEXT5":{"coordinates":"0 21 63 25","type":"text","align":"center","scrollSpeed":"3","fontSize":"10","fontColor":"0 255 255"}}}}},"level":"info","message":"Configuration:","timestamp":"2020-10-23T08:46:34.923Z"}
+{"level":"info","message":"Server started on port: 9527","timestamp":"2020-10-23T08:46:34.925Z"}
+{"level":"info","message":"DISPLAY1 -> 192.168.168.101:9527","timestamp":"2020-10-23T08:46:34.926Z"}
+{"level":"info","message":"Displays total: 1","timestamp":"2020-10-23T08:46:34.926Z"}
+{"level":"info","message":"Stopping server...","timestamp":"2020-10-23T08:47:22.119Z"}
+{"level":"info","message":"Could not close connections in time, exiting now.","timestamp":"2020-10-23T08:47:32.115Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T08:47:34.236Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T08:47:34.237Z"}
+{"port":"9527","displays":{"DISPLAY1":{"displayName":"DISPLAY1","displayIp":"192.168.168.101","sensorBrightness":false,"displayPort":"9527","controllerType":"D10","displayHeight":"32","displayWidth":"64","layout":{"FREESPACES":{"TEXT1":{"coordinates":"0 0 63 5","type":"text","align":"center","scrollSpeed":"3","fontSize":"5","fontColor":"255 0 0"},"TEXT2":{"coordinates":"0 6 63 10","type":"text","align":"center","scrollSpeed":"3","fontSize":"5","fontColor":"0 255 0"},"TEXT3":{"coordinates":"0 11 63 15","type":"text","align":"center","scrollSpeed":"3","fontSize":"5","fontColor":"0 0 255"},"TEXT4":{"coordinates":"0 16 63 20","type":"text","align":"center","scrollSpeed":"3","fontSize":"5","fontColor":"255 255 0"},"TEXT5":{"coordinates":"0 21 63 25","type":"text","align":"center","scrollSpeed":"3","fontSize":"5","fontColor":"0 255 255"}}}}},"level":"info","message":"Configuration:","timestamp":"2020-10-23T08:47:34.704Z"}
+{"level":"info","message":"Server started on port: 9527","timestamp":"2020-10-23T08:47:34.705Z"}
+{"level":"info","message":"DISPLAY1 -> 192.168.168.101:9527","timestamp":"2020-10-23T08:47:34.706Z"}
+{"level":"info","message":"Displays total: 1","timestamp":"2020-10-23T08:47:34.707Z"}
+{"level":"info","message":"Stopping server...","timestamp":"2020-10-23T08:57:14.058Z"}
+{"level":"info","message":"Could not close connections in time, exiting now.","timestamp":"2020-10-23T08:57:24.070Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T08:57:25.929Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T08:57:25.931Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T09:23:22.773Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T09:23:22.775Z"}
+{"port":"9527","displays":{"DISPLAY1":{"displayName":"DISPLAY1","displayIp":"192.168.168.101","sensorBrightness":false,"displayPort":"9527","controllerType":"D10","displayHeight":"32","displayWidth":"64","layout":{"FREESPACES":{"TEXT1":{"coordinates":"0 0 63 31","type":"text","align":"center","scrollSpeed":"3","fontSize":"20","fontColor":"255 0 0"}}}}},"level":"info","message":"Configuration:","timestamp":"2020-10-23T09:23:23.245Z"}
+{"level":"info","message":"Server started on port: 9527","timestamp":"2020-10-23T09:23:23.245Z"}
+{"level":"info","message":"DISPLAY1 -> 192.168.168.101:9527","timestamp":"2020-10-23T09:23:23.246Z"}
+{"level":"info","message":"Displays total: 1","timestamp":"2020-10-23T09:23:23.250Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T09:33:15.641Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T09:33:15.643Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T09:36:31.848Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T09:36:31.850Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T09:45:14.094Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T09:45:14.096Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T09:47:40.286Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T09:47:40.288Z"}
+{"port":"9527","displays":{"DISPLAY1":{"displayName":"DISPLAY1","displayIp":"192.168.168.101","sensorBrightness":false,"displayPort":"9527","controllerType":"D10","displayHeight":"32","displayWidth":"64","layout":{"FREESPACES":{"TEXT1":{"coordinates":"0 0 63 31","type":"text","align":"center","scrollSpeed":"3","fontSize":"20","fontColor":"255 0 0"}},"IMAGE":{"PICTURE1":{"coordinates":"0 0 63 31","type":"image","gifAllowed":"true","params":{"PIC1":"pic1.png","PIC2":"pic2.png","PIC3":"pic3.png"}}}}}},"level":"info","message":"Configuration:","timestamp":"2020-10-23T09:47:40.757Z"}
+{"level":"info","message":"Server started on port: 9527","timestamp":"2020-10-23T09:47:40.758Z"}
+{"level":"info","message":"DISPLAY1 -> 192.168.168.101:9527","timestamp":"2020-10-23T09:47:40.759Z"}
+{"level":"info","message":"Displays total: 1","timestamp":"2020-10-23T09:47:40.759Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-23T11:48:02.811Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-23T11:48:02.813Z"}

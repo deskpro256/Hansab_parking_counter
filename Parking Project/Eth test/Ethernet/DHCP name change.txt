@@ -1,0 +1,9 @@
+The name that you find on the router is what the W5500 sent during DHCP exchange procedure.
+If you used the DHCP client source code example downloaded from WIZNET site then…
+open ioLibrary\Internet\DHCP\DHCP.h and just change the definition in this line
+
+#define DCHP_HOST_NAME     "WIZnet\0"
+with what you want and recompile everything.
+
+
+

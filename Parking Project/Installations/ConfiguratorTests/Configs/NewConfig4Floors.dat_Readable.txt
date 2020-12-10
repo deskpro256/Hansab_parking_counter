@@ -1,0 +1,17 @@
+[Configuration data] 
+
+[Master settings]
+
+Used slave count: 4
+Active floor count: 4
+Floor 1 MAX count: 123
+Floor 2 MAX count: 456
+Floor 3 MAX count: 789
+Floor 4 MAX count: 258
+
+[Slave settings]
+
+Slave0 MAX count:123, Type: 2, Floor: 1
+Slave1 MAX count:456, Type: 2, Floor: 2
+Slave2 MAX count:789, Type: 2, Floor: 3
+Slave3 MAX count:258, Type: 2, Floor: 4

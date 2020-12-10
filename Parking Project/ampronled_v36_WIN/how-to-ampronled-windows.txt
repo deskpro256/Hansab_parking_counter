@@ -1,0 +1,21 @@
+Here is the link to download windows version of ampronLED software:
+http://cloud.ampron.eu/HF5Lc8
+
+Unzip it to desired folder and run as administrator with command "ampronled-mlds-2.1.36-win.exe start".
+
+We also included example configuration files for you to get things up faster.
+
+Double-check that Windows has Microsoft Visual c++ redistributable v13 installed on the machine before starting the app. To run it as a service we suggest to use NSSM.
+
+If you get stuck at any point, then just let us know and we will guide you through.
+
+
+change text:
+http://192.168.168.65:9527/mlds?id=DISPLAY1&layout=FREESPACES&TEXT=034
+
+change brightness:
+http://192.168.168.65:9527/brightness/100?id=DISPLAY1
+
+
+change image:
+http://192.168.168.65:9527/mlds?id=DISPLAY1&layout=IMAGE&PICTURE1=PIC1

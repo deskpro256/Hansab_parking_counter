@@ -1,0 +1,38 @@
+//[=====================================]
+// HTML Tags
+char docTypeHTML[] = "<!DOCTYPE html>";
+char htmlStart[] = "<html>";
+char htmlEnd[] = "</html>";
+char autoScaleMeta[] = "<meta name="viewport" content="width=device-width, initial-scale=1">";
+char headStart[] = "<head>";
+char headEnd[] = "</head>";
+char bodyStart[] = "<body>";
+char bodyEnd[] = "</body>"";
+char styleStart[] = "<style>";
+char styleEnd[] = "</style>";
+char scriptStart[] = "<script>";
+char scriptEnd[] = "</script>";
+char centerStart[] = "<center>";
+char centerEnd[] = "</center>";
+char divStart[] = "<div>";
+char divEnd[] = "</div>";
+char formEnd[] = "</form>";
+
+
+
+
+  client.println(F(""));
+  client.println(F(""));
+  client.println(F(""));
+  client.println(F(""));
+  client.println(F(""));
+  client.println(F(""));
+  
+  
+  
+  client.println();
+  client.println();
+  client.println();
+  client.println();
+  client.println();
+  client.println();

@@ -1,0 +1,19 @@
+{
+    "port": "9527",
+        
+          
+    "displays":
+    {
+        
+		"DISPLAY1": {
+            "displayName": "DISPLAY1",
+            "displayIp": "192.168.168.101",
+			"sensorBrightness": false,
+            "displayPort": "9527",
+            "controllerType": "D10",	    
+            "displayHeight": "32",
+            "displayWidth": "64",	          
+            "layout": "file:ci_routing.json"
+        }
+    }
+}

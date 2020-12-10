@@ -1,0 +1,19 @@
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-22T07:14:57.719Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-22T07:14:57.721Z"}
+{"port":"9527","displays":{},"level":"info","message":"Configuration:","timestamp":"2020-10-22T07:15:07.733Z"}
+{"level":"info","message":"Server started on port: 9527","timestamp":"2020-10-22T07:15:07.739Z"}
+{"level":"info","message":"Displays total: 0","timestamp":"2020-10-22T07:15:07.740Z"}
+{"level":"info","message":"Stopping server...","timestamp":"2020-10-22T07:15:52.188Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-22T07:17:06.281Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-22T07:17:06.283Z"}
+{"port":"9527","displays":{},"level":"info","message":"Configuration:","timestamp":"2020-10-22T07:17:16.296Z"}
+{"level":"info","message":"Server started on port: 9527","timestamp":"2020-10-22T07:17:16.296Z"}
+{"level":"info","message":"Displays total: 0","timestamp":"2020-10-22T07:17:16.298Z"}
+{"level":"info","message":"Stopping server...","timestamp":"2020-10-22T07:17:33.930Z"}
+{"level":"info","message":"Version: 2.6.21-mlds-2.1.36","timestamp":"2020-10-22T07:17:57.253Z"}
+{"level":"info","message":"Initializing server...","timestamp":"2020-10-22T07:17:57.255Z"}
+{"port":"9527","displays":{"DISPLAY1":{"displayName":"CHECK_IN.DISPLAY1","displayIp":"192.168.168.101","sensorBrightness":false,"displayPort":"9527","controllerType":"D10","displayHeight":"32","displayWidth":"64","layout":{"PICDEMO":{"PICTURE":{"coordinates":"0 0 63 31","type":"image","gifAllowed":"true","params":{"PICTURE1":"pic1.gif","PICTURE2":"pic2.png"}}},"TEXTandPICDEMO":{"TEXT":{"coordinates":"20 0 63 31","type":"text","scrollSpeed":"3","fontSize":"20","fontColor":"255 255 255"},"PICTURE":{"coordinates":"0 0 19 31","type":"image","gifAllowed":"true","params":{"SMALLPICTURE1":"pic3.gif","SMALLPICTURE2":"pic4.png"}}}}}},"level":"info","message":"Configuration:","timestamp":"2020-10-22T07:17:57.723Z"}
+{"level":"info","message":"Server started on port: 9527","timestamp":"2020-10-22T07:17:57.724Z"}
+{"level":"info","message":"DISPLAY1 -> 192.168.168.101:9527","timestamp":"2020-10-22T07:17:57.726Z"}
+{"level":"info","message":"Displays total: 1","timestamp":"2020-10-22T07:17:57.726Z"}
+{"level":"warn","message":"fault command: /mlds?id=DISPLAY1&layout=TEXT&TEXT=Hello! error: layout","timestamp":"2020-10-22T07:19:35.987Z"}

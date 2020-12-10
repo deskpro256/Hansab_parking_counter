@@ -1,0 +1,26 @@
+{    
+    "FREESPACES": {
+        "TEXT1": {
+            "coordinates": "0 0 63 31",			
+            "type": "text",
+			"align": "center",
+            "scrollSpeed":"3",
+            "fontSize": "20",
+            "fontColor": "255 0 0"
+        }
+    },
+	"IMAGE":{
+		"PICTURE1":{			
+            "coordinates": "0 0 63 31",
+            "type": "image",
+ 	        "gifAllowed": "true",             
+			"params": {
+						"PIC1": "pic1.png",
+						"PIC2": "pic2.png",
+						"PIC3": "pic3.png",
+						"GIF1": "gif1.gif",						
+						"GIF2": "gif2.gif"
+            }
+		}
+	}
+}

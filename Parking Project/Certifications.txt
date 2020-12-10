@@ -1,0 +1,4 @@
+- FCC/CISPR 22 >> EMC  US/EU
+- CE  >> Europeans Conformity
+- RoHs >> Reduction of Hazardous substances
+- WEEE (Waste Electrical & Electronic Equipment) >> Wheelie bin
