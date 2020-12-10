@@ -6,7 +6,6 @@ void EthernetSetup() {
   NetworkEEPROMRead();
   // if DHCP = 0, use manually entered settings
   if (DHCP == 0x00) {
-
     // start the Ethernet connection and the server:
     Ethernet.init(10);  // PB2
     //Ethernet.begin(MAC, IP);
@@ -25,14 +24,12 @@ void EthernetSetup() {
 }
 
 
-
 //=================[HANDLE ETHERNET STUFF]=======================
 void handleEthernet() {
 
   wdt_reset();
 
   // listen for incoming clients
-  client = server.available();
   if (client) {
     memset(linebuf, 0, sizeof(linebuf));
     charcount = 0;

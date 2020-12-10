@@ -12,14 +12,15 @@
 
 #define NOP __asm__ __volatile__ ("nop\n\t")  //NO OPERATION
 
-
-//============================[NOP_DELAY]========================
-//no-operation delay with a set value
-void NOPdelay(unsigned int z) {
+/*
+  //============================[NOP_DELAY]========================
+  //no-operation delay with a set value
+  void NOPdelay(unsigned int z) {
   for (unsigned int x = 0; x <= z; x++) {
     NOP;
   }
-}
+  }
+*/
 
 //============================[VARIABLES]========================
 
@@ -60,7 +61,7 @@ char errorDevices[32] = {0x00, 0x30, 0x01, 0x30, 0x02, 0x30, 0x03, 0x30,
                         };
 //devices with errors. ID, ERROR, ID, ERROR ...
 char errorCodes[4] = {'0', '1', '2', '3'}; // E0 E1 E2 E3
-byte addresses[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
+//byte addresses[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
 int slaveCount = 16;
 volatile bool ConfigEnabled = false;
 int tries = 0;  // counts retries
@@ -244,26 +245,31 @@ void loop() {
   }
   else {
     wdt_reset();
-    foo = 0;
-    while (foo <= slaveCount - 1) {
-      wdt_reset();
-      //getErrors(foo);
+
+    if (foo <= slaveCount - 1) {
       getChanges(foo);
+      wdt_reset();
       foo++;
     }
+    else {
+      foo = 0;
+    }
+    /*
+      foo = 0;
+      while (foo <= slaveCount - 1) {
+      wdt_reset();
+      getChanges(foo);
+      foo++;
+      }
+    */
     checkForCountError();
     UpdateCount();
   }
-
-  int timer = 1000;
-  while (timer > 0) {
-    handleEthernet();
-    delay(1);
-    timer--;
-  }
-  //handleEthernet();
   if (DHCP == 0x01) {
     Ethernet.maintain();
   }
-
+  client = server.available();
+  if (client) {
+    handleEthernet();
+  }
 }

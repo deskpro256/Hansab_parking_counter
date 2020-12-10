@@ -12,3 +12,4 @@ ISR(INT1_vect) {
     ConfigEnabled = false;
   }
 }
+//ISR timer every 100 ms to check for a web client and serve the website

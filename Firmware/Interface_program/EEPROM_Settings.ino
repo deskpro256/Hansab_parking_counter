@@ -76,7 +76,20 @@ void readEEPROMSettings() {
     tempF4Count = ((EEPROM[10] - 48) * 100) + ((EEPROM[11] - 48) * 10) + (EEPROM[12] - 48); //Floor4 count
     //get active floor count
     activeFloors = EEPROM[28];
-    switch (activeFloors) {
+// changes --------------------------------------------------------------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    //get maximum count for each floor
+    floorMaxCount[0] = tempF1Count;
+    floorMaxCount[1] = tempF2Count;
+    floorMaxCount[2] = tempF3Count;
+    floorMaxCount[3] = tempF4Count;
+
+    //also set that count as current count
+    currentFloorCount[0] = tempF1Count;
+    currentFloorCount[1] = tempF2Count;
+    currentFloorCount[2] = tempF3Count;
+    currentFloorCount[3] = tempF4Count;
+    /*
+      switch (activeFloors) {
       case 1:
         //get maximum count for each floor
         floorMaxCount[0] = tempF1Count;
@@ -130,7 +143,8 @@ void readEEPROMSettings() {
         currentFloorCount[2] = tempF3Count;
         currentFloorCount[3] = tempF4Count;
         break;
-    }
+      }
+    */
   }
 
 }
@@ -181,26 +195,27 @@ void NetworkEEPROMRead() {
   if (EEPROM.read(27) != 0x69) {
 
     // DHCP on/off
-    EEPROM.write(14, 0x00); //dhcp off, default IP address
+    EEPROM.write(14, 0x01); //dhcp on
+    // get dhcp ip
+    /*
+        // IP ADDRESS
+        EEPROM.write(15, 192); //0xC0
+        EEPROM.write(16, 168); //0xA8
+        EEPROM.write(17, 2);   //0x00
+        EEPROM.write(18, 122); //0xB1
 
-    // IP ADDRESS
-    EEPROM.write(15, 192); //0xC0
-    EEPROM.write(16, 168); //0xA8
-    EEPROM.write(17, 2);   //0x00
-    EEPROM.write(18, 122); //0xB1
+        // GATEWAY
+        EEPROM.write(19, 255); //0xFF
+        EEPROM.write(20, 255); //0xFF
+        EEPROM.write(21, 255); //0xFF
+        EEPROM.write(22, 0);   //0xC0
 
-    // GATEWAY
-    EEPROM.write(19, 255); //0xFF
-    EEPROM.write(20, 255); //0xFF
-    EEPROM.write(21, 255); //0xFF
-    EEPROM.write(22, 0);   //0xC0
-
-    // SUBNET
-    EEPROM.write(23, 192); //0xC0
-    EEPROM.write(24, 168); //0xA8
-    EEPROM.write(25, 2);   //0x00
-    EEPROM.write(26, 1);   //0x01
-
+        // SUBNET
+        EEPROM.write(23, 192); //0xC0
+        EEPROM.write(24, 168); //0xA8
+        EEPROM.write(25, 2);   //0x00
+        EEPROM.write(26, 1);   //0x01
+    */
     EEPROM.write(27, 0x69); // add the preset byte for further boot cycles
     NetworkEEPROMRead(); // now read the newly set values
 

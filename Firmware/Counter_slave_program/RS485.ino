@@ -12,6 +12,7 @@ void RS485Send(char receiverID, char msgType, char command, char data1, char dat
   msg[6] = data2;
   msg[7] = data3;
   msg[8] = ETX;
+  //TODO add CRC
 
   PORTD |= (1 << PD2);      // (RE_DE, HIGH) enable sending
   PORTC |= (1 << PC5);      // Enable COM Led
@@ -32,6 +33,7 @@ void RS485Receive() {
     Serial.readBytes(buff, sizeBuff - 1);
     newData = true;
     isMyAddress();
+    //in place of isMyAddress chech for message correctness with CRC calculating
   }
   else {
     newData = false;
